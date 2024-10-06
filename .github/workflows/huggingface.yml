@@ -1,0 +1,27 @@
+name: Deploy to Hugging Face Space
+
+on:
+  push:
+    branches:
+      - main  # or whatever branch you want to track
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install Git LFS (Large File Storage) - If needed
+      run: |
+        sudo apt-get update
+        sudo apt-get install git-lfs
+        git lfs install
+
+    - name: Hugging Face CLI login
+      run: huggingface-cli login --token ${{ secrets.HF_TOKEN }}
+
+    - name: Sync repository to Hugging Face Space
+      run: |
+        git push https://gschaumb:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/gschaumb/team03-capstone main
