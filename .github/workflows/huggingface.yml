@@ -19,9 +19,12 @@ jobs:
         sudo apt-get install git-lfs
         git lfs install
 
+    - name: Install Hugging Face CLI
+      run: pip install huggingface_hub
+
     - name: Hugging Face CLI login
       run: huggingface-cli login --token ${{ secrets.HF_TOKEN }}
 
     - name: Sync repository to Hugging Face Space
       run: |
-        git push https://gschaumb:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/gschaumb/team03-capstone main
+        git push https://${{ secrets.HF_USERNAME }}:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/${{ secrets.HF_USERNAME }}/team03-capstone main
