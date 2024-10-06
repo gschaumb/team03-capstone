@@ -12,6 +12,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
+      with:
+        fetch-depth: 0  # Fetch the full history, not just a shallow clone
 
     - name: Install Git LFS (Large File Storage) - If needed
       run: |
