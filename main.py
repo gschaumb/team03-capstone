@@ -115,7 +115,7 @@ def perception_node_1(state):
     
     if result.empty:
         logger.warning("PerceptionNode1 returned empty results.")
-        state.data['perception_1'] = {"message": "No relevant documents found", "data": pd.DataFrame()}  # Placeholder
+        state.data['perception_1'] = {"message": "No relevant documents found", "data": pd.DataFrame()}
     else:
         state.data['perception_1'] = {"message": "Documents found", "data": result}
     
@@ -160,19 +160,17 @@ def integration_node(state):
 
 # Build Graph
 workflow = StateGraph(AgentState)
-workflow.add_node("UserInterfaceNode", lambda state: state)  # UI node placeholder for Gradio interactions
+workflow.add_node("UserInterfaceNode", lambda state: state)  # Placeholder to ensure graph has a UI start point
 workflow.add_node("PerceptionNode1", perception_node_1)
 workflow.add_node("PerceptionNode2", perception_node_2)
 workflow.add_node("IntegrationNode", integration_node)
 
-# Update conditional edges to ensure proper connectivity
-workflow.add_edge(START, "UserInterfaceNode")  # Start with the User Interface Node
-workflow.add_edge("UserInterfaceNode", "PerceptionNode1")  # User input goes to PerceptionNode1
-
-# Add connections between the nodes
-workflow.add_conditional_edges("PerceptionNode1", lambda _: "PerceptionNode2", {"to_perception_2": "PerceptionNode2"})
-workflow.add_conditional_edges("PerceptionNode2", lambda _: "IntegrationNode", {"to_integration": "IntegrationNode"})
-workflow.add_conditional_edges("IntegrationNode", lambda _: END, {"__end__": END})
+# Start workflow from the UI node
+workflow.add_edge(START, "UserInterfaceNode")
+workflow.add_edge("UserInterfaceNode", "PerceptionNode1")
+workflow.add_edge("PerceptionNode1", "PerceptionNode2")
+workflow.add_edge("PerceptionNode2", "IntegrationNode")
+workflow.add_edge("IntegrationNode", END)
 
 # Compile the graph
 graph = workflow.compile()
