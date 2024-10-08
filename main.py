@@ -89,13 +89,6 @@ class IntegrationAgent:
         logger.debug("IntegrationAgent generated response: %s", response)
         return response
 
-# Define UI Agent
-class UserInterfaceAgent:
-    def handle_user_input(self, user_input, state):
-        logger.debug("Handling user input: %s", user_input)
-        state.messages.append({'sender': 'User', 'content': user_input})
-        return state
-
 # Shared State
 class AgentState:
     def __init__(self):
@@ -116,94 +109,65 @@ perception_agent_2 = PerceptionAgent(financial_df, "Financial_Perception")
 
 # Node Functions for the Perception Agents
 def perception_node_1(state):
-    logger.debug("Executing PerceptionNode1 with state: %s", state.__dict__)
+    logger.debug("Executing PerceptionNode1 with initial state: %s", state.__dict__)
     query = state.messages[-1]['content']
     result = perception_agent_1.extract_data(query)
+    
     if result.empty:
         logger.warning("PerceptionNode1 returned empty results.")
-        state.data['perception_1'] = "No relevant documents found."
+        state.data['perception_1'] = {"message": "No relevant documents found", "data": pd.DataFrame()}  # Placeholder
     else:
-        state.data['perception_1'] = result
+        state.data['perception_1'] = {"message": "Documents found", "data": result}
+    
     logger.debug("Updated state after PerceptionNode1: %s", state.__dict__)
     return state
 
 def perception_node_2(state):
-    logger.debug("Executing PerceptionNode2 with state: %s", state.__dict__)
+    logger.debug("Executing PerceptionNode2 with initial state: %s", state.__dict__)
     query = state.messages[-1]['content']
     result = perception_agent_2.extract_data(query)
+
     if result.empty:
         logger.warning("PerceptionNode2 returned empty results.")
-        state.data['perception_2'] = "No relevant documents found."
+        state.data['perception_2'] = {"message": "No relevant documents found", "data": pd.DataFrame()}
     else:
-        state.data['perception_2'] = result
+        state.data['perception_2'] = {"message": "Documents found", "data": result}
+
     logger.debug("Updated state after PerceptionNode2: %s", state.__dict__)
     return state
 
 # Integration Node
 def integration_node(state):
-    logger.debug("Executing IntegrationNode with state: %s", state.__dict__)
+    logger.debug("Executing IntegrationNode with initial state: %s", state.__dict__)
     agent = IntegrationAgent()
-    perception_results = pd.concat(
-        [state.data[key] for key in state.data.keys() if key.startswith('perception') and isinstance(state.data[key], pd.DataFrame)],
-        ignore_index=True
-    )
-    if perception_results.empty:
+
+    valid_results = [
+        state.data[key]['data'] for key in state.data.keys()
+        if key.startswith('perception') and isinstance(state.data[key]['data'], pd.DataFrame) and not state.data[key]['data'].empty
+    ]
+
+    if len(valid_results) == 0:
         logger.warning("IntegrationNode has no valid perception results to integrate.")
         state.data['integration_result'] = "No relevant information found."
     else:
+        perception_results = pd.concat(valid_results, ignore_index=True)
         query = state.messages[-1]['content']
         response = agent.synthesize_data(perception_results, query)
         state.data['integration_result'] = response
+
     logger.debug("Updated state after IntegrationNode: %s", state.__dict__)
     return state
 
-# UI Node
-def ui_node(state):
-    logger.debug("Executing UserInterfaceNode with state: %s", state.__dict__)
-    agent = UserInterfaceAgent()
-    updated_state = agent.handle_user_input(state.messages[-1]['content'], state)
-    logger.debug("Updated state after UserInterfaceNode: %s", updated_state.__dict__)
-    return updated_state
-
-# Routing Logic
-def router(state) -> Literal["call_tool", "__end__", "to_integration", "to_perception_1"]:
-    last_message = state.messages[-1]
-    logger.debug("Routing based on last message: %s", last_message)
-
-    if "clarify" in last_message['content']:
-        return "to_perception_1"
-    elif "FINAL ANSWER" in last_message['content']:
-        return "__end__"
-    elif "tool_needed" in last_message['content']:
-        return "call_tool"
-    else:
-        return "to_integration"
-
 # Build Graph
 workflow = StateGraph(AgentState)
-workflow.add_node("UserInterfaceNode", ui_node)
+workflow.add_node("UserInterfaceNode", lambda state: state)  # UI node placeholder for Gradio interactions
 workflow.add_node("PerceptionNode1", perception_node_1)
 workflow.add_node("PerceptionNode2", perception_node_2)
 workflow.add_node("IntegrationNode", integration_node)
 
-workflow.add_conditional_edges("UserInterfaceNode", router, {
-    "to_perception_1": "PerceptionNode1",
-    "to_perception_2": "PerceptionNode2",
-    "__end__": END,
-})
-
-workflow.add_conditional_edges("PerceptionNode1", router, {
-    "to_integration": "IntegrationNode",
-})
-
-workflow.add_conditional_edges("PerceptionNode2", router, {
-    "to_integration": "IntegrationNode",
-})
-
-workflow.add_conditional_edges("IntegrationNode", router, {
-    "return_ui": "UserInterfaceNode",
-    "__end__": END,
-})
+workflow.add_conditional_edges("UserInterfaceNode", lambda _: "PerceptionNode1", {"to_perception_1": "PerceptionNode1"})
+workflow.add_conditional_edges("PerceptionNode1", lambda _: "IntegrationNode", {"to_integration": "IntegrationNode"})
+workflow.add_conditional_edges("IntegrationNode", lambda _: "__end__", {"__end__": END})
 
 # Compile the graph
 graph = workflow.compile()
