@@ -3,7 +3,7 @@ from main import graph, AgentState
 import logging
 
 # Configure logging to print to stdout for hosted environments
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - '%(message)s)
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 # Initializing the Agent State with the correct structure for a TypedDict
