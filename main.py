@@ -1,11 +1,16 @@
 import os
 import pandas as pd
 import pickle
+import logging
 from typing import Literal
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 from transformers import T5ForConditionalGeneration, T5Tokenizer
 from langgraph.graph import StateGraph, START, END
+
+# Configure logging to output to stdout so it can be captured in the hosted environment logs
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 # Global Variables
 GLOBAL_SENTENCE_MODEL = None
@@ -16,12 +21,14 @@ GLOBAL_HUGGINGFACE_TOKENIZER = None
 def load_sentence_transformer_model(model_name="all-MiniLM-L6-v2"):
     global GLOBAL_SENTENCE_MODEL
     if GLOBAL_SENTENCE_MODEL is None:
+        logger.debug("Loading SentenceTransformer model: %s", model_name)
         GLOBAL_SENTENCE_MODEL = SentenceTransformer(model_name)
 
 # Load HuggingFace model and tokenizer globally (using Flan-T5-Large for this example)
 def load_huggingface_model(model_name="google/flan-t5-large"):
     global GLOBAL_HUGGINGFACE_MODEL, GLOBAL_HUGGINGFACE_TOKENIZER
     if GLOBAL_HUGGINGFACE_MODEL is None or GLOBAL_HUGGINGFACE_TOKENIZER is None:
+        logger.debug("Loading HuggingFace model: %s", model_name)
         GLOBAL_HUGGINGFACE_MODEL = T5ForConditionalGeneration.from_pretrained(model_name)
         GLOBAL_HUGGINGFACE_TOKENIZER = T5Tokenizer.from_pretrained(model_name)
 
@@ -29,60 +36,64 @@ def load_huggingface_model(model_name="google/flan-t5-large"):
 def generate_embeddings(texts):
     if GLOBAL_SENTENCE_MODEL is None:
         raise ValueError("SentenceTransformer model not loaded.")
+    logger.debug("Generating embeddings for texts.")
     embeddings = GLOBAL_SENTENCE_MODEL.encode(texts, convert_to_tensor=True)
     return embeddings.cpu().numpy()
 
 def compute_similarities(query_embedding, document_embeddings):
+    logger.debug("Computing cosine similarities.")
     return cosine_similarity(query_embedding, document_embeddings).flatten()
 
 # Generate response using the advanced HuggingFace model
 def generate_response_with_huggingface(query, top_k_documents):
-    global GLOBAL_HUGGINGFACE_MODEL, GLOBAL_HUGGINGFACE_TOKENIZER
     if GLOBAL_HUGGINGFACE_MODEL is None or GLOBAL_HUGGINGFACE_TOKENIZER is None:
         raise ValueError("HuggingFace model or tokenizer not loaded.")
     
-    # Concatenate top_k_documents with the user's query for an augmented response
+    logger.debug("Generating response using HuggingFace model.")
     augmented_query = query + " " + " ".join(top_k_documents['chunked_text'].tolist())
     inputs = GLOBAL_HUGGINGFACE_TOKENIZER(augmented_query, return_tensors="pt", truncation=True, max_length=512)
-    outputs = GLOBAL_HUGGINGFACE_MODEL.generate(inputs["input_ids"], max_length=300, num_return_sequences=1)
-    response = GLOBAL_HUGGINGFACE_TOKENIZER.decode(outputs[0], skip_special_tokens=True)
     
-    return response
+    try:
+        outputs = GLOBAL_HUGGINGFACE_MODEL.generate(inputs["input_ids"], max_length=300, num_return_sequences=1)
+        response = GLOBAL_HUGGINGFACE_TOKENIZER.decode(outputs[0], skip_special_tokens=True)
+        logger.debug("Generated response: %s", response)
+        return response
+    except Exception as e:
+        logger.error("Error during model generation: %s", e)
+        return "An error occurred during response generation."
 
 # Define Perception Agent
 class PerceptionAgent:
     def __init__(self, data_df, name):
         self.data_df = data_df
         self.name = name
+        logger.debug("Initialized PerceptionAgent: %s", self.name)
 
     def extract_data(self, query):
-        # Generate embeddings for documents and the query
+        logger.debug("PerceptionAgent (%s) extracting data for query: %s", self.name, query)
         document_texts = self.data_df['chunked_text'].tolist()
         query_embedding = generate_embeddings([query])
         document_embeddings = generate_embeddings(document_texts)
 
-        # Compute cosine similarities between the query and document embeddings
         similarities = compute_similarities(query_embedding, document_embeddings)
         top_k_indices = similarities.argsort()[-5:][::-1]  # Retrieve top 5 similar documents
 
-        # Extract top-k documents and return them
         top_k_documents = self.data_df.iloc[top_k_indices]
+        logger.debug("PerceptionAgent (%s) found top documents: %s", self.name, top_k_documents)
         return top_k_documents
 
 # Define Integration Agent
 class IntegrationAgent:
     def synthesize_data(self, perception_results, query):
-        # Combine results from Perception Agents and use the HuggingFace model to generate a response
+        logger.debug("IntegrationAgent synthesizing data for query: %s", query)
         response = generate_response_with_huggingface(query, perception_results)
+        logger.debug("IntegrationAgent generated response: %s", response)
         return response
 
 # Define UI Agent
 class UserInterfaceAgent:
-    def __init__(self):
-        pass
-
     def handle_user_input(self, user_input, state):
-        # Store user input in state
+        logger.debug("Handling user input: %s", user_input)
         state.messages.append({'sender': 'User', 'content': user_input})
         return state
 
@@ -106,12 +117,14 @@ perception_agent_2 = PerceptionAgent(financial_df, "Financial_Perception")
 
 # Node Functions for the Perception Agents
 def perception_node_1(state):
+    logger.debug("Executing PerceptionNode1.")
     query = state.messages[-1]['content']
     result = perception_agent_1.extract_data(query)
     state.data['perception_1'] = result
     return state
 
 def perception_node_2(state):
+    logger.debug("Executing PerceptionNode2.")
     query = state.messages[-1]['content']
     result = perception_agent_2.extract_data(query)
     state.data['perception_2'] = result
@@ -119,6 +132,7 @@ def perception_node_2(state):
 
 # Integration Node
 def integration_node(state):
+    logger.debug("Executing IntegrationNode.")
     agent = IntegrationAgent()
     perception_results = pd.concat([state.data[key] for key in state.data.keys() if key.startswith('perception')], ignore_index=True)
     query = state.messages[-1]['content']
@@ -128,6 +142,7 @@ def integration_node(state):
 
 # UI Node
 def ui_node(state):
+    logger.debug("Executing UserInterfaceNode.")
     agent = UserInterfaceAgent()
     updated_state = agent.handle_user_input(state.messages[-1]['content'], state)
     return updated_state
@@ -135,8 +150,8 @@ def ui_node(state):
 # Routing Logic
 def router(state) -> Literal["call_tool", "__end__", "to_integration", "to_perception_1"]:
     last_message = state.messages[-1]
+    logger.debug("Routing based on last message: %s", last_message)
     
-    # Decide what to do based on last action performed or message content
     if "clarify" in last_message['content']:
         return "to_perception_1"
     elif "FINAL ANSWER" in last_message['content']:
