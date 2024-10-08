@@ -1,56 +1,82 @@
 import gradio as gr
+import logging
 from main import graph, AgentState
 
-# Initialize shared state
-state = AgentState()
+# Configure logging for hosted environment
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
-# Gradio Function for Handling User Input
-def process_user_input(user_input, conversation_history=[]):
-    # Update conversation history with user input
-    conversation_history.append(f"User: {user_input}")
+# Function to process user input and run through the LangGraph workflow
+def process_user_input(user_input):
+    logger.debug("Received user input: %s", user_input)
 
-    # Update agent state with the new input
-    state.messages.append({'sender': 'User', 'content': user_input})
+    # Instantiate initial state
+    state = AgentState()
+    state.messages.append({"sender": "User", "content": user_input})
 
-    # Execute the graph based on input and workflow logic
-    events = graph.stream({'messages': state.messages}, {'recursion_limit': 50})
-
-    # Intermediate state information
-    perception_agent_responses = []
-    integration_response = ""
-
-    # Process events and update conversation history
-    for event in events:
-        sender = event.get("sender", "Agent")
-        content = event.get("content", "Processing...")
-
-        # Collect intermediate data based on agent types
-        if "PerceptionNode" in sender:
-            perception_agent_responses.append(f"{sender}: {content}")
-        elif "IntegrationNode" in sender:
-            integration_response = content
+    try:
+        # Execute the graph workflow with the given state
+        logger.debug("Starting graph workflow execution with initial state: %s", state.__dict__)
         
-        # Append to conversation history
-        conversation_history.append(f"{sender}: {content}")
+        events = graph.stream(state)
 
-    # Append intermediate state information to the conversation
-    if perception_agent_responses:
-        perception_info = "\n".join(perception_agent_responses)
-        conversation_history.append(f"Intermediate Perception Agent Results:\n{perception_info}")
+        # Iterate through the workflow events and log each event
+        for event in events:
+            logger.debug("Event in workflow: %s", event)
 
-    if integration_response:
-        conversation_history.append(f"Intermediate Integration Agent Result:\n{integration_response}")
+        # Log the final state after processing the entire workflow
+        logger.debug("Final state after workflow execution: %s", state.__dict__)
 
-    # Return updated conversation
-    return "\n".join(conversation_history), conversation_history
+        # Extract the response from the state and provide feedback to the user
+        integration_result = state.data.get('integration_result', "Could not generate a response.")
+        logger.debug("Integration result: %s", integration_result)
+        return integration_result
 
-# Define the Gradio UI Elements
+    except Exception as e:
+        # Log any errors that occur during the workflow
+        logger.error("Error occurred during processing of user input: %s", e)
+        return "An error occurred during processing. Please try again."
+
+# Creating the Gradio Interface
 with gr.Blocks() as demo:
-    chatbot = gr.Chatbot()
-    user_input = gr.Textbox(label="Ask a question about Enron")
-    conversation_history = gr.State([])
+    gr.Markdown("# AI Legal & Financial Analysis Chatbot")
+    gr.Markdown(
+        """
+        This chatbot helps answer questions related to legal and financial data.
+        It uses advanced language models and multi-agent collaboration to provide you with the best possible insights.
+        """
+    )
+    
+    # Input field for user query
+    with gr.Row():
+        user_input = gr.Textbox(lines=2, placeholder="Ask about Enron's legal and financial issues...")
+        submit_button = gr.Button("Submit")
+    
+    # Output areas for the main response and intermediate details
+    with gr.Row():
+        output_response = gr.Textbox(label="Response", lines=5)
+        intermediate_info = gr.Textbox(label="Intermediate State Information", lines=10)
+    
+    # Define action to be performed on clicking Submit button
+    def interface_action(user_query):
+        response = process_user_input(user_query)
+        
+        # Logging state information directly for intermediate inspection
+        try:
+            state_debug_info = (
+                f"Messages: {state.messages}\n"
+                f"Data: {state.data}\n"
+                f"Sender: {state.sender}"
+            )
+        except Exception as e:
+            state_debug_info = f"Error fetching intermediate state: {e}"
+            logger.error(state_debug_info)
+        
+        return response, state_debug_info
 
-    user_input.submit(process_user_input, inputs=[user_input, conversation_history], outputs=[chatbot, conversation_history])
+    # Connect user input, button, and output display
+    submit_button.click(fn=interface_action, inputs=user_input, outputs=[output_response, intermediate_info])
 
-# Launch the Gradio App
-demo.launch()
+# Launch Gradio Interface
+if __name__ == "__main__":
+    demo.launch()

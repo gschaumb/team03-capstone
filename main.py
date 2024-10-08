@@ -7,7 +7,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from transformers import T5ForConditionalGeneration, T5Tokenizer
 from langgraph.graph import StateGraph, START, END
 
-# Configure logging to output to stdout for hosted environment logs
+# Configure logging to output to stdout so it can be captured in the hosted environment logs
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
@@ -144,7 +144,7 @@ def integration_node(state):
     logger.debug("Executing IntegrationNode with state: %s", state.__dict__)
     agent = IntegrationAgent()
     perception_results = pd.concat(
-        [state.data[key] for key in state.data.keys() if key.startswith('perception') and not isinstance(state.data[key], str)],
+        [state.data[key] for key in state.data.keys() if key.startswith('perception') and isinstance(state.data[key], pd.DataFrame)],
         ignore_index=True
     )
     if perception_results.empty:
