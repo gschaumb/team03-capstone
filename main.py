@@ -114,28 +114,32 @@ class IntegrationAgent:
         return response
 
 # Node Functions for the Perception Agents
-def perception_node_1(state: AgentState) -> dict:
+def perception_node_1(state: AgentState) -> AgentState:
     logger.debug("Executing PerceptionNode1 with initial state: %s", state)
     query = state['messages'][-1]['content']
     result = perception_agent_1.extract_data(query)
     
     if result.empty:
-        return {"perception_1": {"status": "no_data", "data": pd.DataFrame()}}
+        state['perception_1'] = {"status": "no_data", "data": pd.DataFrame()}
     else:
-        return {"perception_1": {"status": "data_found", "data": result}}
+        state['perception_1'] = {"status": "data_found", "data": result}
+    
+    return state
 
-def perception_node_2(state: AgentState) -> dict:
+def perception_node_2(state: AgentState) -> AgentState:
     logger.debug("Executing PerceptionNode2 with initial state: %s", state)
     query = state['messages'][-1]['content']
     result = perception_agent_2.extract_data(query)
 
     if result.empty:
-        return {"perception_2": {"status": "no_data", "data": pd.DataFrame()}}
+        state['perception_2'] = {"status": "no_data", "data": pd.DataFrame()}
     else:
-        return {"perception_2": {"status": "data_found", "data": result}}
+        state['perception_2'] = {"status": "data_found", "data": result}
+
+    return state
 
 # Integration Node
-def integration_node(state: AgentState) -> dict:
+def integration_node(state: AgentState) -> AgentState:
     logger.debug("Executing IntegrationNode with initial state: %s", state)
     agent = IntegrationAgent()
 
@@ -145,12 +149,14 @@ def integration_node(state: AgentState) -> dict:
     ]
 
     if len(valid_results) == 0:
-        return {"integration_result": {"status": "no_data", "message": "No relevant information found."}}
+        state['integration_result'] = {"status": "no_data", "message": "No relevant information found."}
     else:
         perception_results = pd.concat(valid_results, ignore_index=True)
         query = state['messages'][-1]['content']
         response = agent.synthesize_data(perception_results, query)
-        return {"integration_result": {"status": "data_integrated", "message": response}}
+        state['integration_result'] = {"status": "data_integrated", "message": response}
+
+    return state
 
 # Initialize Models
 load_sentence_transformer_model()  # Load embedding model
@@ -166,9 +172,9 @@ perception_agent_2 = PerceptionAgent(financial_df, "Financial_Perception", FINAN
 # Build Graph
 workflow = StateGraph(AgentState)
 workflow.add_node("UserInterfaceNode", lambda state: state)  # Placeholder to ensure graph has a UI start point
-workflow.add_node("PerceptionNode1", lambda state: state.update(perception_node_1(state)))
-workflow.add_node("PerceptionNode2", lambda state: state.update(perception_node_2(state)))
-workflow.add_node("IntegrationNode", lambda state: state.update(integration_node(state)))
+workflow.add_node("PerceptionNode1", lambda state: perception_node_1(state))
+workflow.add_node("PerceptionNode2", lambda state: perception_node_2(state))
+workflow.add_node("IntegrationNode", lambda state: integration_node(state))
 
 # Set entry point and add edges
 workflow.set_entry_point("UserInterfaceNode")
