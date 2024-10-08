@@ -75,4 +75,5 @@ with gr.Blocks() as demo:
     submit_btn.click(fn=update_state_ui, inputs=user_input, outputs=[output, state_output])
 
 # Launch Gradio app
-if __
+if __name__ == "__main__":
+    demo.launch(share=True)
