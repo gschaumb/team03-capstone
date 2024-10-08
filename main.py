@@ -115,9 +115,17 @@ def perception_node_1(state):
     
     if result.empty:
         logger.warning("PerceptionNode1 returned empty results.")
-        state.data['perception_1'] = {"message": "No relevant documents found", "data": pd.DataFrame()}
+        state.data['perception_1'] = {
+            "message": "No relevant documents found",
+            "data": pd.DataFrame(),
+            "status": "no_data"
+        }
     else:
-        state.data['perception_1'] = {"message": "Documents found", "data": result}
+        state.data['perception_1'] = {
+            "message": "Documents found",
+            "data": result,
+            "status": "data_found"
+        }
     
     logger.debug("Updated state after PerceptionNode1: %s", state.__dict__)
     return state
@@ -129,9 +137,17 @@ def perception_node_2(state):
 
     if result.empty:
         logger.warning("PerceptionNode2 returned empty results.")
-        state.data['perception_2'] = {"message": "No relevant documents found", "data": pd.DataFrame()}
+        state.data['perception_2'] = {
+            "message": "No relevant documents found",
+            "data": pd.DataFrame(),
+            "status": "no_data"
+        }
     else:
-        state.data['perception_2'] = {"message": "Documents found", "data": result}
+        state.data['perception_2'] = {
+            "message": "Documents found",
+            "data": result,
+            "status": "data_found"
+        }
 
     logger.debug("Updated state after PerceptionNode2: %s", state.__dict__)
     return state
@@ -148,12 +164,18 @@ def integration_node(state):
 
     if len(valid_results) == 0:
         logger.warning("IntegrationNode has no valid perception results to integrate.")
-        state.data['integration_result'] = "No relevant information found."
+        state.data['integration_result'] = {
+            "message": "No relevant information found.",
+            "status": "no_data"
+        }
     else:
         perception_results = pd.concat(valid_results, ignore_index=True)
         query = state.messages[-1]['content']
         response = agent.synthesize_data(perception_results, query)
-        state.data['integration_result'] = response
+        state.data['integration_result'] = {
+            "message": response,
+            "status": "data_integrated"
+        }
 
     logger.debug("Updated state after IntegrationNode: %s", state.__dict__)
     return state
@@ -173,4 +195,6 @@ workflow.add_edge("PerceptionNode2", "IntegrationNode")
 workflow.add_edge("IntegrationNode", END)
 
 # Compile the graph
+logger.debug("Compiling workflow graph.")
 graph = workflow.compile()
+logger.debug("Workflow graph compiled successfully.")
