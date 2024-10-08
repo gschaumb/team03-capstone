@@ -38,11 +38,6 @@ def process_user_input(user_input):
         return "An error occurred during processing. Please try again.", None
 
 # Creating the Gradio Interface
-It seems my response was cut off. Here is the rest of the `app.py` code.
-
-### **Continuation of `app.py` Code**
-
-```python
 with gr.Blocks() as demo:
     gr.Markdown("# AI Legal & Financial Analysis Chatbot")
     gr.Markdown(
