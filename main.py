@@ -1,4 +1,5 @@
 import os
+import pickle
 import pandas as pd
 import logging
 from typing import Literal
@@ -15,6 +16,7 @@ logger = logging.getLogger(__name__)
 GLOBAL_SENTENCE_MODEL = None
 GLOBAL_HUGGINGFACE_MODEL = None
 GLOBAL_HUGGINGFACE_TOKENIZER = None
+PERSISTENT_EMBEDDINGS_PATH = "persistent_memory"
 
 # Load SentenceTransformer model globally
 def load_sentence_transformer_model(model_name="all-MiniLM-L6-v2"):
@@ -61,6 +63,46 @@ def generate_response_with_huggingface(query, top_k_documents):
         logger.error("Error during model generation: %s", e)
         return "An error occurred during response generation."
 
+# Persistent memory functions
+def save_embeddings(data_df, file_path):
+    logger.debug("Saving embeddings to %s", file_path)
+    with open(file_path, 'wb') as f:
+        pickle.dump(data_df, f)
+
+def load_embeddings(file_path):
+    logger.debug("Loading embeddings from %s", file_path)
+    with open(file_path, 'rb') as f:
+        return pickle.load(f)
+
+# Precompute embeddings and save in persistent memory
+def precompute_and_store_embeddings():
+    load_sentence_transformer_model()  # Ensure model is loaded
+    
+    if not os.path.exists(PERSISTENT_EMBEDDINGS_PATH):
+        os.makedirs(PERSISTENT_EMBEDDINGS_PATH)
+    
+    # SEC Documents
+    sec_df = pd.read_csv("data/sec_docs.csv")
+    sec_embeddings_path = os.path.join(PERSISTENT_EMBEDDINGS_PATH, "sec_embeddings.pkl")
+    if not os.path.exists(sec_embeddings_path):
+        logger.debug("Precomputing embeddings for SEC documents.")
+        sec_df["embeddings"] = generate_embeddings(sec_df["chunked_text"].tolist()).tolist()
+        save_embeddings(sec_df, sec_embeddings_path)
+    else:
+        sec_df = load_embeddings(sec_embeddings_path)
+    
+    # Financial Reports
+    financial_df = pd.read_csv("data/financial_reports.csv")
+    financial_embeddings_path = os.path.join(PERSISTENT_EMBEDDINGS_PATH, "financial_embeddings.pkl")
+    if not os.path.exists(financial_embeddings_path):
+        logger.debug("Precomputing embeddings for Financial reports.")
+        financial_df["embeddings"] = generate_embeddings(financial_df["chunked_text"].tolist()).tolist()
+        save_embeddings(financial_df, financial_embeddings_path)
+    else:
+        financial_df = load_embeddings(financial_embeddings_path)
+    
+    return sec_df, financial_df
+
 # Define Perception Agent
 class PerceptionAgent:
     def __init__(self, data_df, name):
@@ -70,9 +112,8 @@ class PerceptionAgent:
 
     def extract_data(self, query):
         logger.debug("PerceptionAgent (%s) extracting data for query: %s", self.name, query)
-        document_texts = self.data_df['chunked_text'].tolist()
         query_embedding = generate_embeddings([query])
-        document_embeddings = generate_embeddings(document_texts)
+        document_embeddings = self.data_df["embeddings"].tolist()
 
         similarities = compute_similarities(query_embedding, document_embeddings)
         top_k_indices = similarities.argsort()[-5:][::-1]  # Retrieve top 5 similar documents
@@ -104,10 +145,10 @@ class AgentState:
 load_sentence_transformer_model()  # Load embedding model
 load_huggingface_model()  # Load HuggingFace LLM
 
-# Instantiate Perception Agents with DataFrames
-sec_df = pd.read_csv("data/sec_docs.csv")
-financial_df = pd.read_csv("data/financial_reports.csv")
+# Precompute and load embeddings
+sec_df, financial_df = precompute_and_store_embeddings()
 
+# Instantiate Perception Agents with DataFrames
 perception_agent_1 = PerceptionAgent(sec_df, "SEC_Perception")
 perception_agent_2 = PerceptionAgent(financial_df, "Financial_Perception")
 
