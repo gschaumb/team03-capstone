@@ -94,7 +94,7 @@ class AgentState:
     def __init__(self):
         self.messages = []  # Sequence of messages exchanged
         self.sender = ""  # Tracks last sender
-        self.data = {}  # Stores intermediate results
+        self.data = {"perception_1": None, "perception_2": None, "integration_result": None}  # Initialized with required keys
 
 # Initialize Models
 load_sentence_transformer_model()  # Load embedding model

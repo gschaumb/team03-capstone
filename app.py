@@ -1,85 +1,64 @@
 import gradio as gr
-import logging
 from main import graph, AgentState
+import logging
 
-# Configure logging for hosted environment
+# Configure logging to print to stdout for hosted environments
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-# Function to process user input and run through the LangGraph workflow
-def process_user_input(user_input):
-    logger.debug("Received user input: %s", user_input)
+# Initializing the Agent State
+agent_state = AgentState()
 
-    # Instantiate initial state
-    state = AgentState()
-    state.messages.append({"sender": "User", "content": user_input})
+def process_user_input(user_input):
+    # Add user input to state
+    logger.debug("Received user input: %s", user_input)
+    agent_state.messages.append({'sender': 'User', 'content': user_input})
 
     try:
-        # Execute the graph workflow with the given state
-        logger.debug("Starting graph workflow execution with initial state: %s", state.__dict__)
-        
-        events = graph.stream(state)
+        logger.debug("Starting graph workflow execution with initial state: %s", agent_state.__dict__)
+        # Execute graph
+        events = graph.stream(agent_state.__dict__)  # Streaming state through the graph
 
-        # Iterate through the workflow events and log each event
+        # Collect intermediate states
+        intermediate_states = []
         for event in events:
-            logger.debug("Event in workflow: %s", event)
+            # Capture and log each intermediate state
+            intermediate_state_info = {
+                "state_data": event['data'],
+                "messages": event['messages'],
+                "current_sender": event['sender']
+            }
+            logger.debug("Intermediate state: %s", intermediate_state_info)
+            intermediate_states.append(intermediate_state_info)
 
-        # Log the final state after processing the entire workflow
-        logger.debug("Final state after workflow execution: %s", state.__dict__)
+        # Final response (assuming IntegrationNode is the endpoint that gives a response)
+        final_response = agent_state.data['integration_result']['message']
+        if not final_response:
+            final_response = "No relevant information found."
 
-        # Extract the response from the state and provide feedback to the user
-        integration_result = state.data.get('integration_result', "Could not generate a response.")
-        logger.debug("Integration result: %s", integration_result)
-        return integration_result, state
+        logger.debug("Final response: %s", final_response)
 
     except Exception as e:
-        # Log any errors that occur during the workflow
         logger.error("Error occurred during processing of user input: %s", e)
-        return "An error occurred during processing. Please try again.", None
+        final_response = "An error occurred while processing your request. Please try again."
 
-# Creating the Gradio Interface
+    return final_response, intermediate_states
+
+# Gradio interface setup
 with gr.Blocks() as demo:
-    gr.Markdown("# AI Legal & Financial Analysis Chatbot")
-    gr.Markdown(
-        """
-        This chatbot helps answer questions related to legal and financial data.
-        It uses advanced language models and multi-agent collaboration to provide you with the best possible insights.
-        """
-    )
-    
-    # Input field for user query
-    with gr.Row():
-        user_input = gr.Textbox(lines=2, placeholder="Ask about Enron's legal and financial issues...")
-        submit_button = gr.Button("Submit")
-    
-    # Output areas for the main response and intermediate details
-    with gr.Row():
-        output_response = gr.Textbox(label="Response", lines=5)
-        intermediate_info = gr.Textbox(label="Intermediate State Information", lines=10)
-    
-    # Define action to be performed on clicking Submit button
-    def interface_action(user_query):
-        response, state = process_user_input(user_query)
-        
-        # Logging state information directly for intermediate inspection
-        if state is not None:
-            try:
-                state_debug_info = (
-                    f"Messages: {state.messages}\n"
-                    f"Data: {state.data}\n"
-                    f"Sender: {state.sender}"
-                )
-            except Exception as e:
-                state_debug_info = f"Error fetching intermediate state: {e}"
-                logger.error(state_debug_info)
-        else:
-            state_debug_info = "State could not be fetched due to an error during processing."
+    gr.Markdown("# Multi-Agent Collaboration Demo")
 
-        return response, state_debug_info
+    user_input = gr.Textbox(placeholder="Ask a question about the Enron case...", label="Your Query")
+    output = gr.Textbox(label="Agent Response")
+    state_output = gr.JSON(label="Intermediate State Data", value={})
 
-    # Connect user input, button, and output display
-    submit_button.click(fn=interface_action, inputs=user_input, outputs=[output_response, intermediate_info])
+    def update_state_ui(user_query):
+        response, intermediate_states = process_user_input(user_query)
+        return response, intermediate_states
 
-# Launch Gradio Interface
+    submit_btn = gr.Button("Submit")
+    submit_btn.click(fn=update_state_ui, inputs=user_input, outputs=[output, state_output])
+
+# Launch Gradio app
 if __name__ == "__main__":
-    demo.launch()
+    demo.launch(share=True)
