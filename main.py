@@ -18,8 +18,8 @@ def load_sentence_transformer_model(model_name="all-MiniLM-L6-v2"):
     if GLOBAL_SENTENCE_MODEL is None:
         GLOBAL_SENTENCE_MODEL = SentenceTransformer(model_name)
 
-# Load HuggingFace causal model and tokenizer globally (using Flan-T5-XXL for this example)
-def load_huggingface_model(model_name="google/flan-t5-xxl"):
+# Load HuggingFace model and tokenizer globally (using Flan-T5-Large for this example)
+def load_huggingface_model(model_name="google/flan-t5-large"):
     global GLOBAL_HUGGINGFACE_MODEL, GLOBAL_HUGGINGFACE_TOKENIZER
     if GLOBAL_HUGGINGFACE_MODEL is None or GLOBAL_HUGGINGFACE_TOKENIZER is None:
         GLOBAL_HUGGINGFACE_MODEL = T5ForConditionalGeneration.from_pretrained(model_name)
@@ -120,7 +120,7 @@ def perception_node_2(state):
 # Integration Node
 def integration_node(state):
     agent = IntegrationAgent()
-    perception_results = pd.concat([state.data[key] for key in state.data.keys() if key.startswith('perception')])
+    perception_results = pd.concat([state.data[key] for key in state.data.keys() if key.startswith('perception')], ignore_index=True)
     query = state.messages[-1]['content']
     response = agent.synthesize_data(perception_results, query)
     state.data['integration_result'] = response
