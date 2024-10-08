@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 import logging
-from typing import Literal
+from typing import TypedDict, List
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 from transformers import T5ForConditionalGeneration, T5Tokenizer
@@ -47,6 +47,14 @@ def generate_embeddings(texts):
 def compute_similarities(query_embedding, document_embeddings):
     logger.debug("Computing cosine similarities.")
     return cosine_similarity(query_embedding, document_embeddings).flatten()
+
+# Define the State
+class AgentState(TypedDict):
+    messages: List[dict]
+    sender: str
+    perception_1: dict
+    perception_2: dict
+    integration_result: dict
 
 # Generate response using the advanced HuggingFace model
 def generate_response_with_huggingface(query, top_k_documents):
@@ -105,16 +113,44 @@ class IntegrationAgent:
         logger.debug("IntegrationAgent generated response: %s", response)
         return response
 
-# Shared State
-class AgentState:
-    def __init__(self):
-        self.messages = []  # Sequence of messages exchanged
-        self.sender = ""  # Tracks last sender
-        self.data = {
-            "perception_1": {"status": None, "data": None},
-            "perception_2": {"status": None, "data": None},
-            "integration_result": {"status": None, "message": None}
-        }
+# Node Functions for the Perception Agents
+def perception_node_1(state: AgentState) -> dict:
+    logger.debug("Executing PerceptionNode1 with initial state: %s", state)
+    query = state['messages'][-1]['content']
+    result = perception_agent_1.extract_data(query)
+    
+    if result.empty:
+        return {"perception_1": {"status": "no_data", "data": pd.DataFrame()}}
+    else:
+        return {"perception_1": {"status": "data_found", "data": result}}
+
+def perception_node_2(state: AgentState) -> dict:
+    logger.debug("Executing PerceptionNode2 with initial state: %s", state)
+    query = state['messages'][-1]['content']
+    result = perception_agent_2.extract_data(query)
+
+    if result.empty:
+        return {"perception_2": {"status": "no_data", "data": pd.DataFrame()}}
+    else:
+        return {"perception_2": {"status": "data_found", "data": result}}
+
+# Integration Node
+def integration_node(state: AgentState) -> dict:
+    logger.debug("Executing IntegrationNode with initial state: %s", state)
+    agent = IntegrationAgent()
+
+    valid_results = [
+        state[key]['data'] for key in ['perception_1', 'perception_2']
+        if state[key]['status'] == 'data_found' and isinstance(state[key]['data'], pd.DataFrame) and not state[key]['data'].empty
+    ]
+
+    if len(valid_results) == 0:
+        return {"integration_result": {"status": "no_data", "message": "No relevant information found."}}
+    else:
+        perception_results = pd.concat(valid_results, ignore_index=True)
+        query = state['messages'][-1]['content']
+        response = agent.synthesize_data(perception_results, query)
+        return {"integration_result": {"status": "data_integrated", "message": response}}
 
 # Initialize Models
 load_sentence_transformer_model()  # Load embedding model
@@ -127,81 +163,15 @@ financial_df = pd.read_csv("data/financial_reports.csv")
 perception_agent_1 = PerceptionAgent(sec_df, "SEC_Perception", SEC_EMBEDDINGS_PATH)
 perception_agent_2 = PerceptionAgent(financial_df, "Financial_Perception", FINANCIAL_EMBEDDINGS_PATH)
 
-# Node Functions for the Perception Agents
-def perception_node_1(state):
-    logger.debug("Executing PerceptionNode1 with initial state: %s", state.__dict__)
-    query = state.messages[-1]['content']
-    result = perception_agent_1.extract_data(query)
-    
-    if result.empty:
-        state.data['perception_1'] = {
-            "status": "no_data",
-            "data": pd.DataFrame()
-        }
-    else:
-        state.data['perception_1'] = {
-            "status": "data_found",
-            "data": result
-        }
-    
-    logger.debug("Updated state after PerceptionNode1: %s", state.__dict__)
-    return state
-
-def perception_node_2(state):
-    logger.debug("Executing PerceptionNode2 with initial state: %s", state.__dict__)
-    query = state.messages[-1]['content']
-    result = perception_agent_2.extract_data(query)
-
-    if result.empty:
-        state.data['perception_2'] = {
-            "status": "no_data",
-            "data": pd.DataFrame()
-        }
-    else:
-        state.data['perception_2'] = {
-            "status": "data_found",
-            "data": result
-        }
-
-    logger.debug("Updated state after PerceptionNode2: %s", state.__dict__)
-    return state
-
-# Integration Node
-def integration_node(state):
-    logger.debug("Executing IntegrationNode with initial state: %s", state.__dict__)
-    agent = IntegrationAgent()
-
-    valid_results = [
-        state.data[key]['data'] for key in ['perception_1', 'perception_2']
-        if state.data[key]['status'] == 'data_found' and isinstance(state.data[key]['data'], pd.DataFrame) and not state.data[key]['data'].empty
-    ]
-
-    if len(valid_results) == 0:
-        state.data['integration_result'] = {
-            "status": "no_data",
-            "message": "No relevant information found."
-        }
-    else:
-        perception_results = pd.concat(valid_results, ignore_index=True)
-        query = state.messages[-1]['content']
-        response = agent.synthesize_data(perception_results, query)
-        state.data['integration_result'] = {
-            "status": "data_integrated",
-            "message": response
-        }
-
-    logger.debug("Updated state after IntegrationNode: %s", state.__dict__)
-    return state
-
 # Build Graph
 workflow = StateGraph(AgentState)
 workflow.add_node("UserInterfaceNode", lambda state: state)  # Placeholder to ensure graph has a UI start point
-workflow.add_node("PerceptionNode1", perception_node_1)
-workflow.add_node("PerceptionNode2", perception_node_2)
-workflow.add_node("IntegrationNode", integration_node)
+workflow.add_node("PerceptionNode1", lambda state: state.update(perception_node_1(state)))
+workflow.add_node("PerceptionNode2", lambda state: state.update(perception_node_2(state)))
+workflow.add_node("IntegrationNode", lambda state: state.update(integration_node(state)))
 
-# Start workflow from the UI node
-workflow.add_edge(START, "UserInterfaceNode")
+# Set entry point and add edges
+workflow.set_entry_point("UserInterfaceNode")
 workflow.add_edge("UserInterfaceNode", "PerceptionNode1")
 workflow.add_edge("PerceptionNode1", "PerceptionNode2")
 workflow.add_edge("PerceptionNode2", "IntegrationNode")
