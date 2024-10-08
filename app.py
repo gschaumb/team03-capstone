@@ -30,12 +30,12 @@ def process_user_input(user_input):
         # Extract the response from the state and provide feedback to the user
         integration_result = state.data.get('integration_result', "Could not generate a response.")
         logger.debug("Integration result: %s", integration_result)
-        return integration_result
+        return integration_result, state
 
     except Exception as e:
         # Log any errors that occur during the workflow
         logger.error("Error occurred during processing of user input: %s", e)
-        return "An error occurred during processing. Please try again."
+        return "An error occurred during processing. Please try again.", None
 
 # Creating the Gradio Interface
 with gr.Blocks() as demo:
@@ -59,19 +59,22 @@ with gr.Blocks() as demo:
     
     # Define action to be performed on clicking Submit button
     def interface_action(user_query):
-        response = process_user_input(user_query)
+        response, state = process_user_input(user_query)
         
         # Logging state information directly for intermediate inspection
-        try:
-            state_debug_info = (
-                f"Messages: {state.messages}\n"
-                f"Data: {state.data}\n"
-                f"Sender: {state.sender}"
-            )
-        except Exception as e:
-            state_debug_info = f"Error fetching intermediate state: {e}"
-            logger.error(state_debug_info)
-        
+        if state is not None:
+            try:
+                state_debug_info = (
+                    f"Messages: {state.messages}\n"
+                    f"Data: {state.data}\n"
+                    f"Sender: {state.sender}"
+                )
+            except Exception as e:
+                state_debug_info = f"Error fetching intermediate state: {e}"
+                logger.error(state_debug_info)
+        else:
+            state_debug_info = "State could not be fetched due to an error during processing."
+
         return response, state_debug_info
 
     # Connect user input, button, and output display
