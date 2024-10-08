@@ -98,6 +98,25 @@ class PerceptionAgent:
 
         return top_k_documents
 
+# Define Integration Agent
+class IntegrationAgent:
+    def synthesize_data(self, perception_results, query):
+        if GLOBAL_HUGGINGFACE_MODEL is None or GLOBAL_HUGGINGFACE_TOKENIZER is None:
+            raise ValueError("HuggingFace model or tokenizer not loaded.")
+        
+        logger.debug("IntegrationAgent synthesizing data for query: %s", query)
+        augmented_query = query + " " + " ".join(perception_results['chunked_text'].tolist())
+        inputs = GLOBAL_HUGGINGFACE_TOKENIZER(augmented_query, return_tensors="pt", truncation=True, max_length=512)
+
+        try:
+            outputs = GLOBAL_HUGGINGFACE_MODEL.generate(inputs["input_ids"], max_length=300, num_return_sequences=1)
+            response = GLOBAL_HUGGINGFACE_TOKENIZER.decode(outputs[0], skip_special_tokens=True)
+            logger.debug("IntegrationAgent generated response: %s", response)
+            return response
+        except Exception as e:
+            logger.error("Error during model generation: %s", e)
+            return "An error occurred during response generation."
+
 # Node Functions for the Perception Agents
 def perception_node_1(state: AgentState) -> AgentState:
     logger.debug("Executing PerceptionNode1 with initial state: %s", state)
