@@ -105,16 +105,18 @@ class IntegrationAgent:
             raise ValueError("HuggingFace model or tokenizer not loaded.")
         
         logger.debug("IntegrationAgent synthesizing data for query: %s", query)
+        
+        # Combine all top documents' text for context
         augmented_query = query + " " + " ".join(perception_results['chunked_text'].tolist())
         inputs = GLOBAL_HUGGINGFACE_TOKENIZER(augmented_query, return_tensors="pt", truncation=True, max_length=512)
-
+        
         try:
             outputs = GLOBAL_HUGGINGFACE_MODEL.generate(inputs["input_ids"], max_length=300, num_return_sequences=1)
             response = GLOBAL_HUGGINGFACE_TOKENIZER.decode(outputs[0], skip_special_tokens=True)
             logger.debug("IntegrationAgent generated response: %s", response)
             return response
         except Exception as e:
-            logger.error("Error during model generation: %s", e)
+            logger.error("Error during response generation: %s", e)
             return "An error occurred during response generation."
 
 # Node Functions for the Perception Agents
