@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 import logging
-from typing import TypedDict, List
+from typing import TypedDict, List, Dict
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 from transformers import T5ForConditionalGeneration, T5Tokenizer
@@ -48,13 +48,13 @@ def compute_similarities(query_embedding, document_embeddings):
     logger.debug("Computing cosine similarities.")
     return cosine_similarity(query_embedding, document_embeddings).flatten()
 
-# Define the State
+# Define the State as a TypedDict
 class AgentState(TypedDict):
-    messages: List[dict]
+    messages: List[Dict[str, str]]
     sender: str
-    perception_1: dict
-    perception_2: dict
-    integration_result: dict
+    perception_1: Dict
+    perception_2: Dict
+    integration_result: Dict
 
 # Define Perception Agent
 class PerceptionAgent:
