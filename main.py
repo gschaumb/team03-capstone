@@ -56,24 +56,6 @@ class AgentState(TypedDict):
     perception_2: dict
     integration_result: dict
 
-# Generate response using the advanced HuggingFace model
-def generate_response_with_huggingface(query, top_k_documents):
-    if GLOBAL_HUGGINGFACE_MODEL is None or GLOBAL_HUGGINGFACE_TOKENIZER is None:
-        raise ValueError("HuggingFace model or tokenizer not loaded.")
-    
-    logger.debug("Generating response using HuggingFace model.")
-    augmented_query = query + " " + " ".join(top_k_documents['chunked_text'].tolist())
-    inputs = GLOBAL_HUGGINGFACE_TOKENIZER(augmented_query, return_tensors="pt", truncation=True, max_length=512)
-    
-    try:
-        outputs = GLOBAL_HUGGINGFACE_MODEL.generate(inputs["input_ids"], max_length=300, num_return_sequences=1)
-        response = GLOBAL_HUGGINGFACE_TOKENIZER.decode(outputs[0], skip_special_tokens=True)
-        logger.debug("Generated response: %s", response)
-        return response
-    except Exception as e:
-        logger.error("Error during model generation: %s", e)
-        return "An error occurred during response generation."
-
 # Define Perception Agent
 class PerceptionAgent:
     def __init__(self, data_df, name, embeddings_path):
@@ -97,21 +79,24 @@ class PerceptionAgent:
 
     def extract_data(self, query):
         logger.debug("PerceptionAgent (%s) extracting data for query: %s", self.name, query)
-        query_embedding = generate_embeddings([query])
-        similarities = compute_similarities(query_embedding, self.document_embeddings)
-        top_k_indices = similarities.argsort()[-5:][::-1]  # Retrieve top 5 similar documents
 
+        # Generate query embedding and log it
+        query_embedding = generate_embeddings([query])
+        logger.debug("Generated query embedding: %s", query_embedding)
+
+        # Compute similarities between the query and document embeddings
+        similarities = compute_similarities(query_embedding, self.document_embeddings)
+        logger.debug("Computed similarities: %s", similarities)
+
+        # Retrieve top 5 similar documents
+        top_k_indices = similarities.argsort()[-5:][::-1]
+        logger.debug("Top 5 similar document indices: %s", top_k_indices)
+
+        # Extract top documents
         top_k_documents = self.data_df.iloc[top_k_indices]
         logger.debug("PerceptionAgent (%s) found top documents: %s", self.name, top_k_documents)
-        return top_k_documents
 
-# Define Integration Agent
-class IntegrationAgent:
-    def synthesize_data(self, perception_results, query):
-        logger.debug("IntegrationAgent synthesizing data for query: %s", query)
-        response = generate_response_with_huggingface(query, perception_results)
-        logger.debug("IntegrationAgent generated response: %s", response)
-        return response
+        return top_k_documents
 
 # Node Functions for the Perception Agents
 def perception_node_1(state: AgentState) -> AgentState:
