@@ -1,6 +1,5 @@
 import os
 import pandas as pd
-import pickle
 import logging
 from typing import Literal
 from sentence_transformers import SentenceTransformer
@@ -8,7 +7,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from transformers import T5ForConditionalGeneration, T5Tokenizer
 from langgraph.graph import StateGraph, START, END
 
-# Configure logging to output to stdout so it can be captured in the hosted environment logs
+# Configure logging to output to stdout for hosted environment logs
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
@@ -117,41 +116,60 @@ perception_agent_2 = PerceptionAgent(financial_df, "Financial_Perception")
 
 # Node Functions for the Perception Agents
 def perception_node_1(state):
-    logger.debug("Executing PerceptionNode1.")
+    logger.debug("Executing PerceptionNode1 with state: %s", state.__dict__)
     query = state.messages[-1]['content']
     result = perception_agent_1.extract_data(query)
-    state.data['perception_1'] = result
+    if result.empty:
+        logger.warning("PerceptionNode1 returned empty results.")
+        state.data['perception_1'] = "No relevant documents found."
+    else:
+        state.data['perception_1'] = result
+    logger.debug("Updated state after PerceptionNode1: %s", state.__dict__)
     return state
 
 def perception_node_2(state):
-    logger.debug("Executing PerceptionNode2.")
+    logger.debug("Executing PerceptionNode2 with state: %s", state.__dict__)
     query = state.messages[-1]['content']
     result = perception_agent_2.extract_data(query)
-    state.data['perception_2'] = result
+    if result.empty:
+        logger.warning("PerceptionNode2 returned empty results.")
+        state.data['perception_2'] = "No relevant documents found."
+    else:
+        state.data['perception_2'] = result
+    logger.debug("Updated state after PerceptionNode2: %s", state.__dict__)
     return state
 
 # Integration Node
 def integration_node(state):
-    logger.debug("Executing IntegrationNode.")
+    logger.debug("Executing IntegrationNode with state: %s", state.__dict__)
     agent = IntegrationAgent()
-    perception_results = pd.concat([state.data[key] for key in state.data.keys() if key.startswith('perception')], ignore_index=True)
-    query = state.messages[-1]['content']
-    response = agent.synthesize_data(perception_results, query)
-    state.data['integration_result'] = response
+    perception_results = pd.concat(
+        [state.data[key] for key in state.data.keys() if key.startswith('perception') and not isinstance(state.data[key], str)],
+        ignore_index=True
+    )
+    if perception_results.empty:
+        logger.warning("IntegrationNode has no valid perception results to integrate.")
+        state.data['integration_result'] = "No relevant information found."
+    else:
+        query = state.messages[-1]['content']
+        response = agent.synthesize_data(perception_results, query)
+        state.data['integration_result'] = response
+    logger.debug("Updated state after IntegrationNode: %s", state.__dict__)
     return state
 
 # UI Node
 def ui_node(state):
-    logger.debug("Executing UserInterfaceNode.")
+    logger.debug("Executing UserInterfaceNode with state: %s", state.__dict__)
     agent = UserInterfaceAgent()
     updated_state = agent.handle_user_input(state.messages[-1]['content'], state)
+    logger.debug("Updated state after UserInterfaceNode: %s", updated_state.__dict__)
     return updated_state
 
 # Routing Logic
 def router(state) -> Literal["call_tool", "__end__", "to_integration", "to_perception_1"]:
     last_message = state.messages[-1]
     logger.debug("Routing based on last message: %s", last_message)
-    
+
     if "clarify" in last_message['content']:
         return "to_perception_1"
     elif "FINAL ANSWER" in last_message['content']:
