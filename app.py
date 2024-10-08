@@ -33,23 +33,21 @@ def process_user_input(user_input):
         # Collect intermediate states
         intermediate_states = []
         for event in events:
-            # Update the state explicitly to avoid overwriting
-            agent_state.update({
-                'perception_1': event.get('perception_1', agent_state['perception_1']),
-                'perception_2': event.get('perception_2', agent_state['perception_2']),
-                'integration_result': event.get('integration_result', agent_state['integration_result'])
-            })
+            # Explicitly update the state to avoid overwriting fields with None values
+            agent_state['perception_1'] = event.get('perception_1', agent_state['perception_1'])
+            agent_state['perception_2'] = event.get('perception_2', agent_state['perception_2'])
+            agent_state['integration_result'] = event.get('integration_result', agent_state['integration_result'])
 
             # Log and capture intermediate states
             intermediate_state_info = {
                 "state_data": event.get('data', {}),
-                "messages": event.get('messages', agent_state['messages']),
-                "current_sender": event.get('sender', agent_state['sender'])
+                "messages": agent_state['messages'],
+                "current_sender": agent_state.get('sender', "")
             }
             logger.debug("Intermediate state: %s", intermediate_state_info)
             intermediate_states.append(intermediate_state_info)
 
-        # Final response (from IntegrationNode)
+        # Final response should be from the IntegrationNode's result
         final_response = agent_state['integration_result'].get('message', "No relevant information found.")
         logger.debug("Final response: %s", final_response)
 
