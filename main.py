@@ -94,7 +94,11 @@ class AgentState:
     def __init__(self):
         self.messages = []  # Sequence of messages exchanged
         self.sender = ""  # Tracks last sender
-        self.data = {"perception_1": None, "perception_2": None, "integration_result": None}  # Initialized with required keys
+        self.data = {
+            "perception_1": {"status": None, "data": None},
+            "perception_2": {"status": None, "data": None},
+            "integration_result": {"status": None, "message": None}
+        }
 
 # Initialize Models
 load_sentence_transformer_model()  # Load embedding model
@@ -114,17 +118,14 @@ def perception_node_1(state):
     result = perception_agent_1.extract_data(query)
     
     if result.empty:
-        logger.warning("PerceptionNode1 returned empty results.")
         state.data['perception_1'] = {
-            "message": "No relevant documents found",
-            "data": pd.DataFrame(),
-            "status": "no_data"
+            "status": "no_data",
+            "data": pd.DataFrame()
         }
     else:
         state.data['perception_1'] = {
-            "message": "Documents found",
-            "data": result,
-            "status": "data_found"
+            "status": "data_found",
+            "data": result
         }
     
     logger.debug("Updated state after PerceptionNode1: %s", state.__dict__)
@@ -136,17 +137,14 @@ def perception_node_2(state):
     result = perception_agent_2.extract_data(query)
 
     if result.empty:
-        logger.warning("PerceptionNode2 returned empty results.")
         state.data['perception_2'] = {
-            "message": "No relevant documents found",
-            "data": pd.DataFrame(),
-            "status": "no_data"
+            "status": "no_data",
+            "data": pd.DataFrame()
         }
     else:
         state.data['perception_2'] = {
-            "message": "Documents found",
-            "data": result,
-            "status": "data_found"
+            "status": "data_found",
+            "data": result
         }
 
     logger.debug("Updated state after PerceptionNode2: %s", state.__dict__)
@@ -158,23 +156,22 @@ def integration_node(state):
     agent = IntegrationAgent()
 
     valid_results = [
-        state.data[key]['data'] for key in state.data.keys()
-        if key.startswith('perception') and isinstance(state.data[key]['data'], pd.DataFrame) and not state.data[key]['data'].empty
+        state.data[key]['data'] for key in ['perception_1', 'perception_2']
+        if state.data[key]['status'] == 'data_found' and isinstance(state.data[key]['data'], pd.DataFrame) and not state.data[key]['data'].empty
     ]
 
     if len(valid_results) == 0:
-        logger.warning("IntegrationNode has no valid perception results to integrate.")
         state.data['integration_result'] = {
-            "message": "No relevant information found.",
-            "status": "no_data"
+            "status": "no_data",
+            "message": "No relevant information found."
         }
     else:
         perception_results = pd.concat(valid_results, ignore_index=True)
         query = state.messages[-1]['content']
         response = agent.synthesize_data(perception_results, query)
         state.data['integration_result'] = {
-            "message": response,
-            "status": "data_integrated"
+            "status": "data_integrated",
+            "message": response
         }
 
     logger.debug("Updated state after IntegrationNode: %s", state.__dict__)
