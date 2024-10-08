@@ -2,11 +2,11 @@ import gradio as gr
 from main import graph, AgentState
 import logging
 
-# Configure logging to print to stdout for hosted environments
+# Configure logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-# Initializing the Agent State with the correct structure for a TypedDict
+# Initializing the Agent State with clear structure
 agent_state = {
     'messages': [],
     'sender': '',
@@ -18,7 +18,12 @@ agent_state = {
 def process_user_input(user_input):
     # Add user input to state
     logger.debug("Received user input: %s", user_input)
-    agent_state['messages'].append({'sender': 'User', 'content': user_input})
+    
+    if user_input:
+        agent_state['messages'].append({'sender': 'User', 'content': user_input})
+    else:
+        logger.error("User input is empty.")
+        return "Please provide a valid input.", []
 
     try:
         logger.debug("Starting graph workflow execution with initial state: %s", agent_state)
@@ -28,19 +33,23 @@ def process_user_input(user_input):
         # Collect intermediate states
         intermediate_states = []
         for event in events:
-            # Update `agent_state` with the latest data
-            agent_state.update(event)
+            # Update the state explicitly to avoid overwriting
+            agent_state.update({
+                'perception_1': event.get('perception_1', agent_state['perception_1']),
+                'perception_2': event.get('perception_2', agent_state['perception_2']),
+                'integration_result': event.get('integration_result', agent_state['integration_result'])
+            })
 
-            # Capture and log each intermediate state
+            # Log and capture intermediate states
             intermediate_state_info = {
-                "state_data": event.get('data'),
-                "messages": event.get('messages'),
-                "current_sender": event.get('sender')
+                "state_data": event.get('data', {}),
+                "messages": event.get('messages', agent_state['messages']),
+                "current_sender": event.get('sender', agent_state['sender'])
             }
             logger.debug("Intermediate state: %s", intermediate_state_info)
             intermediate_states.append(intermediate_state_info)
 
-        # Final response (assuming IntegrationNode is the endpoint that gives a response)
+        # Final response (from IntegrationNode)
         final_response = agent_state['integration_result'].get('message', "No relevant information found.")
         logger.debug("Final response: %s", final_response)
 
@@ -66,5 +75,4 @@ with gr.Blocks() as demo:
     submit_btn.click(fn=update_state_ui, inputs=user_input, outputs=[output, state_output])
 
 # Launch Gradio app
-if __name__ == "__main__":
-    demo.launch(share=True)
+if __

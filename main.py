@@ -1,14 +1,14 @@
 import os
 import pandas as pd
 import logging
-from typing import TypedDict, List, Dict
+from typing import TypedDict, List, Dict, Optional
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 from transformers import T5ForConditionalGeneration, T5Tokenizer
 from langgraph.graph import StateGraph, START, END
 import pickle
 
-# Configure logging to output to stdout so it can be captured in the hosted environment logs
+# Configure logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
@@ -21,6 +21,23 @@ GLOBAL_HUGGINGFACE_TOKENIZER = None
 SEC_EMBEDDINGS_PATH = "/data/sec_embeddings.pkl"
 FINANCIAL_EMBEDDINGS_PATH = "/data/financial_embeddings.pkl"
 
+# TypedDicts for Perception and Integration Result
+class PerceptionResult(TypedDict, total=False):
+    status: str
+    data: Optional[pd.DataFrame]
+
+class IntegrationResult(TypedDict, total=False):
+    status: str
+    message: Optional[str]
+
+# Define the State as a TypedDict with clear structure
+class AgentState(TypedDict):
+    messages: List[Dict[str, str]]
+    sender: str
+    perception_1: PerceptionResult
+    perception_2: PerceptionResult
+    integration_result: IntegrationResult
+
 # Load SentenceTransformer model globally
 def load_sentence_transformer_model(model_name="all-MiniLM-L6-v2"):
     global GLOBAL_SENTENCE_MODEL
@@ -28,7 +45,7 @@ def load_sentence_transformer_model(model_name="all-MiniLM-L6-v2"):
         logger.debug("Loading SentenceTransformer model: %s", model_name)
         GLOBAL_SENTENCE_MODEL = SentenceTransformer(model_name)
 
-# Load HuggingFace model and tokenizer globally (using Flan-T5-Large for this example)
+# Load HuggingFace model and tokenizer globally
 def load_huggingface_model(model_name="google/flan-t5-large"):
     global GLOBAL_HUGGINGFACE_MODEL, GLOBAL_HUGGINGFACE_TOKENIZER
     if GLOBAL_HUGGINGFACE_MODEL is None or GLOBAL_HUGGINGFACE_TOKENIZER is None:
@@ -47,14 +64,6 @@ def generate_embeddings(texts):
 def compute_similarities(query_embedding, document_embeddings):
     logger.debug("Computing cosine similarities.")
     return cosine_similarity(query_embedding, document_embeddings).flatten()
-
-# Define the State as a TypedDict
-class AgentState(TypedDict):
-    messages: List[Dict[str, str]]
-    sender: str
-    perception_1: Dict
-    perception_2: Dict
-    integration_result: Dict
 
 # Define Perception Agent
 class PerceptionAgent:
@@ -119,9 +128,15 @@ class IntegrationAgent:
             logger.error("Error during response generation: %s", e)
             return "An error occurred during response generation."
 
-# Node Functions for the Perception Agents
+# Perception Nodes
 def perception_node_1(state: AgentState) -> AgentState:
     logger.debug("Executing PerceptionNode1 with initial state: %s", state)
+    
+    if not state['messages']:
+        logger.error("No messages in state.")
+        state['perception_1'] = {"status": "no_data", "data": pd.DataFrame()}
+        return state
+    
     query = state['messages'][-1]['content']
     result = perception_agent_1.extract_data(query)
     
@@ -134,6 +149,12 @@ def perception_node_1(state: AgentState) -> AgentState:
 
 def perception_node_2(state: AgentState) -> AgentState:
     logger.debug("Executing PerceptionNode2 with initial state: %s", state)
+    
+    if not state['messages']:
+        logger.error("No messages in state.")
+        state['perception_2'] = {"status": "no_data", "data": pd.DataFrame()}
+        return state
+
     query = state['messages'][-1]['content']
     result = perception_agent_2.extract_data(query)
 
