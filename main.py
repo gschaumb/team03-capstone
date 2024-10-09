@@ -125,8 +125,18 @@ class IntegrationAgent:
         logger.debug("IntegrationAgent synthesizing data for query: %s", query)
     
         # Combine all top documents' text for context
-        augmented_query = query + " " + " ".join(perception_results['chunked_text'].tolist())
-    
+        combined_text = " ".join(perception_results['chunked_text'].tolist())
+        
+        # Create a system prompt to guide the LLM
+        system_prompt = (
+            "You are a financial analyst. Please summarize the following information in clear, "
+            "well-structured prose, focusing on the most important points relevant to the user's query. "
+            "Avoid technical jargon where possible and ensure the response is coherent and easy to understand.\n\n"
+        )
+
+        # Augment the user query with the perception data and the system prompt
+        augmented_query = system_prompt + f"Query: {query}\n\nContext:\n{combined_text}"
+
         # Tokenize the input for Mistral (adjust max_length to fit model's capabilities)
         inputs = GLOBAL_HUGGINGFACE_TOKENIZER(augmented_query, return_tensors="pt", padding="longest", truncation=True, max_length=512)
 
@@ -139,7 +149,7 @@ class IntegrationAgent:
             outputs = GLOBAL_HUGGINGFACE_MODEL.generate(
                 inputs["input_ids"], 
                 attention_mask=inputs["attention_mask"], 
-                max_new_tokens=150,  
+                max_new_tokens=300,  # Increased from 150 to handle longer responses
                 num_return_sequences=1,
                 pad_token_id=GLOBAL_HUGGINGFACE_TOKENIZER.pad_token_id  
             )
