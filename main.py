@@ -4,7 +4,7 @@ import logging
 from typing import TypedDict, List, Dict, Optional
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
-from transformers import BloomForCausalLM, BloomTokenizerFast
+from transformers import GPT2LMHeadModel, GPT2TokenizerFast
 from langgraph.graph import StateGraph, START, END
 import pickle
 
@@ -45,14 +45,14 @@ def load_sentence_transformer_model(model_name="all-MiniLM-L6-v2"):
         logger.debug("Loading SentenceTransformer model: %s", model_name)
         GLOBAL_SENTENCE_MODEL = SentenceTransformer(model_name)
 
-# Load HuggingFace model and tokenizer globally
-def load_huggingface_model(model_name="bigscience/bloomz-7b1"):
+# Load HuggingFace model and tokenizer globally (now using distilGPT2)
+def load_huggingface_model(model_name="distilgpt2"):
     global GLOBAL_HUGGINGFACE_MODEL, GLOBAL_HUGGINGFACE_TOKENIZER
     if GLOBAL_HUGGINGFACE_MODEL is None or GLOBAL_HUGGINGFACE_TOKENIZER is None:
         logger.debug("Loading HuggingFace model: %s", model_name)
-        # Load Bloom model and tokenizer
-        GLOBAL_HUGGINGFACE_MODEL = BloomForCausalLM.from_pretrained(model_name)
-        GLOBAL_HUGGINGFACE_TOKENIZER = BloomTokenizerFast.from_pretrained(model_name)
+        # Load distilGPT2 model and tokenizer
+        GLOBAL_HUGGINGFACE_MODEL = GPT2LMHeadModel.from_pretrained(model_name)
+        GLOBAL_HUGGINGFACE_TOKENIZER = GPT2TokenizerFast.from_pretrained(model_name)
 
 # Helper Functions
 def generate_embeddings(texts):
@@ -119,17 +119,17 @@ class IntegrationAgent:
         # Combine all top documents' text for context
         augmented_query = query + " " + " ".join(perception_results['chunked_text'].tolist())
         
-        # Tokenize the input
+        # Tokenize the input for distilGPT2 (adjust max_length to fit model's capabilities)
         inputs = GLOBAL_HUGGINGFACE_TOKENIZER(augmented_query, return_tensors="pt", padding="longest", truncation=True, max_length=512)
         
         try:
             # Generate the model's response (text generation step)
             GLOBAL_HUGGINGFACE_MODEL.eval()
             
-            # Use `max_new_tokens` instead of `max_length` to control the generation length and avoid input conflicts
+            # Generate output using distilGPT2 (adjust max_new_tokens as needed)
             outputs = GLOBAL_HUGGINGFACE_MODEL.generate(
                 inputs["input_ids"], 
-                max_new_tokens=300,  # Limit the number of new tokens generated in the response
+                max_new_tokens=150,  # Adjust based on performance needs
                 num_return_sequences=1
             )
             response = GLOBAL_HUGGINGFACE_TOKENIZER.decode(outputs[0], skip_special_tokens=True)
@@ -198,7 +198,7 @@ def integration_node(state: AgentState) -> AgentState:
 
 # Initialize Models
 load_sentence_transformer_model()  # Load embedding model
-load_huggingface_model()  # Load HuggingFace LLM
+load_huggingface_model()  # Load HuggingFace LLM (now distilGPT2)
 
 # Instantiate Perception Agents with DataFrames
 sec_df = pd.read_csv("data/sec_docs.csv")
