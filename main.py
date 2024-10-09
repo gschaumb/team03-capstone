@@ -196,25 +196,28 @@ def integration_node(state: AgentState) -> AgentState:
     logger.debug("Executing IntegrationNode with initial state: %s", state)
     agent = IntegrationAgent()
 
+    # Collect valid perception results
     valid_results = [
         state[key]['data'] for key in ['perception_1', 'perception_2']
         if state[key]['status'] == 'data_found' and isinstance(state[key]['data'], pd.DataFrame) and not state[key]['data'].empty
     ]
 
     if len(valid_results) == 0:
+        # If no valid perception data, mark no data found
         state['integration_result'] = {"status": "no_data", "message": "No relevant information found."}
     else:
+        # Combine the valid results
         perception_results = pd.concat(valid_results, ignore_index=True)
-        query = state['messages'][-1]['content']
+        query = state['messages'][-1]['content']  # Get the latest user query
         response = agent.synthesize_data(perception_results, query)
         
-        # Check if the response is valid and clean up response before returning
-        if not response:
+        # Check if the response is non-empty and valid
+        if response:
+            logger.debug("IntegrationAgent generated a valid response.")
+            state['integration_result'] = {"status": "data_integrated", "message": response.strip()}  # Ensure message is updated
+        else:
             logger.error("IntegrationAgent returned an empty response.")
             state['integration_result'] = {"status": "no_data", "message": "Failed to generate response."}
-        else:
-            logger.debug("IntegrationAgent generated a valid response.")
-            state['integration_result'] = {"status": "data_integrated", "message": response.strip()}
 
     return state
 
