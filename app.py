@@ -15,12 +15,18 @@ agent_state = {
     'integration_result': {'status': None, 'message': None}
 }
 
-# process_user_input without deep copy (simplification)
+# process_user_input (with changes to reset state for each query)
 def process_user_input(user_input):
     logger.debug("Received user input: %s", user_input)
-    
+
     if user_input:
+        # Append the new message to the state
         agent_state['messages'].append({'sender': 'User', 'content': user_input})
+        
+        # Reset perceptions and integration result for the new query
+        agent_state['perception_1'] = {'status': None, 'data': None}
+        agent_state['perception_2'] = {'status': None, 'data': None}
+        agent_state['integration_result'] = {'status': None, 'message': None}
     else:
         logger.error("User input is empty.")
         return "Please provide a valid input.", []
@@ -47,7 +53,7 @@ def process_user_input(user_input):
     except Exception as e:
         logger.error("Error occurred during processing of user input: %s", e)
         return "An error occurred while processing your request. Please try again.", {}
-
+    
 # Gradio interface setup
 with gr.Blocks() as demo:
     gr.Markdown("# Multi-Agent Collaboration Demo")
