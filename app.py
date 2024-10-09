@@ -35,15 +35,12 @@ def process_user_input(user_input):
             logger.debug("Received event with state data: %s", event)
 
             # Update the agent_state with intermediate results, only if the event has valid data
-            if 'perception_1' in event and event['perception_1'] is not None:
-                if event['perception_1']['status'] is not None and event['perception_1']['status'] != 'no_data':
-                    agent_state['perception_1'] = event['perception_1']
-            if 'perception_2' in event and event['perception_2'] is not None:
-                if event['perception_2']['status'] is not None and event['perception_2']['status'] != 'no_data':
-                    agent_state['perception_2'] = event['perception_2']
-            if 'integration_result' in event and event['integration_result'] is not None:
-                if event['integration_result']['message'] is not None and event['integration_result']['message'] != '':
-                    agent_state['integration_result'] = event['integration_result']
+            if 'perception_1' in event and event['perception_1']:
+                agent_state['perception_1'] = event['perception_1']
+            if 'perception_2' in event and event['perception_2']:
+                agent_state['perception_2'] = event['perception_2']
+            if 'integration_result' in event and event['integration_result'] and event['integration_result'].get('message'):
+                agent_state['integration_result'] = event['integration_result']
 
             # Log the updated state for validation
             logger.debug("Updated agent state after event: %s", agent_state)
@@ -52,7 +49,7 @@ def process_user_input(user_input):
 
             # Append the intermediate state for UI purposes
             intermediate_states.append({
-                "state_data": event.get('data', {}),
+                "state_data": event.get('data', agent_state),
                 "messages": agent_state['messages'],
                 "current_sender": agent_state.get('sender', "")
             })
