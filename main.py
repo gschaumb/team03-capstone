@@ -130,6 +130,7 @@ class IntegrationAgent:
 
         try:
             # Generate the model's response
+            logger.debug("Calling HuggingFace model to generate a response.")
             GLOBAL_HUGGINGFACE_MODEL.eval()
         
             # Generate output (adjust max_new_tokens as needed)
@@ -171,6 +172,7 @@ def perception_node_1(state: AgentState) -> AgentState:
     else:
         state['perception_1'] = {"status": "data_found", "data": result}
     
+    logger.debug("PerceptionNode1 result: %s", state['perception_1'])
     return state
 
 def perception_node_2(state: AgentState) -> AgentState:
@@ -189,6 +191,7 @@ def perception_node_2(state: AgentState) -> AgentState:
     else:
         state['perception_2'] = {"status": "data_found", "data": result}
 
+    logger.debug("PerceptionNode2 result: %s", state['perception_2'])
     return state
 
 # Integration Node
@@ -203,22 +206,24 @@ def integration_node(state: AgentState) -> AgentState:
     ]
 
     if len(valid_results) == 0:
-        # If no valid perception data, mark no data found
+        logger.error("No valid perception data available for integration.")
         state['integration_result'] = {"status": "no_data", "message": "No relevant information found."}
     else:
         # Combine the valid results
         perception_results = pd.concat(valid_results, ignore_index=True)
         query = state['messages'][-1]['content']  # Get the latest user query
+        logger.debug("Perception results to be integrated: %s", perception_results)
         response = agent.synthesize_data(perception_results, query)
         
         # Check if the response is non-empty and valid
         if response:
-            logger.debug("IntegrationAgent generated a valid response.")
-            state['integration_result'] = {"status": "data_integrated", "message": response.strip()}  # Ensure message is updated
+            logger.debug("IntegrationAgent generated a valid response: %s", response.strip())
+            state['integration_result'] = {"status": "data_integrated", "message": response.strip()}
         else:
             logger.error("IntegrationAgent returned an empty response.")
             state['integration_result'] = {"status": "no_data", "message": "Failed to generate response."}
 
+    logger.debug("Final integration result: %s", state['integration_result'])
     return state
 
 # Initialize Models

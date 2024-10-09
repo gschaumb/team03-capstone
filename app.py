@@ -26,15 +26,20 @@ def process_user_input(user_input):
     
     try:
         logger.debug("Starting graph workflow execution with initial state: %s", agent_state)
+        
         # Execute the graph workflow
         events = graph.stream(agent_state)  # Stream through the state graph
 
         intermediate_states = []
         for event in events:
+            logger.debug("Received event with state data: %s", event)
+
             # Update the agent_state with intermediate results
             agent_state['perception_1'] = event.get('perception_1', agent_state['perception_1'])
             agent_state['perception_2'] = event.get('perception_2', agent_state['perception_2'])
             agent_state['integration_result'] = event.get('integration_result', agent_state['integration_result'])
+
+            logger.debug("Updated agent state after event: %s", agent_state)
 
             intermediate_states.append({
                 "state_data": event.get('data', {}),
@@ -49,7 +54,7 @@ def process_user_input(user_input):
         else:
             final_response = agent_state['integration_result']['message']
 
-        logger.debug("Final response: %s", final_response)
+        logger.debug("Final response to be returned: %s", final_response)
         return final_response, intermediate_states
     
     except Exception as e:
