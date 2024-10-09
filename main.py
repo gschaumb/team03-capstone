@@ -53,6 +53,11 @@ def load_huggingface_model(model_name="distilgpt2"):
         # Load distilGPT2 model and tokenizer
         GLOBAL_HUGGINGFACE_MODEL = GPT2LMHeadModel.from_pretrained(model_name)
         GLOBAL_HUGGINGFACE_TOKENIZER = GPT2TokenizerFast.from_pretrained(model_name)
+        
+        # Ensure that the tokenizer has a padding token (use eos_token as padding token)
+        if GLOBAL_HUGGINGFACE_TOKENIZER.pad_token is None:
+            logger.debug("Assigning pad_token as eos_token for the tokenizer.")
+            GLOBAL_HUGGINGFACE_TOKENIZER.pad_token = GLOBAL_HUGGINGFACE_TOKENIZER.eos_token
 
 # Helper Functions
 def generate_embeddings(texts):
@@ -130,7 +135,8 @@ class IntegrationAgent:
             outputs = GLOBAL_HUGGINGFACE_MODEL.generate(
                 inputs["input_ids"], 
                 max_new_tokens=150,  # Adjust based on performance needs
-                num_return_sequences=1
+                num_return_sequences=1,
+                pad_token_id=GLOBAL_HUGGINGFACE_TOKENIZER.pad_token_id  # Set the pad_token_id
             )
             response = GLOBAL_HUGGINGFACE_TOKENIZER.decode(outputs[0], skip_special_tokens=True)
             logger.debug("IntegrationAgent generated response: %s", response)
