@@ -7,6 +7,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from langgraph.graph import StateGraph, START, END
 import pickle
+from huggingface_hub import login
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -50,9 +51,9 @@ def load_huggingface_model(model_name="mistralai/Mistral-7B-Instruct-v0.1"):
     global GLOBAL_HUGGINGFACE_MODEL, GLOBAL_HUGGINGFACE_TOKENIZER
     if GLOBAL_HUGGINGFACE_MODEL is None or GLOBAL_HUGGINGFACE_TOKENIZER is None:
         logger.debug("Loading HuggingFace model: %s", model_name)
-        # Load Mistral-7B model and tokenizer
-        GLOBAL_HUGGINGFACE_MODEL = AutoModelForCausalLM.from_pretrained(model_name)
-        GLOBAL_HUGGINGFACE_TOKENIZER = AutoTokenizer.from_pretrained(model_name)
+        hf_token = os.getenv("HF_TOKEN")
+        GLOBAL_HUGGINGFACE_MODEL = AutoModelForCausalLM.from_pretrained(model_name, use_auth_token=hf_token)
+        GLOBAL_HUGGINGFACE_TOKENIZER = AutoTokenizer.from_pretrained(model_name, use_auth_token=hf_token)
         
         # Ensure that the tokenizer has a padding token (use eos_token as padding token if needed)
         if GLOBAL_HUGGINGFACE_TOKENIZER.pad_token is None:
