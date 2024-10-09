@@ -5,9 +5,7 @@ from typing import TypedDict, List, Dict, Optional
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 from transformers import AutoModelForCausalLM, AutoTokenizer
-from langgraph.graph import StateGraph, START, END
 import pickle
-from huggingface_hub import login
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -46,7 +44,7 @@ def load_sentence_transformer_model(model_name="all-MiniLM-L6-v2"):
         logger.debug("Loading SentenceTransformer model: %s", model_name)
         GLOBAL_SENTENCE_MODEL = SentenceTransformer(model_name)
 
-# Load HuggingFace model and tokenizer globally (now using Mistral-7B-Instruct-v0.1)
+# Load HuggingFace model and tokenizer globally
 def load_huggingface_model(model_name="mistralai/Mistral-7B-Instruct-v0.1"):
     global GLOBAL_HUGGINGFACE_MODEL, GLOBAL_HUGGINGFACE_TOKENIZER
     if GLOBAL_HUGGINGFACE_MODEL is None or GLOBAL_HUGGINGFACE_TOKENIZER is None:
@@ -136,17 +134,16 @@ class IntegrationAgent:
             # Generate output (adjust max_new_tokens as needed)
             outputs = GLOBAL_HUGGINGFACE_MODEL.generate(
                 inputs["input_ids"], 
-                attention_mask=inputs["attention_mask"],  # Explicitly set attention mask to address warning
-                max_new_tokens=150,  # Limit the output to 150 tokens for concise response
+                attention_mask=inputs["attention_mask"], 
+                max_new_tokens=150,  
                 num_return_sequences=1,
-                pad_token_id=GLOBAL_HUGGINGFACE_TOKENIZER.pad_token_id  # Set the pad_token_id
+                pad_token_id=GLOBAL_HUGGINGFACE_TOKENIZER.pad_token_id  
             )
         
             # Decode the output
             raw_response = GLOBAL_HUGGINGFACE_TOKENIZER.decode(outputs[0], skip_special_tokens=True)
             logger.debug("IntegrationAgent generated raw response: %s", raw_response)
 
-            # Clean up the response (remove instruction tokens like [INST] if present)
             cleaned_response = raw_response.replace("[INST]", "").replace("[/INST]", "").strip()
             logger.debug("IntegrationAgent cleaned response: %s", cleaned_response)
 
@@ -212,14 +209,13 @@ def integration_node(state: AgentState) -> AgentState:
     else:
         # Combine the valid results
         perception_results = pd.concat(valid_results, ignore_index=True)
-        query = state['messages'][-1]['content']  # Get the latest user query
+        query = state['messages'][-1]['content']  
         logger.debug("Perception results to be integrated: %s", perception_results)
 
         try:
             # Generate the response using the IntegrationAgent
             response = agent.synthesize_data(perception_results, query)
 
-            # Ensure that the response is checked properly and retained if valid
             if response and response.strip():
                 logger.debug("IntegrationAgent generated a valid response: %s", response.strip())
                 state['integration_result'] = {"status": "data_integrated", "message": response.strip()}
@@ -235,8 +231,8 @@ def integration_node(state: AgentState) -> AgentState:
     return state
 
 # Initialize Models
-load_sentence_transformer_model()  # Load embedding model
-load_huggingface_model()  # Load HuggingFace LLM (now Mistral-7B-Instruct-v0.1)
+load_sentence_transformer_model()  
+load_huggingface_model()  
 
 # Instantiate Perception Agents with DataFrames
 sec_df = pd.read_csv("data/sec_docs.csv")
@@ -244,22 +240,3 @@ financial_df = pd.read_csv("data/financial_reports.csv")
 
 perception_agent_1 = PerceptionAgent(sec_df, "SEC_Perception", SEC_EMBEDDINGS_PATH)
 perception_agent_2 = PerceptionAgent(financial_df, "Financial_Perception", FINANCIAL_EMBEDDINGS_PATH)
-
-# Build Graph
-workflow = StateGraph(AgentState)
-workflow.add_node("UserInterfaceNode", lambda state: state)  # Placeholder to ensure graph has a UI start point
-workflow.add_node("PerceptionNode1", lambda state: perception_node_1(state))
-workflow.add_node("PerceptionNode2", lambda state: perception_node_2(state))
-workflow.add_node("IntegrationNode", lambda state: integration_node(state))
-
-# Set entry point and add edges
-workflow.set_entry_point("UserInterfaceNode")
-workflow.add_edge("UserInterfaceNode", "PerceptionNode1")
-workflow.add_edge("PerceptionNode1", "PerceptionNode2")
-workflow.add_edge("PerceptionNode2", "IntegrationNode")
-workflow.add_edge("IntegrationNode", END)
-
-# Compile the graph
-logger.debug("Compiling workflow graph.")
-graph = workflow.compile()
-logger.debug("Workflow graph compiled successfully.")
