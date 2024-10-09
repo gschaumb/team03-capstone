@@ -46,7 +46,7 @@ def load_sentence_transformer_model(model_name="all-MiniLM-L6-v2"):
         GLOBAL_SENTENCE_MODEL = SentenceTransformer(model_name)
 
 # Load HuggingFace model and tokenizer globally
-def load_huggingface_model(model_name="bigscience/bloom"):
+def load_huggingface_model(model_name="bigscience/bloomz-7b1"):
     global GLOBAL_HUGGINGFACE_MODEL, GLOBAL_HUGGINGFACE_TOKENIZER
     if GLOBAL_HUGGINGFACE_MODEL is None or GLOBAL_HUGGINGFACE_TOKENIZER is None:
         logger.debug("Loading HuggingFace model: %s", model_name)
