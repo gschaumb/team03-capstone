@@ -40,16 +40,15 @@ def process_user_input(user_input):
             if 'perception_2' in event and event['perception_2']:
                 agent_state['perception_2'] = event['perception_2']
             if 'integration_result' in event and event['integration_result'] and event['integration_result'].get('message'):
-                agent_state['integration_result'] = event['integration_result']
+                if event['integration_result']['message'].strip():  # Check for non-empty message
+                    agent_state['integration_result'] = event['integration_result']
 
             # Log the updated state for validation
             logger.debug("Updated agent state after event: %s", agent_state)
-            if agent_state['integration_result']['message'] is None:
-                logger.warning("Integration result message is unexpectedly None after event processing.")
 
             # Append the intermediate state for UI purposes
             intermediate_states.append({
-                "state_data": event.get('data', agent_state),
+                "state_data": agent_state.copy(),  # Copy agent state to prevent mutability issues
                 "messages": agent_state['messages'],
                 "current_sender": agent_state.get('sender', "")
             })
@@ -86,4 +85,3 @@ with gr.Blocks() as demo:
 # Launch Gradio app
 if __name__ == "__main__":
     demo.launch(share=True)
-    

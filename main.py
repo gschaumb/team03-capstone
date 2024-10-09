@@ -214,15 +214,22 @@ def integration_node(state: AgentState) -> AgentState:
         perception_results = pd.concat(valid_results, ignore_index=True)
         query = state['messages'][-1]['content']  # Get the latest user query
         logger.debug("Perception results to be integrated: %s", perception_results)
-        response = agent.synthesize_data(perception_results, query)
-    
-        # Ensure that the response is checked properly and retained if valid
-        if response and response.strip():
-            logger.debug("IntegrationAgent generated a valid response: %s", response.strip())
-            state['integration_result'] = {"status": "data_integrated", "message": response.strip()}
-        else:
-            logger.error("IntegrationAgent returned an empty response.")
-            state['integration_result'] = {"status": "no_data", "message": "Failed to generate response."}
+
+        try:
+            # Generate the response using the IntegrationAgent
+            response = agent.synthesize_data(perception_results, query)
+
+            # Ensure that the response is checked properly and retained if valid
+            if response and response.strip():
+                logger.debug("IntegrationAgent generated a valid response: %s", response.strip())
+                state['integration_result'] = {"status": "data_integrated", "message": response.strip()}
+            else:
+                logger.error("IntegrationAgent returned an empty response.")
+                state['integration_result'] = {"status": "no_data", "message": "Failed to generate response."}
+        
+        except Exception as e:
+            logger.error("Error during response generation in IntegrationAgent: %s", e)
+            state['integration_result'] = {"status": "error", "message": "An error occurred during response synthesis."}
 
     logger.debug("Final integration result: %s", state['integration_result'])
     return state
