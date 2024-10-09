@@ -125,7 +125,13 @@ class IntegrationAgent:
         try:
             # Generate the model's response (text generation step)
             GLOBAL_HUGGINGFACE_MODEL.eval()
-            outputs = GLOBAL_HUGGINGFACE_MODEL.generate(inputs["input_ids"], max_length=300, num_return_sequences=1)
+            
+            # Use `max_new_tokens` instead of `max_length` to control the generation length and avoid input conflicts
+            outputs = GLOBAL_HUGGINGFACE_MODEL.generate(
+                inputs["input_ids"], 
+                max_new_tokens=300,  # Limit the number of new tokens generated in the response
+                num_return_sequences=1
+            )
             response = GLOBAL_HUGGINGFACE_TOKENIZER.decode(outputs[0], skip_special_tokens=True)
             logger.debug("IntegrationAgent generated response: %s", response)
             return response
