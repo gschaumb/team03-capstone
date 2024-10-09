@@ -42,10 +42,14 @@ def process_user_input(user_input):
                 "current_sender": agent_state.get('sender', "")
             })
 
-        # Extract the final response from the integration result
-        final_response = agent_state['integration_result'].get('message', "No relevant information found.")
-        logger.debug("Final response: %s", final_response)
+        # Ensure that integration_result is properly populated
+        if 'message' not in agent_state['integration_result'] or not agent_state['integration_result']['message']:
+            logger.error("Integration result message is empty or missing.")
+            final_response = "No relevant information found."
+        else:
+            final_response = agent_state['integration_result'].get('message', "No relevant information found.")
 
+        logger.debug("Final response: %s", final_response)
         return final_response, intermediate_states
     
     except Exception as e:

@@ -135,7 +135,7 @@ class IntegrationAgent:
             # Generate output (adjust max_new_tokens as needed)
             outputs = GLOBAL_HUGGINGFACE_MODEL.generate(
                 inputs["input_ids"], 
-                max_new_tokens=150,  # Adjust based on needs
+                max_new_tokens=150,  # Limit the output to 150 tokens for concise response
                 num_return_sequences=1,
                 pad_token_id=GLOBAL_HUGGINGFACE_TOKENIZER.pad_token_id  # Set the pad_token_id
             )
@@ -207,7 +207,14 @@ def integration_node(state: AgentState) -> AgentState:
         perception_results = pd.concat(valid_results, ignore_index=True)
         query = state['messages'][-1]['content']
         response = agent.synthesize_data(perception_results, query)
-        state['integration_result'] = {"status": "data_integrated", "message": response}
+        
+        # Check if the response is valid and clean up response before returning
+        if not response:
+            logger.error("IntegrationAgent returned an empty response.")
+            state['integration_result'] = {"status": "no_data", "message": "Failed to generate response."}
+        else:
+            logger.debug("IntegrationAgent generated a valid response.")
+            state['integration_result'] = {"status": "data_integrated", "message": response.strip()}
 
     return state
 
