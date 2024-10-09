@@ -11,7 +11,7 @@ import pickle
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-# Global Variables
+# Global Variables for models
 GLOBAL_SENTENCE_MODEL = None
 GLOBAL_HUGGINGFACE_MODEL = None
 GLOBAL_HUGGINGFACE_TOKENIZER = None
@@ -43,6 +43,8 @@ def load_sentence_transformer_model(model_name="all-MiniLM-L6-v2"):
     if GLOBAL_SENTENCE_MODEL is None:
         logger.debug("Loading SentenceTransformer model: %s", model_name)
         GLOBAL_SENTENCE_MODEL = SentenceTransformer(model_name)
+    else:
+        logger.debug("SentenceTransformer model already loaded.")
 
 # Load HuggingFace model and tokenizer globally
 def load_huggingface_model(model_name="mistralai/Mistral-7B-Instruct-v0.1"):
@@ -52,11 +54,13 @@ def load_huggingface_model(model_name="mistralai/Mistral-7B-Instruct-v0.1"):
         hf_token = os.getenv("HF_TOKEN")
         GLOBAL_HUGGINGFACE_MODEL = AutoModelForCausalLM.from_pretrained(model_name, use_auth_token=hf_token)
         GLOBAL_HUGGINGFACE_TOKENIZER = AutoTokenizer.from_pretrained(model_name, use_auth_token=hf_token)
-        
+
         # Ensure that the tokenizer has a padding token (use eos_token as padding token if needed)
         if GLOBAL_HUGGINGFACE_TOKENIZER.pad_token is None:
             logger.debug("Assigning pad_token as eos_token for the tokenizer.")
             GLOBAL_HUGGINGFACE_TOKENIZER.pad_token = GLOBAL_HUGGINGFACE_TOKENIZER.eos_token
+    else:
+        logger.debug("HuggingFace model and tokenizer already loaded.")
 
 # Helper Functions
 def generate_embeddings(texts):
@@ -96,11 +100,11 @@ class PerceptionAgent:
 
         # Generate query embedding and log it
         query_embedding = generate_embeddings([query])
-        logger.debug("Generated query embedding: %s", query_embedding)
+        logger.debug("Generated query embedding.")
 
         # Compute similarities between the query and document embeddings
         similarities = compute_similarities(query_embedding, self.document_embeddings)
-        logger.debug("Computed similarities: %s", similarities)
+        logger.debug("Computed similarities.")
 
         # Retrieve top 3 similar documents
         top_k_indices = similarities.argsort()[-3:][::-1]
@@ -108,7 +112,7 @@ class PerceptionAgent:
 
         # Extract top documents
         top_k_documents = self.data_df.iloc[top_k_indices]
-        logger.debug("PerceptionAgent (%s) found top documents: %s", self.name, top_k_documents)
+        logger.debug("PerceptionAgent (%s) found top documents.", self.name)
 
         return top_k_documents
 
@@ -192,7 +196,7 @@ def perception_node_2(state: AgentState) -> AgentState:
     logger.debug("PerceptionNode2 result: %s", state['perception_2'])
     return state
 
-# Integration Node
+# Integration Node (with checks before calling the LLM)
 def integration_node(state: AgentState) -> AgentState:
     logger.debug("Executing IntegrationNode with initial state: %s", state)
     agent = IntegrationAgent()

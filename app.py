@@ -1,7 +1,6 @@
 import gradio as gr
 from main import perception_node_1, perception_node_2, integration_node, AgentState
 import logging
-import copy
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -16,7 +15,7 @@ agent_state = {
     'integration_result': {'status': None, 'message': None}
 }
 
-# New process_user_input
+# process_user_input without deep copy (simplification)
 def process_user_input(user_input):
     logger.debug("Received user input: %s", user_input)
     
@@ -29,11 +28,8 @@ def process_user_input(user_input):
     try:
         logger.debug("Starting agent workflow with initial state: %s", agent_state)
 
-        # Deep copy the state to avoid mutations during the process
-        current_state = copy.deepcopy(agent_state)
-
         # Run through perception nodes
-        current_state = perception_node_1(current_state)
+        current_state = perception_node_1(agent_state)
         current_state = perception_node_2(current_state)
 
         # Run the integration node
