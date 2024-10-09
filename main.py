@@ -136,6 +136,7 @@ class IntegrationAgent:
             # Generate output (adjust max_new_tokens as needed)
             outputs = GLOBAL_HUGGINGFACE_MODEL.generate(
                 inputs["input_ids"], 
+                attention_mask=inputs["attention_mask"],  # Explicitly set attention mask to address warning
                 max_new_tokens=150,  # Limit the output to 150 tokens for concise response
                 num_return_sequences=1,
                 pad_token_id=GLOBAL_HUGGINGFACE_TOKENIZER.pad_token_id  # Set the pad_token_id
@@ -214,9 +215,9 @@ def integration_node(state: AgentState) -> AgentState:
         query = state['messages'][-1]['content']  # Get the latest user query
         logger.debug("Perception results to be integrated: %s", perception_results)
         response = agent.synthesize_data(perception_results, query)
-        
-        # Check if the response is non-empty and valid
-        if response:
+    
+        # Ensure that the response is checked properly and retained if valid
+        if response and response.strip():
             logger.debug("IntegrationAgent generated a valid response: %s", response.strip())
             state['integration_result'] = {"status": "data_integrated", "message": response.strip()}
         else:
