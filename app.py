@@ -36,11 +36,11 @@ def process_user_input(user_input):
 
             # Update the agent_state with intermediate results, only if the event has valid data
             if 'perception_1' in event and event['perception_1'] is not None:
-                agent_state['perception_1'] = event['perception_1']
+                agent_state['perception_1'] = event['perception_1'] if event['perception_1']['status'] else agent_state['perception_1']
             if 'perception_2' in event and event['perception_2'] is not None:
-                agent_state['perception_2'] = event['perception_2']
+                agent_state['perception_2'] = event['perception_2'] if event['perception_2']['status'] else agent_state['perception_2']
             if 'integration_result' in event and event['integration_result'] is not None:
-                agent_state['integration_result'] = event['integration_result']
+                agent_state['integration_result'] = event['integration_result'] if event['integration_result']['message'] else agent_state['integration_result']
 
             # Log the updated state for validation
             logger.debug("Updated agent state after event: %s", agent_state)
