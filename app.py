@@ -39,16 +39,18 @@ def process_user_input(user_input):
                 agent_state['perception_1'] = event['perception_1']
             if 'perception_2' in event and event['perception_2']:
                 agent_state['perception_2'] = event['perception_2']
-            if 'integration_result' in event and event['integration_result'] and event['integration_result'].get('message'):
-                if event['integration_result']['message'].strip():  # Check for non-empty message
+            if 'integration_result' in event and event['integration_result']:
+                if event['integration_result'].get('message') and event['integration_result']['message'].strip():
                     agent_state['integration_result'] = event['integration_result']
 
             # Log the updated state for validation
             logger.debug("Updated agent state after event: %s", agent_state)
+            if agent_state['integration_result']['message'] is None:
+                logger.warning("Integration result message is unexpectedly None after event processing.")
 
             # Append the intermediate state for UI purposes
             intermediate_states.append({
-                "state_data": agent_state.copy(),  # Copy agent state to prevent mutability issues
+                "state_data": agent_state.copy(),  # Make a copy to prevent mutation
                 "messages": agent_state['messages'],
                 "current_sender": agent_state.get('sender', "")
             })
