@@ -1,6 +1,7 @@
 import gradio as gr
 from main import graph, AgentState
 import logging
+import copy # for deep copy debug in state code
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -29,18 +30,21 @@ def process_user_input(user_input):
     try:
         logger.debug("Starting graph workflow execution with initial state: %s", agent_state)
         
+        # Create a deep copy of the initial state to avoid accidental modifications
+        current_state = copy.deepcopy(agent_state)
+
         # Execute the graph workflow
-        events = graph.stream(agent_state)  # Stream through the state graph
+        events = graph.stream(current_state)  # Stream through the state graph
 
         intermediate_states = []
-        current_state = agent_state.copy()  # Make a copy of the initial state for immutability
 
         for event in events:
             logger.debug("Received event with state data: %s", event)
 
-            # Update the current state with new values from the event.
-            # This ensures immutability of states across the nodes.
-            new_state = current_state.copy()
+            # Create a deep copy of the current state for modifications
+            new_state = copy.deepcopy(current_state)
+
+            # Update the agent_state with intermediate results from the event
             if 'perception_1' in event and event['perception_1']:
                 new_state['perception_1'] = event['perception_1']
             if 'perception_2' in event and event['perception_2']:
@@ -58,10 +62,13 @@ def process_user_input(user_input):
 
             # Append the intermediate state for UI purposes
             intermediate_states.append({
-                "state_data": current_state.copy(),
+                "state_data": copy.deepcopy(current_state),
                 "messages": current_state['messages'],
                 "current_sender": current_state.get('sender', "")
             })
+
+        # Assign the final state back to the global agent_state to preserve its result
+        agent_state.update(current_state)
 
         # Check if the integration result has a valid message
         if not current_state.get('integration_result', {}).get('message'):
@@ -72,7 +79,7 @@ def process_user_input(user_input):
 
         logger.debug("Final response to be returned: %s", final_response)
         return final_response, intermediate_states
-    
+
     except Exception as e:
         logger.error("Error occurred during processing of user input: %s", e)
         return "An error occurred while processing your request. Please try again.", []
