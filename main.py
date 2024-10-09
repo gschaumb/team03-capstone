@@ -4,7 +4,7 @@ import logging
 from typing import TypedDict, List, Dict, Optional
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
-from transformers import T5ForConditionalGeneration, T5Tokenizer
+from transformers import BloomForCausalLM, BloomTokenizerFast
 from langgraph.graph import StateGraph, START, END
 import pickle
 
@@ -50,8 +50,9 @@ def load_huggingface_model(model_name="bigscience/bloomz-7b1"):
     global GLOBAL_HUGGINGFACE_MODEL, GLOBAL_HUGGINGFACE_TOKENIZER
     if GLOBAL_HUGGINGFACE_MODEL is None or GLOBAL_HUGGINGFACE_TOKENIZER is None:
         logger.debug("Loading HuggingFace model: %s", model_name)
-        GLOBAL_HUGGINGFACE_MODEL = T5ForConditionalGeneration.from_pretrained(model_name)
-        GLOBAL_HUGGINGFACE_TOKENIZER = T5Tokenizer.from_pretrained(model_name)
+        # Load Bloom model and tokenizer
+        GLOBAL_HUGGINGFACE_MODEL = BloomForCausalLM.from_pretrained(model_name)
+        GLOBAL_HUGGINGFACE_TOKENIZER = BloomTokenizerFast.from_pretrained(model_name)
 
 # Helper Functions
 def generate_embeddings(texts):
@@ -117,9 +118,13 @@ class IntegrationAgent:
         
         # Combine all top documents' text for context
         augmented_query = query + " " + " ".join(perception_results['chunked_text'].tolist())
-        inputs = GLOBAL_HUGGINGFACE_TOKENIZER(augmented_query, return_tensors="pt", truncation=True, max_length=512)
+        
+        # Tokenize the input
+        inputs = GLOBAL_HUGGINGFACE_TOKENIZER(augmented_query, return_tensors="pt", padding="longest", truncation=True, max_length=512)
         
         try:
+            # Generate the model's response (text generation step)
+            GLOBAL_HUGGINGFACE_MODEL.eval()
             outputs = GLOBAL_HUGGINGFACE_MODEL.generate(inputs["input_ids"], max_length=300, num_return_sequences=1)
             response = GLOBAL_HUGGINGFACE_TOKENIZER.decode(outputs[0], skip_special_tokens=True)
             logger.debug("IntegrationAgent generated response: %s", response)
