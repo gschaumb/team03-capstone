@@ -119,35 +119,37 @@ class IntegrationAgent:
     def synthesize_data(self, perception_results, query):
         if GLOBAL_HUGGINGFACE_MODEL is None or GLOBAL_HUGGINGFACE_TOKENIZER is None:
             raise ValueError("HuggingFace model or tokenizer not loaded.")
-        
+    
         logger.debug("IntegrationAgent synthesizing data for query: %s", query)
-        
-        # Add prompt instruction for summarization role
-        instruction_text = (
-            "As an assistant, your role is to summarize the key points from the provided information "
-            "based on the user's query. Please generate a concise and informative summary."
-        )
-        
+    
         # Combine all top documents' text for context
-        augmented_query = f"<s>[INST] {query} [/INST] {instruction_text} [INST] " + " ".join(perception_results['chunked_text'].tolist()) + " [/INST]"
-        
-        # Tokenize the input for Mistral-7B
+        augmented_query = query + " " + " ".join(perception_results['chunked_text'].tolist())
+    
+        # Tokenize the input for Mistral (adjust max_length to fit model's capabilities)
         inputs = GLOBAL_HUGGINGFACE_TOKENIZER(augmented_query, return_tensors="pt", padding="longest", truncation=True, max_length=512)
-        
+
         try:
-            # Generate the model's response (text generation step)
+            # Generate the model's response
             GLOBAL_HUGGINGFACE_MODEL.eval()
-            
-            # Generate output using Mistral-7B
+        
+            # Generate output (adjust max_new_tokens as needed)
             outputs = GLOBAL_HUGGINGFACE_MODEL.generate(
                 inputs["input_ids"], 
-                max_new_tokens=150,  # Adjust based on performance needs
+                max_new_tokens=150,  # Adjust based on needs
                 num_return_sequences=1,
                 pad_token_id=GLOBAL_HUGGINGFACE_TOKENIZER.pad_token_id  # Set the pad_token_id
             )
-            response = GLOBAL_HUGGINGFACE_TOKENIZER.decode(outputs[0], skip_special_tokens=True)
-            logger.debug("IntegrationAgent generated response: %s", response)
-            return response
+        
+            # Decode the output
+            raw_response = GLOBAL_HUGGINGFACE_TOKENIZER.decode(outputs[0], skip_special_tokens=True)
+            logger.debug("IntegrationAgent generated raw response: %s", raw_response)
+
+            # Clean up the response (remove instruction tokens like [INST] if present)
+            cleaned_response = raw_response.replace("[INST]", "").replace("[/INST]", "").strip()
+            logger.debug("IntegrationAgent cleaned response: %s", cleaned_response)
+
+            return cleaned_response
+    
         except Exception as e:
             logger.error("Error during response generation: %s", e)
             return "An error occurred during response generation."

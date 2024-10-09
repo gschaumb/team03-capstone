@@ -16,53 +16,41 @@ agent_state = {
 }
 
 def process_user_input(user_input):
-    # Add user input to state
     logger.debug("Received user input: %s", user_input)
     
-    if not user_input or len(user_input.strip()) == 0:
+    if user_input:
+        agent_state['messages'].append({'sender': 'User', 'content': user_input})
+    else:
         logger.error("User input is empty.")
         return "Please provide a valid input.", []
-
-    # Optional: Add tokenization check to prevent overly long inputs
-    token_limit = 512  # Mistral model's token limit
-    user_input_tokens = len(user_input.split())
-    if user_input_tokens > token_limit:
-        logger.warning("User input exceeds token limit. Truncating input.")
-        user_input = ' '.join(user_input.split()[:token_limit])
     
-    agent_state['messages'].append({'sender': 'User', 'content': user_input})
-
     try:
         logger.debug("Starting graph workflow execution with initial state: %s", agent_state)
-        # Execute graph
-        events = graph.stream(agent_state)  # Streaming state through the graph
+        # Execute the graph
+        events = graph.stream(agent_state)  # Stream through the state graph
 
-        # Collect intermediate states
         intermediate_states = []
         for event in events:
-            # Explicitly update the state to avoid overwriting fields with None values
+            # Update the agent_state with the intermediate results
             agent_state['perception_1'] = event.get('perception_1', agent_state['perception_1'])
             agent_state['perception_2'] = event.get('perception_2', agent_state['perception_2'])
             agent_state['integration_result'] = event.get('integration_result', agent_state['integration_result'])
 
-            # Log and capture intermediate states
-            intermediate_state_info = {
+            intermediate_states.append({
                 "state_data": event.get('data', {}),
                 "messages": agent_state['messages'],
                 "current_sender": agent_state.get('sender', "")
-            }
-            logger.debug("Intermediate state: %s", intermediate_state_info)
-            intermediate_states.append(intermediate_state_info)
+            })
 
-        # Final response should be from the IntegrationNode's result
+        # Extract the final response from the integration result
         final_response = agent_state['integration_result'].get('message', "No relevant information found.")
         logger.debug("Final response: %s", final_response)
 
+        return final_response, intermediate_states
+    
     except Exception as e:
         logger.error("Error occurred during processing of user input: %s", e)
-        final_response = "An error occurred while processing your request. Please try again."
-
-    return final_response, intermediate_states
+        return "An error occurred while processing your request. Please try again.", []
 
 # Gradio interface setup
 with gr.Blocks() as demo:
