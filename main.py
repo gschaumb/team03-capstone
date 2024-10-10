@@ -150,9 +150,9 @@ class IntegrationAgent:
 
         # Create a system prompt to guide the LLM
         system_prompt = (
-            "You are a legal and financial analyst. Please summarize the following information in clear, "
+            "You are a financial analyst. Please summarize the following information in clear, "
             "well-structured prose, focusing on the most important points relevant to the user's query. "
-            "Highlight key people involved, dates, and actions taken. Limit any technical details or irrelevant entities. "
+            "Highlight key people involved, dates, and actions taken. Leave out technical details or irrelevant entities. "
             "Ensure the response is coherent, concise, and easy to understand.\n\n"
         )
 
@@ -176,8 +176,8 @@ class IntegrationAgent:
             # Generate output (adjust max_new_tokens as needed)
             outputs = GLOBAL_HUGGINGFACE_MODEL.generate(
                 inputs["input_ids"],
-                #attention_mask=inputs["attention_mask"],
-                max_new_tokens=175,  # Experiment with how this affects summarization
+                attention_mask=inputs["attention_mask"],  # Pass attention mask to address warning
+                max_new_tokens=175,  # Adjust this based on your requirements
                 num_return_sequences=1,
                 pad_token_id=GLOBAL_HUGGINGFACE_TOKENIZER.pad_token_id,
             )
