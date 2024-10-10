@@ -126,9 +126,9 @@ class PerceptionAgent:
         similarities = compute_similarities(query_embedding, self.document_embeddings)
         logger.debug("Computed similarities.")
 
-        # Retrieve top 3 similar documents
-        top_k_indices = similarities.argsort()[-3:][::-1]
-        logger.debug("Top 3 similar document indices: %s", top_k_indices)
+        # Retrieve top 2 similar documents
+        top_k_indices = similarities.argsort()[-2:][::-1]
+        logger.debug("Top 2 similar document indices: %s", top_k_indices)
 
         # Extract top documents
         top_k_documents = self.data_df.iloc[top_k_indices]
@@ -177,7 +177,7 @@ class IntegrationAgent:
             outputs = GLOBAL_HUGGINGFACE_MODEL.generate(
                 inputs["input_ids"],
                 attention_mask=inputs["attention_mask"],  # Pass attention mask to address warning
-                max_new_tokens=175,  # Adjust this based on your requirements
+                max_new_tokens=250,  # Adjust this based on your requirements
                 num_return_sequences=1,
                 pad_token_id=GLOBAL_HUGGINGFACE_TOKENIZER.pad_token_id,
             )
