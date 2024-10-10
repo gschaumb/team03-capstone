@@ -157,10 +157,11 @@ class IntegrationAgent:
 
         # Create a system prompt to guide the LLM
         system_prompt = (
-            "You are a financial analyst. Please summarize the following information in clear, "
-            "well-structured prose, focusing on the most important points relevant to the user's query. "
-            "Highlight key people involved, dates, and actions taken. Leave out technical details or irrelevant entities. "
-            "Ensure the response is coherent, concise, and easy to understand.\n\n"
+            "You are a financial analyst. Please provide a brief and well-structured summary of the following information. "
+            "Focus on the most important points related to the user's query. "
+            "Prioritize key people involved, specific dates, and major actions taken. "
+            "Include only relevant details that clarify the situation, while omitting any technical jargon or less important information. "
+            "Ensure the summary is concise, easy to understand, and no longer than 4-5 sentences.\n\n"
         )
 
         # Augment the user query with the perception data and the system prompt
