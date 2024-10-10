@@ -145,8 +145,12 @@ class IntegrationAgent:
 
         logger.debug("IntegrationAgent synthesizing data for query: %s", query)
 
-        # Combine all top documents' text for context
-        combined_text = " ".join(perception_results["chunked_text"].tolist())
+        # Combine all top documents' text for context, including GroupName
+        combined_text = " ".join(
+            [f"{row['GroupName']}: {row['chunked_text']}" for _, row in perception_results.iterrows()]
+)
+        # Combine all top documents' text for context - old
+        # combined_text = " ".join(perception_results["chunked_text"].tolist())
 
         # Create a system prompt to guide the LLM
         system_prompt = (
@@ -177,7 +181,7 @@ class IntegrationAgent:
             outputs = GLOBAL_HUGGINGFACE_MODEL.generate(
                 inputs["input_ids"],
                 attention_mask=inputs["attention_mask"],  # Pass attention mask to address warning
-                max_new_tokens=250,  # Adjust this based on your requirements
+                max_new_tokens=200,  # Adjust this based on your requirements
                 num_return_sequences=1,
                 pad_token_id=GLOBAL_HUGGINGFACE_TOKENIZER.pad_token_id,
             )
