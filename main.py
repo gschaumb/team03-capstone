@@ -177,7 +177,7 @@ class IntegrationAgent:
             outputs = GLOBAL_HUGGINGFACE_MODEL.generate(
                 inputs["input_ids"],
                 attention_mask=inputs["attention_mask"],
-                max_new_tokens=300,  # Increased from 150 to handle longer responses
+                max_new_tokens=175,  # Experiment with how this affects summarization
                 num_return_sequences=1,
                 pad_token_id=GLOBAL_HUGGINGFACE_TOKENIZER.pad_token_id,
             )
