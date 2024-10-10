@@ -147,8 +147,11 @@ class IntegrationAgent:
 
         # Combine all top documents' text for context, including GroupName
         combined_text = " ".join(
-            [f"{row['GroupName']}: {row['chunked_text']}" for _, row in perception_results.iterrows()]
-)
+            [
+                f"{row['GroupName']}: {row['chunked_text']}"
+                for _, row in perception_results.iterrows()
+            ]
+        )
         # Combine all top documents' text for context - old
         # combined_text = " ".join(perception_results["chunked_text"].tolist())
 
@@ -180,7 +183,9 @@ class IntegrationAgent:
             # Generate output (adjust max_new_tokens as needed)
             outputs = GLOBAL_HUGGINGFACE_MODEL.generate(
                 inputs["input_ids"],
-                attention_mask=inputs["attention_mask"],  # Pass attention mask to address warning
+                attention_mask=inputs[
+                    "attention_mask"
+                ],  # Pass attention mask to address warning
                 max_new_tokens=200,  # Adjust this based on your requirements
                 num_return_sequences=1,
                 pad_token_id=GLOBAL_HUGGINGFACE_TOKENIZER.pad_token_id,
