@@ -49,12 +49,12 @@ def load_sentence_transformer_model(model_name="all-MiniLM-L6-v2"):
         GLOBAL_SENTENCE_MODEL = SentenceTransformer(model_name)
 
 
-# Load HuggingFace model and tokenizer globally
-def load_huggingface_model(model_name="mistralai/Mistral-7B-Instruct-v0.1"):
+# Load HuggingFace Zephyr-7B model and tokenizer globally
+def load_huggingface_model(model_name="HuggingFaceH4/zephyr-7b-beta"):
     global GLOBAL_HUGGINGFACE_MODEL, GLOBAL_HUGGINGFACE_TOKENIZER
     if GLOBAL_HUGGINGFACE_MODEL is None or GLOBAL_HUGGINGFACE_TOKENIZER is None:
         logger.debug("Loading HuggingFace model: %s", model_name)
-        hf_token = os.getenv("HF_TOKEN")
+        hf_token = os.getenv("HF_TOKEN")  # Optional token for HuggingFace API
         GLOBAL_HUGGINGFACE_MODEL = AutoModelForCausalLM.from_pretrained(
             model_name, use_auth_token=hf_token
         )
@@ -296,7 +296,7 @@ def integration_node(state: AgentState) -> AgentState:
 
 # Initialize Models
 load_sentence_transformer_model()
-load_huggingface_model()
+load_huggingface_model()  # Updated to load Zephyr-7B
 
 # Instantiate Perception Agents with DataFrames
 sec_df = pd.read_csv("data/sec_docs.csv")
