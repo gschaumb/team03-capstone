@@ -18,7 +18,7 @@ agent_state = {
 }
 
 
-# Function to process user input
+# Function to process user input and generate summaries
 def process_user_input(user_input):
     logger.debug("Received user input: %s", user_input)
 
@@ -51,12 +51,19 @@ def process_user_input(user_input):
         logger.debug("Final response to be returned: %s", summaries)
 
         # Provide shortened labels for each summary in the dropdown
-        dropdown_choices = ["Summary 1", "Summary 2", "Summary 3"]
+        dropdown_choices = [f"Summary {i+1}" for i in range(len(summaries))]
         return dropdown_choices, summaries, current_state
 
     except Exception as e:
         logger.error("Error occurred during processing of user input: %s", e)
         return "An error occurred while processing your request.", [], {}
+
+
+# Function to evaluate and display selected summary
+def evaluate_summary(summary_choice, summaries):
+    # Extract index from "Summary 1", "Summary 2", etc.
+    index = int(summary_choice.split(" ")[-1]) - 1
+    return summaries[index]  # Return the actual summary text
 
 
 # Gradio interface setup
@@ -74,20 +81,14 @@ with gr.Blocks() as demo:
         dropdown_choices, summaries, intermediate_states = process_user_input(
             user_query
         )
-        return dropdown_choices, intermediate_states
-
-    def evaluate_summary(summary_choice, summaries):
-        index = (
-            int(summary_choice.split(" ")[-1]) - 1
-        )  # Extract index from "Summary 1", "Summary 2", etc.
-        return summaries[index]
+        return dropdown_choices, summaries, intermediate_states
 
     submit_btn = gr.Button("Submit")
     submit_btn.click(
         fn=update_state_ui, inputs=user_input, outputs=[summary_dropdown, state_output]
     )
 
-    # The dropdown will now display shortened choices, and return the actual selected summary
+    # Dropdown now displays simple choices, and the actual selected summary is shown in the output
     summary_dropdown.change(
         fn=evaluate_summary, inputs=[summary_dropdown, state_output], outputs=output
     )
