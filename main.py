@@ -122,14 +122,12 @@ class PerceptionAgent1(PerceptionAgentBase):
         # Summarize retrieved documents using LLM
         combined_text = " ".join(top_k_documents["chunked_text"].tolist())
         system_prompt = (
-            "You are a legal analyst. Provide a concise summary of the key people, dates, actions, "
-            "and terms from the following information. Make it two sentences long."
+            "You are an expert summarizer. Please summarize the following information in 2 sentences, "
+            "focusing on the most relevant people, dates, actions, and terms. The summary should be concise."
         )
         augmented_query = system_prompt + f"\n\nContext:\n{combined_text}"
 
-        summary = IntegrationAgent().synthesize_data_llm(
-            augmented_query, max_length=100
-        )
+        summary = IntegrationAgent().synthesize_data_llm(augmented_query, max_length=80)
         logger.debug("Generated summary for PerceptionAgent1: %s", summary)
 
         return summary, top_k_documents
@@ -152,29 +150,26 @@ class PerceptionAgent2(PerceptionAgentBase):
         # Summarize retrieved documents using LLM
         combined_text = " ".join(top_k_documents["chunked_text"].tolist())
         system_prompt = (
-            "You are a financial analyst. Provide a concise summary of the key people, dates, actions, "
-            "and terms from the following financial data. Make it two sentences long."
+            "You are an expert in financial analysis. Summarize the following financial data in 2 sentences, "
+            "highlighting the most relevant financial facts and key events."
         )
         augmented_query = system_prompt + f"\n\nContext:\n{combined_text}"
 
-        summary = IntegrationAgent().synthesize_data_llm(
-            augmented_query, max_length=100
-        )
+        summary = IntegrationAgent().synthesize_data_llm(augmented_query, max_length=80)
         logger.debug("Generated summary for PerceptionAgent2: %s", summary)
 
         return summary, top_k_documents
 
 
-# IntegrationAgent remains unchanged
+# IntegrationAgent for final summary
 class IntegrationAgent:
     def synthesize_data(self, perception_summaries, query):
         logger.debug("IntegrationAgent synthesizing data.")
 
         combined_summaries = " ".join(perception_summaries)
         system_prompt = (
-            "You are a financial expert. Provide a one-sentence summary of the following information."
-            " Focus only on the most important facts and avoid repetition. "
-            "Your summary should be concise and to the point."
+            "You are an expert at summarizing key information. Using the following details, "
+            "create a single-sentence summary focusing only on the most important facts."
         )
         augmented_query = (
             system_prompt + f"\n\nUser Query: {query}\n\nContext:\n{combined_summaries}"
@@ -183,8 +178,8 @@ class IntegrationAgent:
         summaries = []
         for _ in range(3):
             summary = self.synthesize_data_llm(
-                augmented_query, max_length=100
-            )  # Limiting to 100 tokens
+                augmented_query, max_length=60
+            )  # Limiting to 60 tokens for concise output
             summaries.append(summary.strip())
 
         return summaries
