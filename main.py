@@ -172,8 +172,9 @@ class IntegrationAgent:
 
         combined_summaries = " ".join(perception_summaries)
         system_prompt = (
-            "You are a financial expert. Given the user's query and the following summarized information, "
-            "provide a concise overall summary highlighting the key points."
+            "You are a financial expert. Provide a one-sentence summary of the following information."
+            " Focus only on the most important facts and avoid repetition. "
+            "Your summary should be concise and to the point."
         )
         augmented_query = (
             system_prompt + f"\n\nUser Query: {query}\n\nContext:\n{combined_summaries}"
@@ -181,8 +182,10 @@ class IntegrationAgent:
 
         summaries = []
         for _ in range(3):
-            summary = self.synthesize_data_llm(augmented_query, max_length=150)
-            summaries.append(summary)
+            summary = self.synthesize_data_llm(
+                augmented_query, max_length=100
+            )  # Limiting to 100 tokens
+            summaries.append(summary.strip())
 
         return summaries
 

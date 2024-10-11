@@ -32,7 +32,7 @@ def process_user_input(user_input):
         agent_state["integration_result"] = {"status": None, "message": None}
     else:
         logger.error("User input is empty.")
-        return "Please provide a valid input.", []
+        return "Please provide a valid input.", [], {}
 
     try:
         logger.debug("Starting agent workflow with initial state: %s", agent_state)
@@ -48,13 +48,15 @@ def process_user_input(user_input):
         summaries = current_state["integration_result"]["message"] or [
             "No relevant information found."
         ]
-
         logger.debug("Final response to be returned: %s", summaries)
-        return summaries, current_state
+
+        # Provide shortened labels for each summary in the dropdown
+        dropdown_choices = ["Summary 1", "Summary 2", "Summary 3"]
+        return dropdown_choices, summaries, current_state
 
     except Exception as e:
         logger.error("Error occurred during processing of user input: %s", e)
-        return "An error occurred while processing your request. Please try again.", {}
+        return "An error occurred while processing your request.", [], {}
 
 
 # Gradio interface setup
@@ -69,20 +71,25 @@ with gr.Blocks() as demo:
     state_output = gr.JSON(label="Agent Intermediate State Data", value={})
 
     def update_state_ui(user_query):
-        summaries, intermediate_states = process_user_input(user_query)
-        return summaries, intermediate_states
+        dropdown_choices, summaries, intermediate_states = process_user_input(
+            user_query
+        )
+        return dropdown_choices, intermediate_states
 
-    def evaluate_summary(selected_summary):
-        return selected_summary
+    def evaluate_summary(summary_choice, summaries):
+        index = (
+            int(summary_choice.split(" ")[-1]) - 1
+        )  # Extract index from "Summary 1", "Summary 2", etc.
+        return summaries[index]
 
     submit_btn = gr.Button("Submit")
     submit_btn.click(
         fn=update_state_ui, inputs=user_input, outputs=[summary_dropdown, state_output]
     )
 
-    # The dropdown will be updated by returning the list of summaries to its output
+    # The dropdown will now display shortened choices, and return the actual selected summary
     summary_dropdown.change(
-        fn=evaluate_summary, inputs=summary_dropdown, outputs=output
+        fn=evaluate_summary, inputs=[summary_dropdown, state_output], outputs=output
     )
 
 # Launch Gradio app
