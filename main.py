@@ -262,8 +262,12 @@ def perception_node_2(state: AgentState) -> AgentState:
         state["perception_2"] = {"status": "no_data", "data": pd.DataFrame()}
         return state
 
+    # Fetch the summary from PerceptionAgent1 and the user query
     summary_1 = state["perception_1"]["data"]
-    summary_2, result_2 = perception_agent_2.extract_data(summary_1)
+    query = state["messages"][-1]["content"]  # This extracts the user query
+
+    # Pass both the summary from PerceptionAgent1 and the original query to PerceptionAgent2
+    summary_2, result_2 = perception_agent_2.extract_data(summary_1, query)
 
     if result_2.empty:
         state["perception_2"] = {"status": "no_data", "data": pd.DataFrame()}
