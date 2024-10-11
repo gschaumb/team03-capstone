@@ -122,8 +122,8 @@ class PerceptionAgent1(PerceptionAgentBase):
         # Summarize retrieved documents using LLM
         combined_text = " ".join(top_k_documents["chunked_text"].tolist())
         system_prompt = (
-            "You are an expert summarizer. Please summarize the following information in 2 sentences, "
-            "focusing on the most relevant people, dates, actions, and terms. The summary should be concise."
+            "You are an expert summarizer. Based on the following information, answer the user query: "
+            f"'{query}'. Summarize in 2 sentences focusing on the most relevant people, dates, actions, and terms."
         )
         augmented_query = system_prompt + f"\n\nContext:\n{combined_text}"
 
@@ -135,7 +135,7 @@ class PerceptionAgent1(PerceptionAgentBase):
 
 # PerceptionAgent2 - specific logic for Agent 2
 class PerceptionAgent2(PerceptionAgentBase):
-    def extract_data(self, summary_from_agent_1):
+    def extract_data(self, summary_from_agent_1, query):
         logger.debug(
             "PerceptionAgent2 using summary from Agent 1 as query: %s",
             summary_from_agent_1,
@@ -150,7 +150,8 @@ class PerceptionAgent2(PerceptionAgentBase):
         # Summarize retrieved documents using LLM
         combined_text = " ".join(top_k_documents["chunked_text"].tolist())
         system_prompt = (
-            "You are an expert in financial analysis. Summarize the following financial data in 2 sentences, "
+            "You are an expert in financial analysis. Based on the user query: "
+            f"'{query}', summarize the following financial data in 2 sentences, "
             "highlighting the most relevant financial facts and key events."
         )
         augmented_query = system_prompt + f"\n\nContext:\n{combined_text}"
@@ -166,23 +167,42 @@ class IntegrationAgent:
     def synthesize_data(self, perception_summaries, query):
         logger.debug("IntegrationAgent synthesizing data.")
 
-        combined_summaries = " ".join(perception_summaries)
+        # Combine summaries from PerceptionAgents and clean them up
+        combined_summaries = " ".join(
+            self.clean_summary(summary) for summary in perception_summaries
+        )
+
+        # Include the user query in the final prompt
         system_prompt = (
             "You are an expert at summarizing key information. Using the following details, "
-            "create a single-sentence summary focusing only on the most important facts."
+            f"answer the user query: '{query}' in a concise, single-sentence summary focusing on the most important facts."
         )
-        augmented_query = (
-            system_prompt + f"\n\nUser Query: {query}\n\nContext:\n{combined_summaries}"
-        )
+        augmented_query = system_prompt + f"\n\nContext:\n{combined_summaries}"
 
-        summaries = []
-        for _ in range(3):
-            summary = self.synthesize_data_llm(
-                augmented_query, max_length=60
-            )  # Limiting to 60 tokens for concise output
-            summaries.append(summary.strip())
+        # Generate final summary using the LLM
+        summary = self.synthesize_data_llm(augmented_query, max_length=60)
 
-        return summaries
+        return [summary.strip()]
+
+    def clean_summary(self, summary):
+        """
+        Clean up the raw summaries by removing repetitive system prompts or unnecessary instructions.
+        This function can be extended to handle more advanced cases of text cleaning.
+        """
+        # Remove phrases that are irrelevant to the user response
+        remove_phrases = [
+            "You are an expert summarizer.",
+            "Summarize the following",
+            "highlighting the most relevant",
+            "focusing on the most relevant people, dates, actions, and terms.",
+        ]
+
+        for phrase in remove_phrases:
+            summary = summary.replace(phrase, "")
+
+        # Trim any excessive whitespace
+        summary = " ".join(summary.split())
+        return summary
 
     def synthesize_data_llm(self, input_text, max_length=150):
         if GLOBAL_HUGGINGFACE_MODEL is None or GLOBAL_HUGGINGFACE_TOKENIZER is None:
