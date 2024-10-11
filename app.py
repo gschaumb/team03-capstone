@@ -18,7 +18,7 @@ agent_state = {
 }
 
 
-# Function to process_user_input (TBD changes to keep or reset state for each query for future persistence functionality)
+# Function to process user input
 def process_user_input(user_input):
     logger.debug("Received user input: %s", user_input)
 
@@ -44,9 +44,6 @@ def process_user_input(user_input):
         # Run the integration node
         current_state = integration_node(current_state)
 
-        # Update the global agent state with the final state
-        agent_state.update(current_state)
-
         # Check if the integration result has a valid message
         final_response = (
             current_state["integration_result"]["message"]
@@ -69,15 +66,24 @@ with gr.Blocks() as demo:
         placeholder="Ask a question about the Enron case...", label="Your Query"
     )
     output = gr.Textbox(label="Agent Response")
+    summary_dropdown = gr.Dropdown(choices=[], label="Select a Summary for Evaluation")
     state_output = gr.JSON(label="Agent Intermediate State Data", value={})
 
     def update_state_ui(user_query):
-        response, intermediate_states = process_user_input(user_query)
-        return response, intermediate_states
+        summaries, intermediate_states = process_user_input(user_query)
+        summary_dropdown.update(choices=summaries)
+        return "", intermediate_states
+
+    def evaluate_summary(selected_summary):
+        return selected_summary
 
     submit_btn = gr.Button("Submit")
     submit_btn.click(
-        fn=update_state_ui, inputs=user_input, outputs=[output, state_output]
+        fn=update_state_ui, inputs=user_input, outputs=[summary_dropdown, state_output]
+    )
+
+    summary_dropdown.change(
+        fn=evaluate_summary, inputs=summary_dropdown, outputs=output
     )
 
 # Launch Gradio app
