@@ -184,25 +184,30 @@ class IntegrationAgent:
 
         return [summary.strip()]
 
+    # def clean_summary(self, summary):
+    #     """
+    #     Clean up the raw summaries by removing repetitive system prompts or unnecessary instructions.
+    #     This function can be extended to handle more advanced cases of text cleaning.
+    #     """
+    #     # Remove phrases that are irrelevant to the user response
+    #     remove_phrases = [
+    #         "You are an expert summarizer.",
+    #         "Summarize the following",
+    #         "highlighting the most relevant",
+    #         "focusing on the most relevant people, dates, actions, and terms.",
+    #     ]
+
+    #     for phrase in remove_phrases:
+    #         summary = summary.replace(phrase, "")
+
+    #     # Trim any excessive whitespace
+    #     summary = " ".join(summary.split())
+    #     return summary
+    
     def clean_summary(self, summary):
-        """
-        Clean up the raw summaries by removing repetitive system prompts or unnecessary instructions.
-        This function can be extended to handle more advanced cases of text cleaning.
-        """
-        # Remove phrases that are irrelevant to the user response
-        remove_phrases = [
-            "You are an expert summarizer.",
-            "Summarize the following",
-            "highlighting the most relevant",
-            "focusing on the most relevant people, dates, actions, and terms.",
-        ]
-
-        for phrase in remove_phrases:
-            summary = summary.replace(phrase, "")
-
-        # Trim any excessive whitespace
-        summary = " ".join(summary.split())
-        return summary
+        # Strip repetitive parts, and focus on core content
+        cleaned = summary.split("Context:")[-1]  # Remove any leading context tags
+        return cleaned.strip()
 
     def synthesize_data_llm(self, input_text, max_length=150):
         if GLOBAL_HUGGINGFACE_MODEL is None or GLOBAL_HUGGINGFACE_TOKENIZER is None:
