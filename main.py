@@ -4,7 +4,7 @@ import logging
 from typing import TypedDict, List, Dict, Optional
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
-from transformers import AutoModelForCausalLM, AutoTokenizer
+import openai  # Import OpenAI to use GPT-3.5 Turbo
 import pickle
 
 # Configure logging
@@ -15,8 +15,7 @@ logger = logging.getLogger(__name__)
 
 # Global Variables for models
 GLOBAL_SENTENCE_MODEL = None
-GLOBAL_HUGGINGFACE_MODEL = None
-GLOBAL_HUGGINGFACE_TOKENIZER = None
+GLOBAL_OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # Paths for Embeddings
 SEC_EMBEDDINGS_PATH = "/data/sec_embeddings.pkl"
@@ -49,25 +48,6 @@ def load_sentence_transformer_model(model_name="all-MiniLM-L6-v2"):
         GLOBAL_SENTENCE_MODEL = SentenceTransformer(model_name)
 
 
-# Load HuggingFace Zephyr-7B model and tokenizer globally
-def load_huggingface_model(model_name="HuggingFaceH4/zephyr-7b-beta"):
-    global GLOBAL_HUGGINGFACE_MODEL, GLOBAL_HUGGINGFACE_TOKENIZER
-    if GLOBAL_HUGGINGFACE_MODEL is None or GLOBAL_HUGGINGFACE_TOKENIZER is None:
-        logger.debug("Loading HuggingFace model: %s", model_name)
-        hf_token = os.getenv("HF_TOKEN")  # Optional token for HuggingFace API
-        GLOBAL_HUGGINGFACE_MODEL = AutoModelForCausalLM.from_pretrained(
-            model_name, use_auth_token=hf_token
-        )
-        GLOBAL_HUGGINGFACE_TOKENIZER = AutoTokenizer.from_pretrained(
-            model_name, use_auth_token=hf_token
-        )
-
-        if GLOBAL_HUGGINGFACE_TOKENIZER.pad_token is None:
-            GLOBAL_HUGGINGFACE_TOKENIZER.pad_token = (
-                GLOBAL_HUGGINGFACE_TOKENIZER.eos_token
-            )
-
-
 def generate_embeddings(texts):
     if GLOBAL_SENTENCE_MODEL is None:
         raise ValueError("SentenceTransformer model not loaded.")
@@ -79,6 +59,24 @@ def generate_embeddings(texts):
 def compute_similarities(query_embedding, document_embeddings):
     logger.debug("Computing cosine similarities.")
     return cosine_similarity(query_embedding, document_embeddings).flatten()
+
+
+# Initialize OpenAI GPT-3.5 Turbo
+def initialize_openai():
+    if not GLOBAL_OPENAI_API_KEY:
+        raise ValueError("OpenAI API key not found.")
+    openai.api_key = GLOBAL_OPENAI_API_KEY
+
+
+def openai_generate_response(messages, max_tokens=150):
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo", messages=messages, max_tokens=max_tokens
+        )
+        return response.choices[0].message["content"].strip()
+    except Exception as e:
+        logger.error(f"OpenAI API request failed: {e}")
+        return None
 
 
 # Base class for shared functionality between Perception Agents
@@ -119,7 +117,7 @@ class PerceptionAgent1(PerceptionAgentBase):
         # Retrieve top 2 documents
         top_k_documents = self.compute_similarity_and_retrieve(query_embedding)
 
-        # Summarize retrieved documents using LLM
+        # Summarize retrieved documents using GPT-3.5 Turbo
         combined_text = " ".join(top_k_documents["chunked_text"].tolist())
         system_prompt = (
             "You are an expert summarizer. Based on the following information, answer the user query: "
@@ -127,7 +125,12 @@ class PerceptionAgent1(PerceptionAgentBase):
         )
         augmented_query = system_prompt + f"\n\nContext:\n{combined_text}"
 
-        summary = IntegrationAgent().synthesize_data_llm(augmented_query, max_length=80)
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": combined_text},
+        ]
+
+        summary = openai_generate_response(messages, max_tokens=80)
         logger.debug("Generated summary for PerceptionAgent1: %s", summary)
 
         return summary, top_k_documents
@@ -147,7 +150,7 @@ class PerceptionAgent2(PerceptionAgentBase):
         # Retrieve top 2 documents
         top_k_documents = self.compute_similarity_and_retrieve(query_embedding)
 
-        # Summarize retrieved documents using LLM
+        # Summarize retrieved documents using GPT-3.5 Turbo
         combined_text = " ".join(top_k_documents["chunked_text"].tolist())
         system_prompt = (
             "You are an expert in financial analysis. Based on the user query: "
@@ -156,7 +159,12 @@ class PerceptionAgent2(PerceptionAgentBase):
         )
         augmented_query = system_prompt + f"\n\nContext:\n{combined_text}"
 
-        summary = IntegrationAgent().synthesize_data_llm(augmented_query, max_length=80)
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": combined_text},
+        ]
+
+        summary = openai_generate_response(messages, max_tokens=80)
         logger.debug("Generated summary for PerceptionAgent2: %s", summary)
 
         return summary, top_k_documents
@@ -179,39 +187,19 @@ class IntegrationAgent:
         )
         augmented_query = system_prompt + f"\n\nContext:\n{combined_summaries}"
 
-        # Generate final summary using the LLM
-        summary = self.synthesize_data_llm(augmented_query, max_length=60)
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": combined_summaries},
+        ]
 
+        # Generate final summary using GPT-3.5 Turbo
+        summary = openai_generate_response(messages, max_tokens=60)
         return [summary.strip()]
 
     def clean_summary(self, summary):
         # Strip repetitive parts, and focus on core content
         cleaned = summary.split("Context:")[-1]  # Remove any leading context tags
         return cleaned.strip()
-
-    def synthesize_data_llm(self, input_text, max_length=150):
-        if GLOBAL_HUGGINGFACE_MODEL is None or GLOBAL_HUGGINGFACE_TOKENIZER is None:
-            raise ValueError("HuggingFace model or tokenizer not loaded.")
-
-        inputs = GLOBAL_HUGGINGFACE_TOKENIZER(
-            input_text,
-            return_tensors="pt",
-            padding="longest",
-            truncation=True,
-            max_length=512,
-        )
-
-        outputs = GLOBAL_HUGGINGFACE_MODEL.generate(
-            inputs["input_ids"],
-            attention_mask=inputs["attention_mask"],
-            max_new_tokens=max_length,
-            num_return_sequences=1,
-            pad_token_id=GLOBAL_HUGGINGFACE_TOKENIZER.pad_token_id,
-        )
-        raw_response = GLOBAL_HUGGINGFACE_TOKENIZER.decode(
-            outputs[0], skip_special_tokens=True
-        )
-        return raw_response.strip()
 
 
 # Perception Node 1 for PerceptionAgent1
@@ -296,7 +284,7 @@ def integration_node(state: AgentState) -> AgentState:
 
 # Initialize Models
 load_sentence_transformer_model()
-load_huggingface_model()  # Updated to load Zephyr-7B
+initialize_openai()
 
 # Instantiate Perception Agents with DataFrames
 sec_df = pd.read_csv("data/sec_docs.csv")
