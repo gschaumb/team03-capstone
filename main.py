@@ -190,6 +190,35 @@ class PerceptionAgent2(PerceptionAgentBase):
 
 # IntegrationAgent for final summary
 class IntegrationAgent:
+    def synthesize_data(self, perception_summaries, query):
+        logger.debug("IntegrationAgent synthesizing data.")
+
+        # Combine summaries from PerceptionAgents and clean them up
+        combined_summaries = " ".join(
+            self.clean_summary(summary) for summary in perception_summaries
+        )
+
+        # Include the user query in the final prompt
+        system_prompt = (
+            "You are an expert at summarizing key information. Using the following details, "
+            f"answer the user query: '{query}' in a concise, single-sentence summary focusing on the most important facts."
+        )
+        augmented_query = system_prompt + f"\n\nContext:\n{combined_summaries}"
+
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": combined_summaries},
+        ]
+
+        # Generate final summary using GPT-3.5 Turbo
+        summary = self.synthesize_data_llm(augmented_query, max_length=60)
+        return [summary.strip()]
+
+    def clean_summary(self, summary):
+        # Strip repetitive parts, and focus on core content
+        cleaned = summary.split("Context:")[-1]  # Remove any leading context tags
+        return cleaned.strip()
+
     def synthesize_data_llm(self, input_text, max_length=150):
         logger.debug("Synthesizing data using OpenAI GPT-3.5 Turbo.")
 
