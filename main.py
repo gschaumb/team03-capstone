@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 
 # Global Variables for models
 GLOBAL_SENTENCE_MODEL = None
+GLOBAL_OPENAI_CLIENT = None
 GLOBAL_OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # Paths for Embeddings
