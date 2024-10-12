@@ -63,9 +63,16 @@ def compute_similarities(query_embedding, document_embeddings):
 
 # Initialize OpenAI GPT-3.5 Turbo
 def initialize_openai():
-    if not GLOBAL_OPENAI_API_KEY:
-        raise ValueError("OpenAI API key not found.")
-    openai.api_key = GLOBAL_OPENAI_API_KEY
+    global GLOBAL_OPENAI_CLIENT
+    if not GLOBAL_OPENAI_CLIENT:
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            raise ValueError("OpenAI API key not found.")
+        # Initialize OpenAI client with the key
+        from openai import OpenAI
+
+        GLOBAL_OPENAI_CLIENT = OpenAI(api_key=api_key)
+        logger.debug("OpenAI GPT-3.5 Turbo client initialized.")
 
 
 def openai_generate_response(messages, max_tokens=150):
@@ -123,17 +130,22 @@ class PerceptionAgent1(PerceptionAgentBase):
             "You are an expert summarizer. Based on the following information, answer the user query: "
             f"'{query}'. Summarize in 2 sentences focusing on the most relevant people, dates, actions, and terms."
         )
-        augmented_query = system_prompt + f"\n\nContext:\n{combined_text}"
 
-        messages = [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": combined_text},
-        ]
+        messages = [{"role": "system", "content": system_prompt}]
+        for doc in top_k_documents["chunked_text"]:
+            messages.append({"role": "user", "content": doc})
 
-        summary = openai_generate_response(messages, max_tokens=80)
-        logger.debug("Generated summary for PerceptionAgent1: %s", summary)
-
-        return summary, top_k_documents
+        try:
+            # Use OpenAI chat completion following the pattern
+            response = GLOBAL_OPENAI_CLIENT.chat.completions.create(
+                model="gpt-3.5-turbo", messages=messages, max_tokens=550
+            )
+            summary = response.choices[0].message.content.strip()
+            logger.debug("Generated summary for PerceptionAgent1: %s", summary)
+            return summary, top_k_documents
+        except Exception as e:
+            logger.error(f"OpenAI API request failed: {e}")
+            return None, top_k_documents
 
 
 # PerceptionAgent2 - specific logic for Agent 2
@@ -157,49 +169,47 @@ class PerceptionAgent2(PerceptionAgentBase):
             f"'{query}', summarize the following financial data in 2 sentences, "
             "highlighting the most relevant financial facts and key events."
         )
-        augmented_query = system_prompt + f"\n\nContext:\n{combined_text}"
 
-        messages = [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": combined_text},
-        ]
+        messages = [{"role": "system", "content": system_prompt}]
+        for doc in top_k_documents["chunked_text"]:
+            messages.append({"role": "user", "content": doc})
 
-        summary = openai_generate_response(messages, max_tokens=80)
-        logger.debug("Generated summary for PerceptionAgent2: %s", summary)
-
-        return summary, top_k_documents
+        try:
+            # Use OpenAI chat completion following the pattern
+            response = GLOBAL_OPENAI_CLIENT.chat.completions.create(
+                model="gpt-3.5-turbo", messages=messages, max_tokens=550
+            )
+            summary = response.choices[0].message.content.strip()
+            logger.debug("Generated summary for PerceptionAgent2: %s", summary)
+            return summary, top_k_documents
+        except Exception as e:
+            logger.error(f"OpenAI API request failed: {e}")
+            return None, top_k_documents
 
 
 # IntegrationAgent for final summary
 class IntegrationAgent:
-    def synthesize_data(self, perception_summaries, query):
-        logger.debug("IntegrationAgent synthesizing data.")
+    def synthesize_data_llm(self, input_text, max_length=150):
+        logger.debug("Synthesizing data using OpenAI GPT-3.5 Turbo.")
 
-        # Combine summaries from PerceptionAgents and clean them up
-        combined_summaries = " ".join(
-            self.clean_summary(summary) for summary in perception_summaries
-        )
-
-        # Include the user query in the final prompt
-        system_prompt = (
-            "You are an expert at summarizing key information. Using the following details, "
-            f"answer the user query: '{query}' in a concise, single-sentence summary focusing on the most important facts."
-        )
-        augmented_query = system_prompt + f"\n\nContext:\n{combined_summaries}"
+        # Prepare system prompt and messages
+        system_prompt = "You are an expert at summarizing key information. Use the following context to generate a concise response."
 
         messages = [
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": combined_summaries},
+            {"role": "user", "content": input_text},
         ]
 
-        # Generate final summary using GPT-3.5 Turbo
-        summary = openai_generate_response(messages, max_tokens=60)
-        return [summary.strip()]
-
-    def clean_summary(self, summary):
-        # Strip repetitive parts, and focus on core content
-        cleaned = summary.split("Context:")[-1]  # Remove any leading context tags
-        return cleaned.strip()
+        try:
+            # Use OpenAI chat completion following the pattern
+            response = GLOBAL_OPENAI_CLIENT.chat.completions.create(
+                model="gpt-3.5-turbo", messages=messages, max_tokens=max_length
+            )
+            summary = response.choices[0].message.content.strip()
+            return summary
+        except Exception as e:
+            logger.error(f"OpenAI API request failed: {e}")
+            return None
 
 
 # Perception Node 1 for PerceptionAgent1
