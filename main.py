@@ -4,7 +4,7 @@ import logging
 from typing import TypedDict, List, Dict, Optional
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
-import openai  # Import OpenAI to use GPT-3.5 Turbo
+import openai
 import pickle
 
 # Configure logging
@@ -71,7 +71,6 @@ def initialize_openai():
         api_key = os.getenv("OPENAI_API_KEY")
         if not api_key:
             raise ValueError("OpenAI API key not found.")
-        # Initialize OpenAI client with the key
         from openai import OpenAI
 
         GLOBAL_OPENAI_CLIENT = OpenAI(api_key=api_key)
@@ -120,7 +119,6 @@ class PerceptionAgentBase:
 class PerceptionAgent1(PerceptionAgentBase):
     def extract_data(self, query):
         logger.debug("PerceptionAgent1 extracting data for query: %s", query)
-
         query_embedding = generate_embeddings([query])
         top_k_documents = self.compute_similarity_and_retrieve(query_embedding)
 
@@ -152,7 +150,6 @@ class PerceptionAgent2(PerceptionAgentBase):
         logger.debug("PerceptionAgent2 extracting data for query: %s", query)
         query_embedding = generate_embeddings([query])
         top_k_documents = self.compute_similarity_and_retrieve(query_embedding)
-        # Similar summarization process as PerceptionAgent1
         combined_text = " ".join(top_k_documents["chunked_text"].tolist())
         system_prompt = "Summarize in 2 sentences focusing on relevant people, dates, actions, and terms."
 
@@ -243,7 +240,7 @@ def perception_node_1(state: AgentState) -> AgentState:
     summary_1, result_1 = perception_agent_1.extract_data(query)
 
     state["perception_1"] = {
-        "status": "data_found" if result_1 else "no_data",
+        "status": "data_found" if not result_1.empty else "no_data",
         "data": summary_1,
     }
     return state
@@ -254,7 +251,7 @@ def perception_node_2(state: AgentState) -> AgentState:
     summary_2, result_2 = perception_agent_2.extract_data(query)
 
     state["perception_2"] = {
-        "status": "data_found" if result_2 else "no_data",
+        "status": "data_found" if not result_2.empty else "no_data",
         "data": summary_2,
     }
     return state
@@ -267,7 +264,7 @@ def perception_node_3(state: AgentState) -> AgentState:
     )
 
     state["perception_3"] = {
-        "status": "data_found" if result_3 else "no_data",
+        "status": "data_found" if not result_3.empty else "no_data",
         "data": summary_3,
     }
     return state
