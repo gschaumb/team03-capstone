@@ -144,7 +144,7 @@ class PerceptionAgent1(PerceptionAgentBase):
             return None, top_k_documents
 
 
-# PerceptionAgent2 (previously PerceptionAgent1)
+# PerceptionAgent2 for sec_docs.csv (previously PerceptionAgent1)
 class PerceptionAgent2(PerceptionAgentBase):
     def extract_data(self, query):
         logger.debug("PerceptionAgent2 extracting data for query: %s", query)
@@ -168,7 +168,7 @@ class PerceptionAgent2(PerceptionAgentBase):
             return None, top_k_documents
 
 
-# PerceptionAgent3 (previously PerceptionAgent2)
+# PerceptionAgent3 for financial_reports.csv (previously PerceptionAgent2)
 class PerceptionAgent3(PerceptionAgentBase):
     def extract_data(self, summary_from_agent_2, query):
         query_embedding = generate_embeddings([summary_from_agent_2])
