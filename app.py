@@ -1,7 +1,11 @@
-# app.py
-
 import gradio as gr
-from main import perception_node_1, perception_node_2, integration_node, AgentState
+from main import (
+    perception_node_1,
+    perception_node_2,
+    perception_node_3,
+    integration_node,
+    AgentState,
+)
 import logging
 
 # Configure logging
@@ -16,6 +20,7 @@ agent_state = {
     "sender": "",
     "perception_1": {"status": None, "data": None},
     "perception_2": {"status": None, "data": None},
+    "perception_3": {"status": None, "data": None},
     "integration_result": {"status": None, "message": None},
 }
 
@@ -31,6 +36,7 @@ def process_user_input(user_input):
         # Reset perceptions and integration result for the new query
         agent_state["perception_1"] = {"status": None, "data": None}
         agent_state["perception_2"] = {"status": None, "data": None}
+        agent_state["perception_3"] = {"status": None, "data": None}
         agent_state["integration_result"] = {"status": None, "message": None}
     else:
         logger.error("User input is empty.")
@@ -42,6 +48,7 @@ def process_user_input(user_input):
         # Run through perception nodes
         current_state = perception_node_1(agent_state)
         current_state = perception_node_2(current_state)
+        current_state = perception_node_3(current_state)
 
         # Run the integration node
         current_state = integration_node(current_state)
