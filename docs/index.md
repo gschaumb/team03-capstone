@@ -83,3 +83,6 @@ Projects that benefit from agentic LLM structures often involve tasks that can b
 - **Robustness and Error Handling**: Agentic LLM systems can be complex and prone to errors. Implement mechanisms to handle unexpected situations, such as agent failures, ambiguous instructions, or conflicting information.
   
 - **Ethical Implications**: Consider the ethical implications of your project, particularly when agents interact with real-world systems or make decisions that could impact users. Ensure fairness, transparency, and accountability in agent behavior.
+
+## Placeholder Image Test
+![Figure 1 Placeholder](Figure_1.png)
