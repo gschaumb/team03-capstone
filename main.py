@@ -163,7 +163,7 @@ class PerceptionAgent1(PerceptionAgentBase):
     def __init__(self, data_df, name, embeddings_path):
         retrieval_pipeline = [
             lambda similarities, indices: self.apply_similarity_threshold(
-                similarities, threshold=0.3
+                similarities, threshold=0
             ),
             lambda similarities, indices: self.select_top_k(
                 similarities, indices, top_k=2
