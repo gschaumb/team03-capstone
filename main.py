@@ -334,6 +334,8 @@ class IntegrationAgent:
         return [summary.strip()]
 
     def clean_summary(self, summary):
+        if summary is None:
+            return ""
         cleaned = summary.split("Context:")[-1]
         return cleaned.strip()
 
@@ -393,10 +395,15 @@ def perception_node_3(state: AgentState) -> AgentState:
 def integration_node(state: AgentState) -> AgentState:
     agent = IntegrationAgent()
 
+    # Debug fix - filter out any `None` summaries to prevent passing `None` values
     perception_summaries = [
-        state["perception_1"]["data"],
-        state["perception_2"]["data"],
-        state["perception_3"]["data"],
+        summary
+        for summary in [
+            state["perception_1"]["data"],
+            state["perception_2"]["data"],
+            state["perception_3"]["data"],
+        ]
+        if summary is not None
     ]
 
     query = state["messages"][-1]["content"]
