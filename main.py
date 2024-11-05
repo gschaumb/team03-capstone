@@ -302,6 +302,103 @@ class PerceptionAgent3(PerceptionAgentBase):
             return None, top_k_documents
 
 
+# IntegrationAgent for final summary
+class IntegrationAgent:
+    def synthesize_data(self, perception_summaries, query):
+        combined_summaries = " ".join(
+            self.clean_summary(summary) for summary in perception_summaries
+        )
+
+        system_prompt = (
+            "Using the following details, answer the user query: "
+            f"'{query}' in a concise, single-sentence summary."
+        )
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": combined_summaries},
+        ]
+
+        summary = self.synthesize_data_llm(
+            system_prompt + "\n\nContext:\n" + combined_summaries, max_length=60
+        )
+        return [summary.strip()]
+
+    def clean_summary(self, summary):
+        cleaned = summary.split("Context:")[-1]
+        return cleaned.strip()
+
+    def synthesize_data_llm(self, input_text, max_length=150):
+        messages = [
+            {"role": "system", "content": "You are an expert summarizer."},
+            {"role": "user", "content": input_text},
+        ]
+
+        try:
+            response = GLOBAL_OPENAI_CLIENT.chat.completions.create(
+                model="gpt-3.5-turbo", messages=messages, max_tokens=max_length
+            )
+            summary = response.choices[0].message.content.strip()
+            return summary
+        except Exception as e:
+            logger.error(f"OpenAI API request failed: {e}")
+            return None
+
+
+# Define Perception Nodes
+def perception_node_1(state: AgentState) -> AgentState:
+    query = state["messages"][-1]["content"]
+    summary_1, result_1 = perception_agent_1.extract_data(query)
+
+    state["perception_1"] = {
+        "status": "data_found" if not result_1.empty else "no_data",
+        "data": summary_1,
+    }
+    return state
+
+
+def perception_node_2(state: AgentState) -> AgentState:
+    query = state["messages"][-1]["content"]
+    summary_2, result_2 = perception_agent_2.extract_data(query)
+
+    state["perception_2"] = {
+        "status": "data_found" if not result_2.empty else "no_data",
+        "data": summary_2,
+    }
+    return state
+
+
+def perception_node_3(state: AgentState) -> AgentState:
+    query = state["messages"][-1]["content"]
+    summary_3, result_3 = perception_agent_3.extract_data(
+        state["perception_2"]["data"], query
+    )
+
+    state["perception_3"] = {
+        "status": "data_found" if not result_3.empty else "no_data",
+        "data": summary_3,
+    }
+    return state
+
+
+def integration_node(state: AgentState) -> AgentState:
+    agent = IntegrationAgent()
+
+    perception_summaries = [
+        state["perception_1"]["data"],
+        state["perception_2"]["data"],
+        state["perception_3"]["data"],
+    ]
+
+    query = state["messages"][-1]["content"]
+    summaries = agent.synthesize_data(perception_summaries, query)
+    state["integration_result"] = {"status": "data_integrated", "message": summaries}
+    return state
+
+
+# Initialize Models
+load_sentence_transformer_model()
+initialize_openai()
+
 # Instantiate Perception Agents with DataFrames
 case_df = pd.read_csv("data/case_docs.csv")
 sec_df = pd.read_csv("data/sec_docs.csv")
