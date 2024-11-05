@@ -7,6 +7,7 @@ from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 import openai
 import pickle
+import json
 
 # Configure logging
 logging.basicConfig(
@@ -437,23 +438,54 @@ def perception_node_3(state: AgentState) -> AgentState:
     return state
 
 
+# Updated integration_node to include full data to pass to email agent in both dict and json
 def integration_node(state: AgentState) -> AgentState:
     agent = IntegrationAgent()
 
-    # Collect summaries from each agent using the updated "summary" key
+    # Gather summaries, filtering out None to prevent issues
     perception_summaries = [
         summary
         for summary in [
-            state["perception_1"]["summary"],
-            state["perception_2"]["summary"],
-            state["perception_3"]["summary"],
+            state["perception_1"].get("summary"),
+            state["perception_2"].get("summary"),
+            state["perception_3"].get("summary"),
         ]
         if summary is not None
     ]
 
+    # Get the query for context
     query = state["messages"][-1]["content"]
+
+    # Generate the final integrated summary
     summaries = agent.synthesize_data(perception_summaries, query)
     state["integration_result"] = {"status": "data_integrated", "message": summaries}
+
+    # Prepare data for possible JSON export to email_agent
+    final_data = {
+        "query": query,
+        "perception_1": {
+            "summary": state["perception_1"].get("summary"),
+            "retrieved docs": state["perception_1"].get("retrieved docs"),
+        },
+        "perception_2": {
+            "summary": state["perception_2"].get("summary"),
+            "retrieved docs": state["perception_2"].get("retrieved docs"),
+        },
+        "perception_3": {
+            "summary": state["perception_3"].get("summary"),
+            "retrieved docs": state["perception_3"].get("retrieved docs"),
+        },
+        "integration_result": {
+            "Final summary": summaries,
+        },
+    }
+
+    # Convert final_data to JSON
+    json_data = json.dumps(final_data, indent=2)
+
+    # Option to store the json_data within state for later access
+    state["json_data"] = json_data
+
     return state
 
 
