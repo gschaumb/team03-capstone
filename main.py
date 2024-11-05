@@ -1,3 +1,4 @@
+# main.py
 import os
 import pandas as pd
 import logging
@@ -27,6 +28,9 @@ FINANCIAL_EMBEDDINGS_PATH = "/data/financial_embeddings.pkl"
 class PerceptionResult(TypedDict, total=False):
     status: str
     data: Optional[pd.DataFrame]
+    retrieved_docs: Optional[
+        List[str]
+    ]  # New key to hold retrieved document information
 
 
 class IntegrationResult(TypedDict, total=False):
@@ -155,9 +159,6 @@ class PerceptionAgentBase:
         return self.data_df.iloc[selected_indices]
 
 
-# Each agent can now specify its own retrieval pipeline
-
-
 # New PerceptionAgent1 for `case_docs.csv`
 class PerceptionAgent1(PerceptionAgentBase):
     def __init__(self, data_df, name, embeddings_path):
@@ -179,15 +180,21 @@ class PerceptionAgent1(PerceptionAgentBase):
         query_embedding = generate_embeddings([query])
         top_k_documents = self.compute_similarity_and_retrieve(query_embedding)
 
-        # Check if no documents were retrieved
         if top_k_documents.empty:
             logger.warning(
                 "PerceptionAgent1 found no documents above the similarity threshold."
             )
             return (
                 None,
+                [],
                 pd.DataFrame(),
-            )  # Return None for summary, empty DataFrame for data
+            )  # Return None for summary, empty list for docs
+
+        # Format retrieved documents
+        retrieved_docs = [
+            f"{row['GroupName']}: {row['chunked_text']}"
+            for _, row in top_k_documents.iterrows()
+        ]
 
         # Summarize retrieved documents using GPT-3.5 Turbo
         combined_text = " ".join(top_k_documents["chunked_text"].tolist())
@@ -206,10 +213,10 @@ class PerceptionAgent1(PerceptionAgentBase):
             )
             summary = response.choices[0].message.content.strip()
             logger.debug("Generated summary for PerceptionAgent1: %s", summary)
-            return summary, top_k_documents
+            return summary, retrieved_docs, top_k_documents
         except Exception as e:
             logger.error(f"OpenAI API request failed: {e}")
-            return None, top_k_documents
+            return None, retrieved_docs, top_k_documents
 
 
 # PerceptionAgent2 (previously PerceptionAgent1)
@@ -234,7 +241,17 @@ class PerceptionAgent2(PerceptionAgentBase):
             logger.warning(
                 "PerceptionAgent2 found no documents above the similarity threshold."
             )
-            return None, pd.DataFrame()
+            return (
+                None,
+                [],
+                pd.DataFrame(),
+            )  # Return None for summary, empty list for docs
+
+        # Format retrieved documents
+        retrieved_docs = [
+            f"{row['GroupName']}: {row['chunked_text']}"
+            for _, row in top_k_documents.iterrows()
+        ]
 
         # Summarize retrieved documents using GPT-3.5 Turbo
         combined_text = " ".join(top_k_documents["chunked_text"].tolist())
@@ -253,10 +270,10 @@ class PerceptionAgent2(PerceptionAgentBase):
             )
             summary = response.choices[0].message.content.strip()
             logger.debug("Generated summary for PerceptionAgent2: %s", summary)
-            return summary, top_k_documents
+            return summary, retrieved_docs, top_k_documents
         except Exception as e:
             logger.error(f"OpenAI API request failed: {e}")
-            return None, top_k_documents
+            return None, retrieved_docs, top_k_documents
 
 
 # PerceptionAgent3 (previously PerceptionAgent2)
@@ -285,7 +302,17 @@ class PerceptionAgent3(PerceptionAgentBase):
             logger.warning(
                 "PerceptionAgent3 found no documents above the similarity threshold."
             )
-            return None, pd.DataFrame()
+            return (
+                None,
+                [],
+                pd.DataFrame(),
+            )  # Return None for summary, empty list for docs
+
+        # Format retrieved documents
+        retrieved_docs = [
+            f"{row['GroupName']}: {row['chunked_text']}"
+            for _, row in top_k_documents.iterrows()
+        ]
 
         # Summarize retrieved documents using GPT-3.5 Turbo
         combined_text = " ".join(top_k_documents["chunked_text"].tolist())
@@ -306,10 +333,10 @@ class PerceptionAgent3(PerceptionAgentBase):
             )
             summary = response.choices[0].message.content.strip()
             logger.debug("Generated summary for PerceptionAgent3: %s", summary)
-            return summary, top_k_documents
+            return summary, retrieved_docs, top_k_documents
         except Exception as e:
             logger.error(f"OpenAI API request failed: {e}")
-            return None, top_k_documents
+            return None, retrieved_docs, top_k_documents
 
 
 # IntegrationAgent for final summary
@@ -360,48 +387,51 @@ class IntegrationAgent:
 # Define Perception Nodes
 def perception_node_1(state: AgentState) -> AgentState:
     query = state["messages"][-1]["content"]
-    summary_1, result_1 = perception_agent_1.extract_data(query)
+    summary_1, retrieved_docs_1, result_1 = perception_agent_1.extract_data(query)
 
     state["perception_1"] = {
         "status": "data_found" if not result_1.empty else "no_data",
-        "data": summary_1,
+        "Summary": summary_1,
+        "Retrieved Docs": retrieved_docs_1,
     }
     return state
 
 
 def perception_node_2(state: AgentState) -> AgentState:
     query = state["messages"][-1]["content"]
-    summary_2, result_2 = perception_agent_2.extract_data(query)
+    summary_2, retrieved_docs_2, result_2 = perception_agent_2.extract_data(query)
 
     state["perception_2"] = {
         "status": "data_found" if not result_2.empty else "no_data",
-        "data": summary_2,
+        "Summary": summary_2,
+        "Retrieved Docs": retrieved_docs_2,
     }
     return state
 
 
 def perception_node_3(state: AgentState) -> AgentState:
     query = state["messages"][-1]["content"]
-    # Retrieve summary from PerceptionAgent2
     summary_from_agent_2 = state["perception_2"]["data"]
 
-    # Check if PerceptionAgent2 provided a valid summary
     if summary_from_agent_2 is None:
         logger.warning(
             "No valid data from PerceptionAgent2; skipping PerceptionAgent3."
         )
         state["perception_3"] = {
             "status": "no_data",
-            "data": None,
+            "Summary": None,
+            "Retrieved Docs": [],
         }
         return state
 
-    # Proceed with PerceptionAgent3 if data available
-    summary_3, result_3 = perception_agent_3.extract_data(summary_from_agent_2, query)
+    summary_3, retrieved_docs_3, result_3 = perception_agent_3.extract_data(
+        summary_from_agent_2, query
+    )
 
     state["perception_3"] = {
         "status": "data_found" if not result_3.empty else "no_data",
-        "data": summary_3,
+        "Summary": summary_3,
+        "Retrieved Docs": retrieved_docs_3,
     }
     return state
 
@@ -409,7 +439,7 @@ def perception_node_3(state: AgentState) -> AgentState:
 def integration_node(state: AgentState) -> AgentState:
     agent = IntegrationAgent()
 
-    # Debug fix - filter out any `None` summaries to prevent passing `None` values
+    # Debug fix - filter out any None summaries to prevent passing None values
     perception_summaries = [
         summary
         for summary in [
