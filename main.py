@@ -391,8 +391,8 @@ def perception_node_1(state: AgentState) -> AgentState:
 
     state["perception_1"] = {
         "status": "data_found" if not result_1.empty else "no_data",
-        "Summary": summary_1,
-        "Retrieved Docs": retrieved_docs_1,
+        "summary": summary_1,
+        "retrieved docs": retrieved_docs_1,
     }
     return state
 
@@ -403,16 +403,16 @@ def perception_node_2(state: AgentState) -> AgentState:
 
     state["perception_2"] = {
         "status": "data_found" if not result_2.empty else "no_data",
-        "Summary": summary_2,
-        "Retrieved Docs": retrieved_docs_2,
+        "summary": summary_2,
+        "retrieved docs": retrieved_docs_2,
     }
     return state
 
 
 def perception_node_3(state: AgentState) -> AgentState:
     query = state["messages"][-1]["content"]
-    # Retrieve summary from PerceptionAgent2 using the updated key "Summary"
-    summary_from_agent_2 = state["perception_2"]["Summary"]
+    # Retrieve summary from PerceptionAgent2 using the updated key "summary"
+    summary_from_agent_2 = state["perception_2"]["summary"]
 
     if summary_from_agent_2 is None:
         logger.warning(
@@ -420,8 +420,8 @@ def perception_node_3(state: AgentState) -> AgentState:
         )
         state["perception_3"] = {
             "status": "no_data",
-            "Summary": None,
-            "Retrieved Docs": [],
+            "summary": None,
+            "retrieved docs": [],
         }
         return state
 
@@ -431,8 +431,8 @@ def perception_node_3(state: AgentState) -> AgentState:
 
     state["perception_3"] = {
         "status": "data_found" if not result_3.empty else "no_data",
-        "Summary": summary_3,
-        "Retrieved Docs": retrieved_docs_3,
+        "summary": summary_3,
+        "retrieved docs": retrieved_docs_3,
     }
     return state
 
@@ -440,13 +440,13 @@ def perception_node_3(state: AgentState) -> AgentState:
 def integration_node(state: AgentState) -> AgentState:
     agent = IntegrationAgent()
 
-    # Collect summaries from each agent using the updated "Summary" key
+    # Collect summaries from each agent using the updated "summary" key
     perception_summaries = [
         summary
         for summary in [
-            state["perception_1"]["Summary"],
-            state["perception_2"]["Summary"],
-            state["perception_3"]["Summary"],
+            state["perception_1"]["summary"],
+            state["perception_2"]["summary"],
+            state["perception_3"]["summary"],
         ]
         if summary is not None
     ]
