@@ -220,7 +220,7 @@ class PerceptionAgent1(PerceptionAgentBase):
             return None, retrieved_docs, top_k_documents
 
 
-# PerceptionAgent2 (previously PerceptionAgent1)
+# PerceptionAgent2 for sec_docs - the legal complaints (previously PerceptionAgent1)
 class PerceptionAgent2(PerceptionAgentBase):
     def __init__(self, data_df, name, embeddings_path):
         retrieval_pipeline = [
@@ -277,7 +277,7 @@ class PerceptionAgent2(PerceptionAgentBase):
             return None, retrieved_docs, top_k_documents
 
 
-# PerceptionAgent3 (previously PerceptionAgent2)
+# PerceptionAgent3 for financial_reports docs - the annual reports (previously PerceptionAgent2)
 class PerceptionAgent3(PerceptionAgentBase):
     def __init__(self, data_df, name, embeddings_path):
         retrieval_pipeline = [
@@ -412,7 +412,7 @@ def perception_node_2(state: AgentState) -> AgentState:
 
 def perception_node_3(state: AgentState) -> AgentState:
     query = state["messages"][-1]["content"]
-    # Retrieve summary from PerceptionAgent2 using the updated key "summary"
+    # Retrieve summary from PerceptionAgent2 using updated key "summary"
     summary_from_agent_2 = state["perception_2"]["summary"]
 
     if summary_from_agent_2 is None:
@@ -438,7 +438,7 @@ def perception_node_3(state: AgentState) -> AgentState:
     return state
 
 
-# Updated integration_node to include full data to pass to email agent in both dict and json
+# Updated integration_node to include full data to pass to email agent in json
 def integration_node(state: AgentState) -> AgentState:
     agent = IntegrationAgent()
 
@@ -453,14 +453,14 @@ def integration_node(state: AgentState) -> AgentState:
         if summary is not None
     ]
 
-    # Get the query for context
+    # Get query for context
     query = state["messages"][-1]["content"]
 
-    # Generate the final integrated summary
+    # Generate final integrated summary
     summaries = agent.synthesize_data(perception_summaries, query)
     state["integration_result"] = {"status": "data_integrated", "message": summaries}
 
-    # Prepare data for possible JSON export to email_agent
+    # Prepare data for possible JSON to email_agent
     final_data = {
         "query": query,
         "perception_1": {
@@ -483,7 +483,7 @@ def integration_node(state: AgentState) -> AgentState:
     # Convert final_data to JSON
     json_data = json.dumps(final_data, indent=2)
 
-    # Option to store the json_data within state for later access
+    # Store json_data within state for later access by email agent
     state["json_data"] = json_data
 
     return state
