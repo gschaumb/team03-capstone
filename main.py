@@ -411,7 +411,8 @@ def perception_node_2(state: AgentState) -> AgentState:
 
 def perception_node_3(state: AgentState) -> AgentState:
     query = state["messages"][-1]["content"]
-    summary_from_agent_2 = state["perception_2"]["data"]
+    # Retrieve summary from PerceptionAgent2 using the updated key "Summary"
+    summary_from_agent_2 = state["perception_2"]["Summary"]
 
     if summary_from_agent_2 is None:
         logger.warning(
