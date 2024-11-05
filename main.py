@@ -272,9 +272,13 @@ class PerceptionAgent3(PerceptionAgentBase):
         ]
         super().__init__(data_df, name, embeddings_path, retrieval_pipeline)
 
-    def extract_data(self, query):
-        logger.debug("PerceptionAgent3 extracting data for query: %s", query)
-        query_embedding = generate_embeddings([query])
+    def extract_data(self, summary_from_agent_2, query):
+        logger.debug(
+            "PerceptionAgent3 extracting data using summary from Agent 2 and query: %s",
+            query,
+        )
+        # Generate query embedding based on summary received from PerceptionAgent2
+        query_embedding = generate_embeddings([summary_from_agent_2])
         top_k_documents = self.compute_similarity_and_retrieve(query_embedding)
 
         if top_k_documents.empty:
@@ -287,7 +291,8 @@ class PerceptionAgent3(PerceptionAgentBase):
         combined_text = " ".join(top_k_documents["chunked_text"].tolist())
         system_prompt = (
             "You are an expert in financial analysis. Based on the user query: "
-            f"'{query}', summarize the following financial data in 2 sentences, "
+            f"'{query}', and the context provided from previous analysis, "
+            "summarize the following financial data in 2 sentences, "
             "highlighting the most relevant financial facts and key events."
         )
 
@@ -374,9 +379,9 @@ def perception_node_2(state: AgentState) -> AgentState:
 
 def perception_node_3(state: AgentState) -> AgentState:
     query = state["messages"][-1]["content"]
-    summary_3, result_3 = perception_agent_3.extract_data(
-        state["perception_2"]["data"], query
-    )
+    # Pass both the `summary_from_agent_2` and `query`
+    summary_from_agent_2 = state["perception_2"]["data"]
+    summary_3, result_3 = perception_agent_3.extract_data(summary_from_agent_2, query)
 
     state["perception_3"] = {
         "status": "data_found" if not result_3.empty else "no_data",
