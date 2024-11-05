@@ -113,22 +113,21 @@ class PerceptionAgentBase:
     # Retrieval Option 1: Apply a similarity threshold
     def apply_similarity_threshold(self, similarities, threshold=0.5):
         logger.debug("Applying similarity threshold: %s", threshold)
-        filtered_indices = [
-            i for i, score in enumerate(similarities) if score >= threshold
-        ]
-        return filtered_indices
+        return [i for i, score in enumerate(similarities) if score >= threshold]
 
     # Retrieval Option 2: Select the top K documents
-    def select_top_k(self, similarities, top_k=1):
+    def select_top_k(self, similarities, indices, top_k=1):
         logger.debug("Selecting top %d documents by similarity", top_k)
-        top_k_indices = similarities.argsort()[-top_k:][::-1]
-        return top_k_indices
+        # Only use similarities of documents that passed previous filter (indices)
+        selected_similarities = similarities[indices]
+        top_indices = selected_similarities.argsort()[-top_k:][::-1]
+        return [indices[i] for i in top_indices]
 
     # Retrieval Option 3: Retrieve with context (neighbors before and after)
-    def retrieve_with_context(self, selected_indices, context_window=1):
+    def retrieve_with_context(self, indices, context_window=1):
         logger.debug("Retrieving with context window: %d", context_window)
-        extended_indices = set(selected_indices)
-        for index in selected_indices:
+        extended_indices = set(indices)
+        for index in indices:
             for offset in range(-context_window, context_window + 1):
                 if 0 <= index + offset < len(self.data_df):
                     extended_indices.add(index + offset)
