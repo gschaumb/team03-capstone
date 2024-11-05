@@ -163,10 +163,10 @@ class PerceptionAgent1(PerceptionAgentBase):
     def __init__(self, data_df, name, embeddings_path):
         retrieval_pipeline = [
             lambda similarities, indices: self.apply_similarity_threshold(
-                similarities, threshold=0.5
+                similarities, threshold=0.3
             ),
             lambda similarities, indices: self.select_top_k(
-                similarities, indices, top_k=1
+                similarities, indices, top_k=2
             ),
             lambda similarities, indices: self.retrieve_with_context(
                 indices, context_window=1
@@ -217,7 +217,7 @@ class PerceptionAgent2(PerceptionAgentBase):
     def __init__(self, data_df, name, embeddings_path):
         retrieval_pipeline = [
             lambda similarities, indices: self.apply_similarity_threshold(
-                similarities, threshold=0.6
+                similarities, threshold=0.3
             ),
             lambda similarities, indices: self.select_top_k(
                 similarities, indices, top_k=2
