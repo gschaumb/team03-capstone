@@ -440,13 +440,13 @@ def perception_node_3(state: AgentState) -> AgentState:
 def integration_node(state: AgentState) -> AgentState:
     agent = IntegrationAgent()
 
-    # Debug fix - filter out any None summaries to prevent passing None values
+    # Collect summaries from each agent using the updated "Summary" key
     perception_summaries = [
         summary
         for summary in [
-            state["perception_1"]["data"],
-            state["perception_2"]["data"],
-            state["perception_3"]["data"],
+            state["perception_1"]["Summary"],
+            state["perception_2"]["Summary"],
+            state["perception_3"]["Summary"],
         ]
         if summary is not None
     ]
