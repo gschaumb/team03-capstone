@@ -321,15 +321,16 @@ class IntegrationAgent:
 
         system_prompt = (
             "Using the following details, answer the user query: "
-            f"'{query}' in a concise, single-sentence summary."
+            f"'{query}' in a concise summary, approximately 550 tokens long."
         )
         messages = [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": combined_summaries},
         ]
 
+        # Generate final summary with limit of ~550 tokens to match M2 demo for eval
         summary = self.synthesize_data_llm(
-            system_prompt + "\n\nContext:\n" + combined_summaries, max_length=60
+            system_prompt + "\n\nContext:\n" + combined_summaries, max_length=550
         )
         return [summary.strip()]
 
@@ -339,7 +340,7 @@ class IntegrationAgent:
         cleaned = summary.split("Context:")[-1]
         return cleaned.strip()
 
-    def synthesize_data_llm(self, input_text, max_length=150):
+    def synthesize_data_llm(self, input_text, max_length=550):  # Updated max_length
         messages = [
             {"role": "system", "content": "You are an expert summarizer."},
             {"role": "user", "content": input_text},
