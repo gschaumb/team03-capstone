@@ -381,8 +381,21 @@ def perception_node_2(state: AgentState) -> AgentState:
 
 def perception_node_3(state: AgentState) -> AgentState:
     query = state["messages"][-1]["content"]
-    # Pass both the `summary_from_agent_2` and `query`
+    # Retrieve summary from PerceptionAgent2
     summary_from_agent_2 = state["perception_2"]["data"]
+
+    # Check if PerceptionAgent2 provided a valid summary
+    if summary_from_agent_2 is None:
+        logger.warning(
+            "No valid data from PerceptionAgent2; skipping PerceptionAgent3."
+        )
+        state["perception_3"] = {
+            "status": "no_data",
+            "data": None,
+        }
+        return state
+
+    # Proceed with PerceptionAgent3 if data available
     summary_3, result_3 = perception_agent_3.extract_data(summary_from_agent_2, query)
 
     state["perception_3"] = {
