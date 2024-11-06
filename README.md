@@ -1,8 +1,8 @@
 ---
 title: Team03 Capstone
 emoji: 📚
-colorFrom: pink
-colorTo: purple
+colorFrom: yellow
+colorTo: blue
 sdk: gradio
 sdk_version: 5.0.1
 app_file: app.py
