@@ -29,9 +29,7 @@ FINANCIAL_EMBEDDINGS_PATH = "/data/financial_embeddings.pkl"
 class PerceptionResult(TypedDict, total=False):
     status: str
     data: Optional[pd.DataFrame]
-    retrieved_docs: Optional[
-        List[str]
-    ]  # New key to hold retrieved document information
+    retrieved_docs: Optional[List[str]]  # To hold retrieved document information
 
 
 class IntegrationResult(TypedDict, total=False):
@@ -160,7 +158,7 @@ class PerceptionAgentBase:
         return self.data_df.iloc[selected_indices]
 
 
-# New PerceptionAgent1 for `case_docs.csv`
+# New PerceptionAgent1 for case_docs.csv
 class PerceptionAgent1(PerceptionAgentBase):
     def __init__(self, data_df, name, embeddings_path):
         retrieval_pipeline = [
@@ -197,7 +195,7 @@ class PerceptionAgent1(PerceptionAgentBase):
             for _, row in top_k_documents.iterrows()
         ]
 
-        # Summarize retrieved documents using GPT-3.5 Turbo
+        # Summarize retrieved documents using GPT 3.5 Turbo
         combined_text = " ".join(top_k_documents["chunked_text"].tolist())
         system_prompt = (
             "You are an expert summarizer. Based on the following information, answer the user query: "
@@ -254,7 +252,7 @@ class PerceptionAgent2(PerceptionAgentBase):
             for _, row in top_k_documents.iterrows()
         ]
 
-        # Summarize retrieved documents using GPT-3.5 Turbo
+        # Summarize retrieved documents using GPT 3.5 Turbo
         combined_text = " ".join(top_k_documents["chunked_text"].tolist())
         system_prompt = (
             "You are an expert summarizer. Based on the following information, answer the user query: "
@@ -315,7 +313,7 @@ class PerceptionAgent3(PerceptionAgentBase):
             for _, row in top_k_documents.iterrows()
         ]
 
-        # Summarize retrieved documents using GPT-3.5 Turbo
+        # Summarize retrieved documents using GPT 3.5 Turbo
         combined_text = " ".join(top_k_documents["chunked_text"].tolist())
         system_prompt = (
             "You are an expert in financial analysis. Based on the user query: "
@@ -438,7 +436,7 @@ def perception_node_3(state: AgentState) -> AgentState:
     return state
 
 
-# Updated integration_node to include full data to pass to email agent in json
+# Updated integration_node to include full data to pass to email agent in JSON
 def integration_node(state: AgentState) -> AgentState:
     agent = IntegrationAgent()
 

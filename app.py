@@ -30,7 +30,7 @@ def process_user_input(user_input):
     logger.debug("Received user input: %s", user_input)
 
     if user_input:
-        # Append new message to state - possible later use for persistence
+        # Append new message to state - for possible later use for session persistence
         agent_state["messages"].append({"sender": "User", "content": user_input})
 
         # Reset perceptions and integration result for new query
