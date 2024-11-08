@@ -480,7 +480,7 @@ def integration_node(state: AgentState) -> AgentState:
             "retrieved docs": state["perception_3"].get("retrieved docs"),
         },
         "integration_result": {
-            "final summary": summaries,
+            "Final summary": summaries,
         },
     }
 
