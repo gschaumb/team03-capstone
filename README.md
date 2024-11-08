@@ -10,7 +10,7 @@ pinned: false
 license: bsd-3-clause
 ---
 
-# HuggingFace Space Setup
+### HuggingFace Space Setup
 
 This file is used in the setup of the HuggingFace Space and provides necessary configuration information.
 
@@ -18,8 +18,6 @@ This file is used in the setup of the HuggingFace Space and provides necessary c
   Check out the configuration reference at:  
   [https://huggingface.co/docs/hub/spaces-config-reference](https://huggingface.co/docs/hub/spaces-config-reference)
 
-
----
 
 ### Capstone Project Links
 
@@ -35,6 +33,5 @@ This file is used in the setup of the HuggingFace Space and provides necessary c
   Our Milestone 2 demo (used in Capstone evaluation) can be found at:  
   [https://huggingface.co/spaces/gschaumb/M2-Team01-SS24-RAG-demo](https://huggingface.co/spaces/gschaumb/M2-Team01-SS24-RAG-demo)
 
----
 
 This file is integral to the configuration and deployment of our Capstone project on HuggingFace Spaces.
