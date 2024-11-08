@@ -195,7 +195,7 @@ class PerceptionAgent1(PerceptionAgentBase):
             for _, row in top_k_documents.iterrows()
         ]
 
-        # Summarize retrieved documents using GPT 3.5 Turbo
+        # Summarize retrieved documents using GPT-3.5 Turbo
         combined_text = " ".join(top_k_documents["chunked_text"].tolist())
         system_prompt = (
             "You are an expert summarizer. Based on the following information, answer the user query: "
@@ -228,6 +228,9 @@ class PerceptionAgent2(PerceptionAgentBase):
             lambda similarities, indices: self.select_top_k(
                 similarities, indices, top_k=2
             ),
+            lambda similarities, indices: self.retrieve_with_context(
+                indices, context_window=1
+            ),
         ]
         super().__init__(data_df, name, embeddings_path, retrieval_pipeline)
 
@@ -252,7 +255,7 @@ class PerceptionAgent2(PerceptionAgentBase):
             for _, row in top_k_documents.iterrows()
         ]
 
-        # Summarize retrieved documents using GPT 3.5 Turbo
+        # Summarize retrieved documents using GPT-3.5 Turbo
         combined_text = " ".join(top_k_documents["chunked_text"].tolist())
         system_prompt = (
             "You are an expert summarizer. Based on the following information, answer the user query: "
@@ -279,6 +282,9 @@ class PerceptionAgent2(PerceptionAgentBase):
 class PerceptionAgent3(PerceptionAgentBase):
     def __init__(self, data_df, name, embeddings_path):
         retrieval_pipeline = [
+            lambda similarities, indices: self.apply_similarity_threshold(
+                similarities, threshold=0
+            ),
             lambda similarities, indices: self.select_top_k(
                 similarities, indices, top_k=1
             ),
@@ -313,7 +319,7 @@ class PerceptionAgent3(PerceptionAgentBase):
             for _, row in top_k_documents.iterrows()
         ]
 
-        # Summarize retrieved documents using GPT 3.5 Turbo
+        # Summarize retrieved documents using GPT-3.5 Turbo
         combined_text = " ".join(top_k_documents["chunked_text"].tolist())
         system_prompt = (
             "You are an expert in financial analysis. Based on the user query: "
