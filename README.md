@@ -16,4 +16,4 @@ For our Capstone project overview and report see the Github Page at: https://gsc
 
 Our Capstone demo can be found at: https://huggingface.co/spaces/gschaumb/team03-capstone
 
-Our Milestone 2 demo which (used in Capstone evalution) can be found at: https://huggingface.co/spaces/gschaumb/M2-Team01-SS24-RAG-demo
+Our Milestone 2 demo (used in Capstone evalution) can be found at: https://huggingface.co/spaces/gschaumb/M2-Team01-SS24-RAG-demo
