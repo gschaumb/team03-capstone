@@ -84,5 +84,8 @@ Projects that benefit from agentic LLM structures often involve tasks that can b
   
 - **Ethical Implications**: Consider the ethical implications of your project, particularly when agents interact with real-world systems or make decisions that could impact users. Ensure fairness, transparency, and accountability in agent behavior.
 
-## Placeholder Image Test
+## Placeholder Image Tests
+
 ![Figure 1 Placeholder](agent_flow.svg)
+
+![Figure 1 Placeholder](high_level_benefits.png)
