@@ -86,6 +86,8 @@ Projects that benefit from agentic LLM structures often involve tasks that can b
 
 ## Placeholder Image Tests
 
-![Figure 1 Placeholder](agent_flow.svg)
+![Figure 1 Placeholder](basic_RAG.png)
 
-![Figure 1 Placeholder](high_level_benefits.png)
+![Figure 2 Placeholder](high_level_benefits.png)
+
+![Figure 3 Placeholder](agent_flow.svg)
