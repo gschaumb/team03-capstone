@@ -1,6 +1,6 @@
 # Introduction 
 
-Agentic retrieval-augmented generation (RAG) with large language models (LLMs) is a cutting-edge research area, combining the power of large language models with the ability to interact with external data and perform actions in real-world contexts. This approach enables the creation of agents capable of reasoning, planning, and executing tasks to solve complex problems. For instance, agentic RAG systems can:
+Agentic retrieval-augmented generation (RAG) with large language models (LLMs) is a cutting-edge research area, combining the power of large language models with the ability to interact with external data and perform actions in real-world contexts. This enables the creation of agents capable of reasoning, planning, and executing tasks to solve complex problems. For instance, agentic RAG systems can perform:
 
 - **Math Problem Solving**: Using agents to autonomously or collaboratively solve math problems, with agents specializing in areas like equation solving, symbolic manipulation, or accessing external mathematical resources.
   
@@ -13,7 +13,7 @@ The combination of reasoning and acting makes agentic RAG a promising approach f
 
 ## Project Overview
 
-Our Capstone project builds on our Milestones 1 and 2, where we extracted data sources and developed a basic RAG solution for a customer support use case. In this Capstone project:
+Our Capstone project builds on our Milestones 1 and 2, where we extracted data sources and developed a basic RAG solution for a **customer support use case**. In this Capstone project:
 
 - **Public legal, financial, and historical documents related to the Enron case** serve as a proxy for the knowledgebase.
 - **The Enron email corpus** represents a range of employee and/or customer emails.
@@ -36,7 +36,7 @@ One example of an effective support use case RAG system is Unstructured.io's cha
 Visit their documentation here:  
 [Unstructured.io Documentation](https://docs.unstructured.io/welcome)
 
-Their site includes a chatbot in the lower right corner, which may also support internal employees and automated email responses. Our interactions with this tool demonstrated its high capacity for providing relevant information, embodying the functionality we sought to simulate with the Enron dataset.
+Their site linked above includes a chatbot in the lower right corner, which we speculate may also support their internal employees and automated email responses. Our interactions with this tool demonstrated its high capacity for providing relevant information, embodying the functionality we sought to simulate with the Enron dataset.
 
 ### Capstone Project Implementation and Hypothesis
 
