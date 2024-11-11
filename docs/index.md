@@ -2,9 +2,11 @@
 
 Agentic retrieval-augmented generation (RAG) with large language models (LLMs) is a cutting-edge research area, combining the power of large language models with the ability to interact with external data and perform actions in real-world contexts. This approach enables the creation of agents capable of reasoning, planning, and executing tasks to solve complex problems. For instance, agentic RAG systems can:
 
-- Answer questions by retrieving relevant information from sources like Wikipedia.
-- Verify facts through external data validation.
-- Control robots to perform tasks in physical environments.
+- **Math Problem Solving**: Using agents to autonomously or collaboratively solve math problems, with agents specializing in areas like equation solving, symbolic manipulation, or accessing external mathematical resources.
+  
+- **Retrieval-Augmented Code Generation**: Employing agents to generate code, with one agent focused on retrieving relevant code snippets from a database, and another responsible for assembling and refining the code based on the retrieved information.
+  
+- **Decision Making in Text-Based Environments**: Building agents that can navigate and interact within simulated environments using natural language commands, with specialized agents handling tasks like planning, object manipulation, or reasoning about the environment.
 
 The combination of reasoning and acting makes agentic RAG a promising approach for developing more capable and trustworthy AI systems with enhanced understanding and interaction capabilities.
 
@@ -69,8 +71,6 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 
 
 
-
-
 # Placeholder Text Follows
 
 The project may explore emerging tools for agentic RAG that could be used for:
@@ -82,16 +82,6 @@ The project may explore emerging tools for agentic RAG that could be used for:
 - **Prompt Engineering**: Different prompting strategies can be used to influence how LLMs reason about information. "Chain-of-thought" prompting and "self-consistency" prompting are two promising strategies. These strategies may be evaluated to see how well they work for the Enron chatbot.
 
 - **Decoding Methods**: By default, LLMs use a "greedy decoding" approach to generate responses. However, LLMs can also generate responses using different approaches. We may experiment with alternative decoding methods, such as "top-k sampling," to see if these methods lead to better results for the Enron chatbot.
-
-
-## Other Examples of Projects Benefiting from Agentic LLMs:
-
-- **Math Problem Solving**: Using agents to autonomously or collaboratively solve math problems, with agents specializing in areas like equation solving, symbolic manipulation, or accessing external mathematical resources.
-  
-- **Retrieval-Augmented Code Generation**: Employing agents to generate code, with one agent focused on retrieving relevant code snippets from a database, and another responsible for assembling and refining the code based on the retrieved information.
-  
-- **Decision Making in Text-Based Environments**: Building agents that can navigate and interact within simulated environments using natural language commands, with specialized agents handling tasks like planning, object manipulation, or reasoning about the environment.
-
 
 
 # Agentic LLM Project Design Guidelines Which May Serve As Our Goals
