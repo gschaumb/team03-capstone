@@ -36,9 +36,9 @@ Visit their documentation here:
 
 Their site includes a chatbot in the lower right corner, which may also support internal employees and automated email responses. Our interactions with this tool demonstrated its high capacity for providing relevant information, embodying the functionality we sought to simulate with the Enron dataset.
 
-## Capstone Project Implementation and Hypothesis
+### Capstone Project Implementation and Hypothesis
 
-In Milestone 2, we performed initial testing with a basic RAG setup (refer to Figure 1). Our Capstone project expands upon this with a goal of showing that agentic RAG improves results with the Enron knowledgebase when compared with basic RAG and unaugmented responses. Additionally, we introduced the capability to search through the extensive Enron email corpus, presenting emails potentially related to the user's query.
+In Milestone 2, we performed initial testing with a basic RAG setup (refer to Figure 1). Our Capstone project expands upon this with a goal of showing that agentic RAG improves results with the Enron knowledgebase when compared with basic RAG and unaugmented responses. Additionally, we introduced and agent with the capability to search through the extensive Enron email corpus, located on a cloud database service, and retrieve emails related to the user's query.
 
 **Figure 1**  
 *Basic RAG Architecture:*  
@@ -51,6 +51,7 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 ![Figure 2](high_level_benefits.png)
 
 
+
 # Methods
 
 
@@ -59,7 +60,10 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 ![Figure 3 Placeholder](agent_flow.svg)
 
 
+
 # Results
+
+
 
 # Discussion
 
