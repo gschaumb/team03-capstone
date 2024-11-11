@@ -53,6 +53,26 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 
 
 
+# Methods
+
+
+
+**Figure 3**
+*Agent Design and Workflow:*
+![Figure 3 Placeholder](agent_flow.svg)
+
+
+
+# Results
+
+
+
+# Discussion
+
+
+
+
+
 
 # Placeholder Text Follows
 
