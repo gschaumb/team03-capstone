@@ -52,9 +52,7 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 ![Figure 2](high_level_benefits.png)
 
 
-
 # Methods
-
 
 
 **Figure 3**
@@ -62,16 +60,9 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 ![Figure 3 Placeholder](agent_flow.svg)
 
 
-
 # Results
 
-
-
 # Discussion
-
-
-
-
 
 
 # Placeholder Text Follows
