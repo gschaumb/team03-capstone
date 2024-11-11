@@ -83,13 +83,15 @@ As part of our Phase 0 we reviewed agentic patterns<sup>[3](#ref-3)</sup>.
 
 ## Statement of Work
 
-[Provide the detailed statement of work here.]
+Statement on Use of Generative AI: Tools such as ChatGPT, Gemini, and Copilot were used in our project for experimentation on tasks such as evaluation query creation, code consultation, as well as searching on approaches and concepts.
+
+[Anandita and Gary work items to be added here.]
 
 ## Other
 
 [Include any additional information or sections here.]
 
-### Notes
+### Notes (Remove the below for final - keeping just as refence for now)
 
 The project may explore emerging tools for agentic RAG that could be used for:
 
@@ -146,7 +148,7 @@ Projects that benefit from agentic LLM structures often involve tasks that can b
   
 - **Ethical Implications**: Consider the ethical implications of your project, particularly when agents interact with real-world systems or make decisions that could impact users. Ensure fairness, transparency, and accountability in agent behavior.
 
-## Placeholder Image Tests
+#### Placeholder Image Tests
 
 ![Figure 1 Placeholder](basic_RAG.png)
 
