@@ -1,10 +1,49 @@
-# Placeholder 
+# Introduction 
 
-This is a placeholder for the Github descriptive page and/or our project report documentation. We'll replace this text with the to-be-developed content.
+Agentic RAG with LLMs is a cutting-edge research area, combining the power of large language models with the ability to interact with external data and perform actions in real-world contexts. This approach enables the creation of agents capable of reasoning, planning, and executing tasks to solve complex problems. For instance, agentic RAG systems can:
 
-Demo can be found at: https://huggingface.co/spaces/gschaumb/team03-capstone
+- Answer questions by retrieving relevant information from sources like Wikipedia.
+- Verify facts through external data validation.
+- Control robots to perform tasks in physical environments.
+
+The combination of reasoning and acting makes agentic RAG a promising approach for developing more capable and trustworthy AI systems with enhanced understanding and interaction capabilities.
+
+## Project Overview
+
+Our Capstone project builds on Milestones 1 and 2, where we developed an agentic RAG solution for a customer support use case. This solution utilizes diverse data sources as a knowledgebase for queries, with a secondary goal of identifying relevant emails within a large corpus. In our project:
+
+- **Public legal, financial, and historical documents related to the Enron case** serve as a proxy for the knowledgebase.
+- **The Enron email corpus** represents a range of employee and/or customer emails.
+
+Ideally, we would use corporate technical manuals, implementation guides, support FAQs, and related customer support emails. Given the difficulty in obtaining such materials, the Enron data has proven a valuable proxy due to its broad content coverage across various document types and email exchanges.
+
+### Inspiration: Unstructured.io's RAG Solution
+
+One example of an effective support use case RAG system is Unstructured.io's chatbot, which operates on their documentation page and Slack channel. This tool provides detailed and accurate answers, representing the type of capability we aimed to emulate in our Enron project.
+
+Visit their documentation here:  
+[Unstructured.io Documentation](https://docs.unstructured.io/welcome)
+
+Their site includes a chatbot in the lower right corner, which may also support internal employees and automated email responses. Our interactions with this tool demonstrated its high capacity for providing relevant information, embodying the functionality we sought to simulate with the Enron dataset.
+
+## Capstone Project Implementation and Hypothesis
+
+In Milestone 2, we performed initial testing with a basic RAG setup (refer to Figure 1). Our Capstone project expands upon this by investigating how an agentic approach might improve upon the basic RAG results. Additionally, we introduced the capability to search through the extensive Enron email corpus, presenting emails potentially related to the user's query.
+
+**Figure 1**  
+*Basic RAG Architecture:*  
+![Figure 1](basic_RAG.png)
+
+Our primary hypothesis is that utilizing one agent per data source type will enhance the chatbot's overall response quality, particularly for compound questions. Each agent is equipped with customized retrieval parameters, optimized for its respective data source. See Figure 2 for a visual illustration of the anticipated benefits.
+
+**Figure 2**  
+*Advantages of Specialized Agentic RAG Configuration:*  
+![Figure 2](high_level_benefits.png)
 
 
+
+
+# Placeholder Text Follows
 
 # Enron Agentic RAG Project Introduction
 
