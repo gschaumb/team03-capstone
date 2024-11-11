@@ -8,12 +8,12 @@ Agentic retrieval-augmented generation (RAG) with large language models (LLMs) i
   
 - **Decision Making in Text-Based Environments**: Building agents that can navigate and interact within simulated environments using natural language commands, with specialized agents handling tasks like planning, object manipulation, or reasoning about the environment.
 
-The combination of reasoning and acting makes agentic RAG a promising approach for developing more capable and trustworthy AI systems with enhanced understanding and interaction capabilities.
+The combination of reasoning and acting makes agentic RAG a promising approach for developing more capable and trustworthy AI systems with enhanced understanding and interaction capabilities<sup>[1](#ref-1)</sup>.
 
 
 ## Project Overview
 
-Our Capstone project builds on our Milestones 1 and 2, where we extracted data sources and developed a basic RAG solution for a **customer support use case**. In this Capstone project:
+Our Capstone project builds on our Milestones 1 and 2<sup>[2](#ref-2)</sup>, where we extracted data sources and developed a basic RAG solution for a **customer support use case**. In this Capstone project:
 
 - **Public legal, financial, and historical documents related to the Enron case** serve as a proxy for the knowledgebase.
 - **The Enron email corpus** represents a range of employee and/or customer emails.
@@ -56,6 +56,7 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 
 # Methods
 
+As part of our Phase 0 we reviewed agentic patterns<sup>[3](#ref-3)</sup>.
 
 **Figure 3**
 *Agent Design and Workflow:*
@@ -76,9 +77,9 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 
 ## References
 
-- Bodas, A., Goldhardt, N., & Schaumburg, G. (n.d.). _Milestone 2_. GitHub. Retrieved from [https://github.com/bodasa-umich/Milestone2](https://github.com/bodasa-umich/Milestone2)
-- La Cava, L., & Tagarelli, A. (2024). Safeguarding Decentralized Social Media: LLM Agents for Automating Community Rule Compliance. arXiv. https://arxiv.org/abs/2409.08963
-- Doe, J. (2023, September 22). Designing Cognitive Architectures: Agentic Workflow Patterns from Scratch. _Medium_. [https://medium.com/google-cloud/designing-cognitive-architectures-agentic-workflow-patterns-from-scratch-63baa74c54bc](https://medium.com/google-cloud/designing-cognitive-architectures-agentic-workflow-patterns-from-scratch-63baa74c54bc)
+1. [La Cava, L., & Tagarelli, A. (2024). Safeguarding Decentralized Social Media: LLM Agents for Automating Community Rule Compliance. arXiv.](#ref-1) <a id="ref-1"></a>https://arxiv.org/abs/2409.08963
+2. [Bodas, A., Goldhardt, N., & Schaumburg, G. (n.d.). _Milestone 2_. GitHub.](#ref-2) <a id="ref-2"></a>https://github.com/bodasa-umich/Milestone2
+3. [Doe, J. (2023, September 22). Designing Cognitive Architectures: Agentic Workflow Patterns from Scratch. _Medium_.](#ref-3) <a id="ref-3"></a>https://medium.com/google-cloud/designing-cognitive-architectures-agentic-workflow-patterns-from-scratch-63baa74c54bc
 
 ## Statement of Work
 
