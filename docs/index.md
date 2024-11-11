@@ -8,6 +8,17 @@ Agentic RAG with LLMs is a cutting-edge research area, combining the power of la
 
 The combination of reasoning and acting makes agentic RAG a promising approach for developing more capable and trustworthy AI systems with enhanced understanding and interaction capabilities.
 
+Large language models (LLMs) are very good at many language-based tasks. However, LLMs often struggle with complex reasoning and with using outside knowledge. Agents can be used to make LLMs even better. Agents can help LLMs interact with external data sources, retrieve information that is relevant, and take actions based on reasoning. This makes the LLM better at problem-solving. Combining agents with LLMs is particularly helpful for retrieval-augmented generation (RAG) tasks, because agents are able to dynamically retrieve and process information.
+
+This project applies agentic RAG patterns to a chatbot solution that can provide information about the Enron case. The project uses publicly available data from the case, such as the legal case documents, annual financial reports, and potentially the email corpus. This approach allows for the exploration of many techniques, such as:
+
+- **Chaining Agents**: Chaining agents can be used to break up the task into a series of smaller steps. Each agent in the chain would be responsible for a specific part of the overall task, like retrieval, summarization, or question answering. An agent that specializes in legal documents could, for example, retrieve the appropriate sections of a document based on what the user asks. The information retrieved by the first agent could then be passed to a summarization agent to be condensed into smaller, more concise insights.
+
+- **Specializing Agent Interaction with Data**: Each agent can be trained on a specific data source so that the agent becomes an expert in understanding and retrieving information from that source. Having specialized agents could really improve the relevance and accuracy of the information that they retrieve. For instance, an agent that was specifically trained on financial reports would be better at answering questions about how Enron was performing financially.
+
+- **LLM as an Intermediate Summary Processor**: LLMs can be used as a central processing unit to take the summaries from different specialized agents and synthesize them into a single response. This approach would help the chatbot to present a clear and consistent picture of the Enron case, even though the case is very complex.
+
+
 ## Project Overview
 
 Our Capstone project builds on Milestones 1 and 2, where we developed an agentic RAG solution for a customer support use case. This solution utilizes diverse data sources as a knowledgebase for queries, with a secondary goal of identifying relevant emails within a large corpus. In our project:
@@ -44,19 +55,6 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 
 
 # Placeholder Text Follows
-
-# Enron Agentic RAG Project Introduction
-
-Large language models (LLMs) are very good at many language-based tasks. However, LLMs often struggle with complex reasoning and with using outside knowledge. Agents can be used to make LLMs even better. Agents can help LLMs interact with external data sources, retrieve information that is relevant, and take actions based on reasoning. This makes the LLM better at problem-solving. Combining agents with LLMs is particularly helpful for retrieval-augmented generation (RAG) tasks, because agents are able to dynamically retrieve and process information.
-
-This project applies agentic RAG patterns to a chatbot solution that can provide information about the Enron case. The project uses publicly available data from the case, such as the legal case documents, annual financial reports, and potentially the email corpus. This approach allows for the exploration of many techniques, such as:
-
-- **Chaining Agents**: Chaining agents can be used to break up the task into a series of smaller steps. Each agent in the chain would be responsible for a specific part of the overall task, like retrieval, summarization, or question answering. An agent that specializes in legal documents could, for example, retrieve the appropriate sections of a document based on what the user asks. The information retrieved by the first agent could then be passed to a summarization agent to be condensed into smaller, more concise insights.
-
-- **Specializing Agent Interaction with Data**: Each agent can be trained on a specific data source so that the agent becomes an expert in understanding and retrieving information from that source. Having specialized agents could really improve the relevance and accuracy of the information that they retrieve. For instance, an agent that was specifically trained on financial reports would be better at answering questions about how Enron was performing financially.
-
-- **LLM as an Intermediate Summary Processor**: LLMs can be used as a central processing unit to take the summaries from different specialized agents and synthesize them into a single response. This approach would help the chatbot to present a clear and consistent picture of the Enron case, even though the case is very complex.
-
 
 The project may explore emerging tools for agentic RAG that could be used for:
 
