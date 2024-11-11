@@ -18,7 +18,7 @@ Our Capstone project builds on our Milestones 1 and 2, where we extracted data s
 - **Public legal, financial, and historical documents related to the Enron case** serve as a proxy for the knowledgebase.
 - **The Enron email corpus** represents a range of employee and/or customer emails.
 
-Ideally, we would have liked to use corporate technical manuals, implementation guides, support FAQs, and related customer support emails. Given the difficulty in obtaining such materials, the Enron data has proven a valuable proxy due to its broad content coverage across various document types and email exchanges.
+Ideally, we would have liked to have used a product or service company's corporate technical manuals, implementation guides, support FAQs, and related customer support emails as our data sources. Given the difficulty in obtaining such materials, the Enron data has proven a valuable proxy due to its broad content coverage across various document types and email exchanges.
 
 Our goal was to investigate whether agentic RAG improved results over basic RAG using specialized agents and workflows, such as:
 
@@ -71,7 +71,24 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 
 
 
-# Placeholder Text Follows
+
+# Appendix
+
+## References
+
+- Bodas, A., Goldhardt, N., & Schaumburg, G. (n.d.). _Milestone 2_. GitHub. Retrieved from [https://github.com/bodasa-umich/Milestone2](https://github.com/bodasa-umich/Milestone2)
+- La Cava, L., & Tagarelli, A. (2024). Safeguarding Decentralized Social Media: LLM Agents for Automating Community Rule Compliance. arXiv. https://arxiv.org/abs/2409.08963
+- Doe, J. (2023, September 22). Designing Cognitive Architectures: Agentic Workflow Patterns from Scratch. _Medium_. [https://medium.com/google-cloud/designing-cognitive-architectures-agentic-workflow-patterns-from-scratch-63baa74c54bc](https://medium.com/google-cloud/designing-cognitive-architectures-agentic-workflow-patterns-from-scratch-63baa74c54bc)
+
+## Statement of Work
+
+[Provide the detailed statement of work here.]
+
+## Other
+
+[Include any additional information or sections here.]
+
+### Notes
 
 The project may explore emerging tools for agentic RAG that could be used for:
 
@@ -84,12 +101,12 @@ The project may explore emerging tools for agentic RAG that could be used for:
 - **Decoding Methods**: By default, LLMs use a "greedy decoding" approach to generate responses. However, LLMs can also generate responses using different approaches. We may experiment with alternative decoding methods, such as "top-k sampling," to see if these methods lead to better results for the Enron chatbot.
 
 
-# Agentic LLM Project Design Guidelines Which May Serve As Our Goals
+#### Agentic LLM Project Design Guidelines Which May Serve As Our Goals
 
 Projects that benefit from agentic LLM structures often involve tasks that can be broken down into distinct sub-tasks, each potentially requiring different capabilities or data sources. This structure becomes particularly useful when these sub-tasks need to be executed in a specific order or require a dynamic interaction based on the outcome of previous steps. Here are some guidelines for designing such projects:
 
 
-## Identify the Core Sub-Tasks:
+#### Identify the Core Sub-Tasks:
 
 - **Different Data Types**: If your project requires retrieving and processing information from different data types like text, code, or structured data, consider using different agents specialized for each type. For instance, one agent could be responsible for parsing code, while another handles database queries.
   
@@ -98,7 +115,7 @@ Projects that benefit from agentic LLM structures often involve tasks that can b
 - **Different Tasks within a Workflow**: Break down the overall project workflow into distinct tasks, each handled by a specific agent. This approach proves valuable when tasks require different capabilities. For instance, one agent could be responsible for generating code, another for checking its safety, and a third for executing it.
 
 
-## Design the Interaction Flow:
+#### Design the Interaction Flow:
 
 - **Static vs. Dynamic Conversations**: Determine whether the interaction between agents should follow a predefined, static order, or if it requires flexibility and adaptation based on intermediate results. Static patterns are simpler to implement, but dynamic patterns offer greater flexibility in complex scenarios.
   
@@ -107,7 +124,7 @@ Projects that benefit from agentic LLM structures often involve tasks that can b
 - **Human Involvement**: Determine the role of humans in the loop. This could range from providing initial instructions, to validating intermediate outputs, to taking over control in case of errors. Striking the right balance between human oversight and agent autonomy is crucial for trust and reliability.
 
 
-## Agent Capabilities and Design:
+#### Agent Capabilities and Design:
 
 - **LLM Configuration**: Carefully choose the appropriate LLM for each agent, considering factors like model size, capabilities, and cost-effectiveness. For instance, a smaller LLM might suffice for straightforward tasks, while a larger, more capable model could be necessary for complex reasoning or code generation.
   
@@ -115,14 +132,14 @@ Projects that benefit from agentic LLM structures often involve tasks that can b
   
 - **Memory Management**: Design mechanisms for agents to access and manage shared or individual memories, allowing them to retain relevant information from previous interactions or access external knowledge bases.
 
-## Evaluation and Refinement:
+#### Evaluation and Refinement:
 
 - **Define Clear Metrics**: Establish clear metrics to evaluate the performance of your agentic system, aligning them with the specific goals of your project. These metrics could include task completion rate, accuracy, cost, latency, or human effort saved.
   
 - **Iterative Refinement**: Continuously monitor, analyze, and refine your agentic system based on its performance and identify areas for improvement, such as agent capabilities, interaction patterns, or tool integration.
 
 
-## Key Considerations:
+#### Key Considerations:
 
 - **Robustness and Error Handling**: Agentic LLM systems can be complex and prone to errors. Implement mechanisms to handle unexpected situations, such as agent failures, ambiguous instructions, or conflicting information.
   
