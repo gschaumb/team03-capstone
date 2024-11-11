@@ -91,7 +91,7 @@ Statement on Use of Generative AI: Tools such as ChatGPT, Gemini, and Copilot we
 
 [Include any additional information or sections here.]
 
-### Notes (Remove the below for final - keeping just as refence for now)
+### Notes (remove the below for final - keeping just as reference materials for now)
 
 The project may explore emerging tools for agentic RAG that could be used for:
 
