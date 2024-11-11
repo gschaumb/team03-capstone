@@ -8,12 +8,10 @@ Agentic retrieval-augmented generation (RAG) with large language models (LLMs) i
 
 The combination of reasoning and acting makes agentic RAG a promising approach for developing more capable and trustworthy AI systems with enhanced understanding and interaction capabilities.
 
-Large language models are very good at many language-based tasks. However, LLMs often struggle with complex reasoning and with using outside knowledge. Agents can be used to make LLMs even better. Agents can help LLMs interact with external data sources, retrieve information that is relevant, and take actions based on reasoning. This makes the LLM better at problem-solving. Combining agents with LLMs is particularly helpful for retrieval-augmented generation tasks, because agents are able to dynamically retrieve and process information.
-
 
 ## Project Overview
 
-Our Capstone project builds on our Milestones 1 and 2, where we extracted data sources developed an agentic RAG solution for a customer support use case. This solution utilizes diverse data sources as a knowledgebase for queries, with a secondary goal of identifying relevant emails within a large corpus. In our project:
+Our Capstone project builds on our Milestones 1 and 2, where we extracted data sources and developed a basic RAG solution for a customer support use case. In this Capstone project:
 
 - **Public legal, financial, and historical documents related to the Enron case** serve as a proxy for the knowledgebase.
 - **The Enron email corpus** represents a range of employee and/or customer emails.
