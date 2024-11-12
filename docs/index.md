@@ -36,17 +36,17 @@ One example of an effective support use case RAG system is Unstructured.io's cha
 Visit their documentation here:  
 [Unstructured.io Documentation](https://docs.unstructured.io/welcome)
 
-Their site linked above includes a chatbot in the lower right corner, which we speculate may also support their internal employees and automated email responses. We experimented with document extraction using Unstructured's products in Milestone 2, and our interactions with this chatbot demonstrated its high capacity for providing relevant information, embodying the functionality we sought to simulate with the Enron dataset.
+Their site linked above includes a chatbot in the lower right corner, which we speculate may also support their internal employees and automated email responses. We experimented with document extraction using Unstructured's products in Milestone 2, and our interactions with this chatbot demonstrated its high capacity for providing relevant information, embodying the functionality we sought to implement with the Enron dataset.
 
 ### Capstone Project Implementation and Hypothesis
 
-In Milestone 2, we performed initial testing with a basic RAG setup (refer to Figure 1). Our Capstone project expands upon this with a goal of showing that agentic RAG improves results with the Enron knowledgebase when compared with basic RAG and unaugmented responses. Additionally, we introduced an agent with the capability to search via API through the extensive Enron email corpus, located on a cloud database service, and retrieve emails related to the user's query.
+In Milestone 2, we performed initial testing with a basic RAG setup (see Figure 1). Our Capstone project expands upon this with the goal of testing whether agentic RAG improves results with the Enron knowledgebase when compared with basic RAG or unaugmented LLM responses, all using the GPT-3.5 Turbo model. Additionally, we created an agent to search via API through the extensive Enron email corpus, located on a cloud database service, and retrieve emails related to the user's query.
 
 **Figure 1**  
 *Basic RAG Architecture:*  
 ![Figure 1](basic_RAG.png)
 
-Our primary hypothesis is that utilizing one agent per data source type will enhance the chatbot's overall response quality, particularly for compound questions. Each agent is equipped with customized retrieval parameters, optimized for its respective data source. See Figure 2 for a visual illustration of the anticipated benefits.
+Our primary hypothesis is that utilizing one agent per data source type will enhance the chatbot's overall response quality, particularly for compound questions. Each agent is equipped with customized retrieval parameters, in an attempt to optimize for its respective data source. See Figure 2 for a visual of the anticipated benefits.
 
 **Figure 2**  
 *Advantages of Specialized Agentic RAG Configuration:*  
