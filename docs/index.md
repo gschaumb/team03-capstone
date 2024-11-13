@@ -61,12 +61,12 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 **Methodology** explains how we attempted to solve the problem and justifies our methodological approach, while **Evaluation Strategy** defines what a successful outcome would be.
 
 ### Phase 0: Experimentation and Feasibility Prototyping
-- **High-Level Design:** Researched agentic patterns<sup>[3](#ref-3)</sup>.
-- **High-Level Design:** Experimented with agnetic libraries and did prototype feasibility coding.
+- **High-Level Design - Requirements:** Researched agentic patterns<sup>[3](#ref-3)</sup>.
+- **High-Level Design - Implementation:** Experimented with agentic libraries and did prototype feasibility coding.
 
 ### Phase 1: Minimum Viable Product (MVP)
-- **Detailed Design:** Defined our agentic pattern flow and email retrieval (see Figure 3). Decided upon coding agents with python classes rather than using an agentic library.
-- **Detailed Design:** Defined evaluation criteria after agent design was defined.
+- **Detailed Design - Implementation:** Decided to code agents with python classes rather than using an agentic library. Defined our agentic pattern flow and email retrieval (see Figure 3).
+- **Detailed Design - Evaluation:** Defined evaluation criteria after agent design was defined.
 
 ### Phase 2: Enhancements
 - **Implemented Enhancements:** Integrated the Email Agent.
