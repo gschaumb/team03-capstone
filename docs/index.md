@@ -73,13 +73,13 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 - **Updated Evaluation Criteria:** Email Agent evlaution.
 
 ## Agent Design Rationale
-Each agent's retrieval pipeline and summarization strategy leverages specific parameters and prompts tailored to the nature of the documents it handles, aiding in the goal of summaries that are both precise and contextually relevant.
+Each agent's retrieval pipeline and summarization strategy leverages specific parameters and prompts tailored to the nature of the documents it handles, aiding our goal of summaries that are both precise and contextually relevant.
 
 **Figure 3**
 *Agent Design and Workflow:*
 ![Figure 3 Placeholder](agent_flow.svg)
 
-### Perception Agent 1 - Case Study Data
+### Case Study Agent
 
 **Retrieval Pipeline**:
 - **Threshold of 0**: Includes all documents with cosine similarity greater than zero to ensure comprehensive coverage.
@@ -87,12 +87,12 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 - **Context Window of 1**: Adds plus one and minus one adjacent documents for richer context and understanding.
 
 **Summarization Strategy**:
-- **Concise Summarization**: Summarizes in two sentences focusing on the most crucial details, providing quick insights into complex case documents.
+- **Concise Summarization**: Summarizes in two sentences focusing on the most important details.
 
 **Objective**:
-- Designed to efficiently distill a chronologically consistent case summary of Enron, providing users with quick, actionable insights while ensuring no detail is overlooked.
+- Designed to efficiently distill a dense, chronologically consistent case summary of Enron, providing key insights while attempting to ensure no detail is overlooked. The initial broad threshold ensures no potentially relevant document is missed, while the top-k selection focuses on the best matches. The context window adds adjacent documents, which can be helpful for understanding necessary context or additional insights.
 
-### Perception Agent 2 - SEC Legal Complaint Documents
+### SEC Legal Complaint Documents Agent
 
 **Retrieval Pipeline**:
 - **Threshold of 0.3**: Filters for moderate to high relevance, reducing noise.
@@ -103,9 +103,9 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 - **Legal Focus**: Summarizes critical legal elements like relevant people and dates in two sentences, streamlining legal review processes.
 
 **Objective**:
-- Configured for well-organized legal data where precise and accurate document retrieval is seen as helpful for precision, compliance and regulatory affairs.
+- Configured for well-organized legal data where accurate document retrieval is seen as helpful for precision, compliance and regulatory affairs. The higher threshold helps to ensure that only documents significantly related to the query are retrieved, reducing noise from less relevant documents.The context window, although small, is useful with legal data where neighboring paragraphs or sections often contain pertinent arguments or references.
 
-### Perception Agent 3 - Annual Financial Reports
+### Annual Financial Reports Agent
 
 **Retrieval Pipeline**:
 - **Threshold of 0**: Captures all potentially relevant financial reports.
@@ -116,15 +116,15 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 - **Financial Analysis**: Integrates financial insights into a concise two-sentence summary focusing on key financial facts and trends.
 
 **Objective**:
-- Succinct summaries that highlight key information and financial figures from the relvant document chunks.
+- Succinct summaries that highlight key information and financial figures from the relvant document chunks. Suitable for financial reports where key figures and statements can be scattered across documents, but where the primary focus should be on the most relevant document. The broader context window helps in gathering comprehensive insights where financial data can be informed by adjacent information.
 
 ### Integration Agent - Final Summary Integration
 
 **Summarization Strategy**:
-- **Comprehensive Integration**: Combines summaries from all agents, using a prompt that directs the LLM to answer the query with a response reflecting relevant underlying data.
+- **Comprehensive Integration**: Combines summaries from all agents, using a prompt that directs the LLM to answer the query with a response reflecting the relevant provided data.
 
 **Objective**:
-- To provide a comprehensive and nuanced overview of the diverse data, attempting to provide users with a response that aids in complex decision-making processes across various document types.
+- To provide a comprehensive and nuanced overview of the diverse data, attempting to provide users with an answer to their query that aids in complex decision-making processes across various document types.
 
 
 
