@@ -56,11 +56,80 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 
 # Methods
 
-As part of our Phase 0 we reviewed agentic patterns<sup>[3](#ref-3)</sup>.
+## Project Methodology
+
+**Methodology** explains how we attempted to solve the problem and justifies our methodological approach, while **Evaluation Strategy** defines what a successful outcome would be.
+
+### Phase 0: Experimentation and Feasibility Prototyping
+- **High-Level Design:** Researched agentic patterns<sup>[3](#ref-3)</sup>.
+- **High-Level Design:** Experimented with agnetic libraries and did prototype feasibility coding.
+
+### Phase 1: Minimum Viable Product (MVP)
+- **Detailed Design:** Defined our agentic pattern flow and email retrieval (see Figure 3). Decided upon coding agents with python classes rather than using an agentic library.
+- **Detailed Design:** Defined evaluation criteria after agent design was defined.
+
+### Phase 2: Enhancements
+- **Implemented Enhancements:** Integrated the Email Agent.
+- **Updated Evaluation Criteria:** Email Agent evlaution.
+
+## Agent Design Rationale
+Each agent's retrieval pipeline and summarization strategy leverages specific parameters and prompts tailored to the nature of the documents it handles, aiding in the goal of summaries that are both precise and contextually relevant.
 
 **Figure 3**
 *Agent Design and Workflow:*
 ![Figure 3 Placeholder](agent_flow.svg)
+
+### Perception Agent 1 - Case Study Data
+
+**Retrieval Pipeline**:
+- **Threshold of 0**: Includes all documents with cosine similarity greater than zero to ensure comprehensive coverage.
+- **Top 2 Documents**: Focuses on the most relevant documents to maintain precision.
+- **Context Window of 1**: Adds plus one and minus one adjacent documents for richer context and understanding.
+
+**Summarization Strategy**:
+- **Concise Summarization**: Summarizes in two sentences focusing on the most crucial details, providing quick insights into complex case documents.
+
+**Objective**:
+- Designed to efficiently distill a chronologically consistent case summary of Enron, providing users with quick, actionable insights while ensuring no detail is overlooked.
+
+### Perception Agent 2 - SEC Legal Complaint Documents
+
+**Retrieval Pipeline**:
+- **Threshold of 0.3**: Filters for moderate to high relevance, reducing noise.
+- **Top 2 Documents**: Ensures focus on the most pertinent content.
+- **Context Window of 1**: Includes immediate neighbors to capture essential legal contexts.
+
+**Summarization Strategy**:
+- **Legal Focus**: Summarizes critical legal elements like relevant people and dates in two sentences, streamlining legal review processes.
+
+**Objective**:
+- Configured for well-organized legal data where precise and accurate document retrieval is seen as helpful for precision, compliance and regulatory affairs.
+
+### Perception Agent 3 - Annual Financial Reports
+
+**Retrieval Pipeline**:
+- **Threshold of 0**: Captures all potentially relevant financial reports.
+- **Top 1 Document**: Concentrates on the single most pertinent document for detailed analysis.
+- **Context Window of 2**: Expands context significantly with the two before and after to capture related financial data broad context.
+
+**Summarization Strategy**:
+- **Financial Analysis**: Integrates financial insights into a concise two-sentence summary focusing on key financial facts and trends.
+
+**Objective**:
+- Succinct summaries that highlight key information and financial figures from the relvant document chunks.
+
+### Integration Agent - Final Summary Integration
+
+**Summarization Strategy**:
+- **Comprehensive Integration**: Combines summaries from all agents, using a prompt that directs the LLM to answer the query with a response reflecting relevant underlying data.
+
+**Objective**:
+- To provide a comprehensive and nuanced overview of the diverse data, attempting to provide users with a response that aids in complex decision-making processes across various document types.
+
+
+
+## Evaluation Strategy
+
 
 
 
