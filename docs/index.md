@@ -70,7 +70,7 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 
 ### Phase 2: Enhancements
 - **Implemented Enhancements:** Integrated the Email Agent.
-- **Updated Evaluation Criteria:** Email Agent evlaution.
+- **Updated Evaluation Criteria:** Email Agent evaluation.
 
 ## Agent Design Rationale
 Each agent's retrieval pipeline and summarization strategy leverages specific parameters and prompts tailored to the nature of the documents it handles, aiding our goal of summaries that are both precise and contextually relevant.
@@ -100,7 +100,7 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 - **Context Window of 1**: Includes immediate neighbors to capture essential legal contexts.
 
 **Summarization Strategy**:
-- **Legal Focus**: Summarizes critical legal elements like relevant people and dates in two sentences, streamlining legal review processes.
+- **Legal Focus**: Summarizes critical legal elements like relevant people and dates in two sentences.
 
 **Objective**:
 - Configured for well-organized legal data where accurate document retrieval is seen as helpful for precision, compliance and regulatory affairs. The higher threshold helps to ensure that only documents significantly related to the query are retrieved, reducing noise from less relevant documents.The context window, although small, is useful with legal data where neighboring paragraphs or sections often contain pertinent arguments or references.
@@ -113,15 +113,15 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 - **Context Window of 2**: Expands context significantly with the two before and after to capture related financial data broad context.
 
 **Summarization Strategy**:
-- **Financial Analysis**: Integrates financial insights into a concise two-sentence summary focusing on key financial facts and trends.
+- **Financial Analysis**: Integrates financial insights into a concise two-sentence summary focusing on key financial facts.
 
 **Objective**:
-- Succinct summaries that highlight key information and financial figures from the relvant document chunks. Suitable for financial reports where key figures and statements can be scattered across documents, but where the primary focus should be on the most relevant document. The broader context window helps in gathering comprehensive insights where financial data can be informed by adjacent information.
+- Succinct summaries that highlight key information and financial figures from the relvant document chunks. Suitable for financial reports where key figures and statements can be scattered across documents, but where the primary focus should be on the most relevant document. The broader context window helps in gathering insights where the financial information is informed by adjacent chunks.
 
 ### Integration Agent - Final Summary Integration
 
 **Summarization Strategy**:
-- **Comprehensive Integration**: Combines summaries from all agents, using a prompt that directs the LLM to answer the query with a response reflecting the relevant provided data.
+- **Comprehensive Integration**: Combines summaries from all agents, using a prompt that directs the LLM to answer the query with a response synthesized from the relevant provided data.
 
 **Objective**:
 - To provide a comprehensive and nuanced overview of the diverse data, attempting to provide users with an answer to their query that aids in complex decision-making processes across various document types.
