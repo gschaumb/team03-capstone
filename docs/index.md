@@ -2,8 +2,18 @@
 <br><br><br>
 
 # Table of Contents 
+- [Introduction](#introduction)
+- [Project Overview](#project-overview)
+- [Methods](#methods)
+  - [Project Methodology](#project-methodology)
+  - [Agent Design Rationale](#agent-design-rationale)
+- [Results](#results)
+- [Discussion](#discussion)
+- [Appendix](#appendix)
+  - [References](#references)
+  - [Statement of Work](#statement-of-work)
 
-# Introduction 
+# Introduction {#introduction}
 
 Agentic retrieval-augmented generation (RAG) with large language models (LLMs) is a cutting-edge research area, combining the power of large language models with the ability to interact with external data and perform actions in real-world contexts. This enables the creation of agents capable of reasoning, planning, and executing tasks to solve complex problems. For instance, agentic RAG systems can perform:
 
@@ -15,8 +25,7 @@ Agentic retrieval-augmented generation (RAG) with large language models (LLMs) i
 
 The combination of reasoning and acting makes agentic RAG a promising approach for developing more capable and trustworthy AI systems with enhanced understanding and interaction capabilities<sup>[1](#ref-1)</sup>.
 
-
-## Project Overview
+## Project Overview {#project-overview}
 
 Our Capstone project builds on our Milestones 1 and 2<sup>[2](#ref-2)</sup>, where we extracted data sources and developed a basic RAG solution for a **customer support use case**. In this Capstone project:
 
@@ -32,7 +41,6 @@ Our goal was to investigate whether agentic RAG improved results over basic RAG 
 - **Specializing Agent Interaction with Data**: Each agent can be specialized for a specific data source so that the agent becomes an expert in understanding and retrieving information from that source. Having specialized agents could really improve the relevance and accuracy of the information that they retrieve. For instance, an agent that was specifically trained on financial reports would be better at answering questions about how Enron was performing financially.
 
 - **LLM as an Intermediate Summary Processor**: LLMs can be used as a central processing unit to take the summaries from different specialized agents and synthesize them into a single response. This approach would help the chatbot to present a clear and consistent picture of the Enron case, even though the case is very complex.
-
 
 ### Inspiration: Unstructured.io's RAG Solution
 
@@ -57,13 +65,11 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 *Advantages of Specialized Agentic RAG Configuration:*  
 ![Figure 2](high_level_benefits.png)
 
-
-
-# Methods
+# Methods {#methods}
 
 **Methodology** explains how we attempted to solve the problem and justifies our methodological approach, while **Evaluation Strategy** defines what a successful outcome would be.
 
-## Project Methodology
+## Project Methodology {#project-methodology}
 
 ### Phase 0: Experimentation and Feasibility Prototyping
 - **High-Level Design - Requirements:** Researched agentic patterns<sup>[3](#ref-3)</sup>.
@@ -77,7 +83,7 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 - **Implemented Enhancements:** Integrated the Email Agent.
 - **Updated Evaluation Criteria:** Email Agent evaluation.
 
-## Agent Design Rationale
+## Agent Design Rationale {#agent-design-rationale}
 Each agent's retrieval pipeline and summarization strategy leverages specific parameters and prompts tailored to the nature of the documents it handles, aiding our goal of summaries that are both precise and contextually relevant.
 
 **Figure 3**
@@ -131,35 +137,26 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 **Objective**:
 - To provide a comprehensive and nuanced overview of the diverse data, attempting to provide users with an answer to their query that aids in complex decision-making processes across various document types.
 
+## Evaluation Strategy {#evaluation-strategy}
 
+# Results {#results}
 
-## Evaluation Strategy
+# Discussion {#discussion}
 
+# Appendix {#appendix}
 
-
-
-# Results
-
-
-
-# Discussion
-
-
-
-
-# Appendix
-
-## References
+## References {#references}
 
 1. [La Cava, L., & Tagarelli, A. (2024). Safeguarding Decentralized Social Media: LLM Agents for Automating Community Rule Compliance. arXiv.](#ref-1) <a id="ref-1"></a>https://arxiv.org/abs/2409.08963
 2. [Bodas, A., Goldhardt, N., & Schaumburg, G. (n.d.). _Milestone 2_. GitHub.](#ref-2) <a id="ref-2"></a>https://github.com/bodasa-umich/Milestone2
 3. [Doe, J. (2023, September 22). Designing Cognitive Architectures: Agentic Workflow Patterns from Scratch. _Medium_.](#ref-3) <a id="ref-3"></a>https://medium.com/google-cloud/designing-cognitive-architectures-agentic-workflow-patterns-from-scratch-63baa74c54bc
 
-## Statement of Work
+## Statement of Work {#statement-of-work}
 
 **Statement on Use of Generative AI:** Tools such as ChatGPT, Gemini, and Copilot were used in our project for experimentation on tasks such as evaluation query creation, code consultation, as well as searching on approaches and concepts.
 
 **Team Member Scope:** [Anandita and Gary work items to be added here.]
+
 
 ## Other
 
