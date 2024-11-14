@@ -1,3 +1,8 @@
+# Agentic RAG Support Chatbot
+<br><br><br>
+
+# Table of Contents 
+
 # Introduction 
 
 Agentic retrieval-augmented generation (RAG) with large language models (LLMs) is a cutting-edge research area, combining the power of large language models with the ability to interact with external data and perform actions in real-world contexts. This enables the creation of agents capable of reasoning, planning, and executing tasks to solve complex problems. For instance, agentic RAG systems can perform:
@@ -56,9 +61,9 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 
 # Methods
 
-## Project Methodology
-
 **Methodology** explains how we attempted to solve the problem and justifies our methodological approach, while **Evaluation Strategy** defines what a successful outcome would be.
+
+## Project Methodology
 
 ### Phase 0: Experimentation and Feasibility Prototyping
 - **High-Level Design - Requirements:** Researched agentic patterns<sup>[3](#ref-3)</sup>.
@@ -152,9 +157,9 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 
 ## Statement of Work
 
-Statement on Use of Generative AI: Tools such as ChatGPT, Gemini, and Copilot were used in our project for experimentation on tasks such as evaluation query creation, code consultation, as well as searching on approaches and concepts.
+**Statement on Use of Generative AI:** Tools such as ChatGPT, Gemini, and Copilot were used in our project for experimentation on tasks such as evaluation query creation, code consultation, as well as searching on approaches and concepts.
 
-[Anandita and Gary work items to be added here.]
+**Team Member Scope:** [Anandita and Gary work items to be added here.]
 
 ## Other
 
