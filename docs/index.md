@@ -67,8 +67,6 @@ Their site linked above includes a chatbot in the lower right corner, which we s
 
 In Milestone 2, we performed initial testing with a basic RAG setup (see Figure 1). Our Capstone project expands upon this with the goal of testing whether agentic RAG improves results with the Enron knowledgebase when compared with basic RAG or unaugmented LLM responses, all using the GPT-3.5 Turbo model. Additionally, we created an agent to search via API through the extensive Enron email corpus, located on a cloud database service, and retrieve emails related to the user's query.
 
-<br>
-
 Our primary hypothesis is that utilizing one agent per data source type will enhance the chatbot's overall response quality, particularly for compound questions. Each agent is equipped with customized retrieval parameters, in an attempt to optimize for its respective data source. See Figure 2 for a visual of the anticipated benefits.
 
 <br>
@@ -80,7 +78,7 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 
 ![Figure 1](basic_RAG.png)
 
-<br>
+<br><br>
 
 **Figure 2**  
 *Advantages of Specialized Agentic RAG Configuration:*  
@@ -108,6 +106,8 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 ### Phase 2: Enhancements {#phase-2-enhancements}
 - **Implemented Enhancements:** Integrated the Email Agent.
 - **Updated Evaluation Criteria:** Email Agent evaluation.
+
+<br>
 
 ## Agent Design Rationale {#agent-design-rationale}
 Each agent's retrieval pipeline and summarization strategy leverages specific parameters and prompts tailored to the nature of the documents it handles, aiding our goal of summaries that are both precise and contextually relevant.
@@ -165,10 +165,12 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 ### Integration Agent {#integration-agent-final-summary-integration}
 
 **Summarization Strategy**:
-- **Comprehensive Integration**: Combines summaries from all agents, using a prompt that directs the LLM to answer the query with a response synthesized from the relevant provided data.
+- **Comprehensive Integration**: Combines summaries from all agents, using a prompt that directs the LLM to answer the query with a response synthesized from the relevant provided data. Agent explicitly asks the LLM to ignore details that aren't clearly linked to the query subject, in an attempt to counteract instances of over-retrieval and noise.
 
 **Objective**:
 - To provide a comprehensive and nuanced overview of the diverse data, attempting to provide users with an answer to their query that aids in complex decision-making processes across various document types.
+
+<br>
 
 ## Evaluation Strategy {#evaluation-strategy}
 
@@ -183,13 +185,17 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 <br>
 
 # Appendix {#appendix}
+
 <br>
+
 ## References {#references}
 
 1. [La Cava, L., & Tagarelli, A. (2024). Safeguarding Decentralized Social Media: LLM Agents for Automating Community Rule Compliance. arXiv.](#ref-1) <a id="ref-1"></a>https://arxiv.org/abs/2409.08963
 2. [Bodas, A., Goldhardt, N., & Schaumburg, G. (n.d.). _Milestone 2_. GitHub.](#ref-2) <a id="ref-2"></a>https://github.com/bodasa-umich/Milestone2
 3. [Doe, J. (2023, September 22). Designing Cognitive Architectures: Agentic Workflow Patterns from Scratch. _Medium_.](#ref-3) <a id="ref-3"></a>https://medium.com/google-cloud/designing-cognitive-architectures-agentic-workflow-patterns-from-scratch-63baa74c54bc
+
 <br>
+
 ## Statement of Work {#statement-of-work}
 
 **Statement on Use of Generative AI:** Tools such as ChatGPT, Gemini, and Copilot were used in our project for experimentation on tasks such as evaluation query creation, code consultation, as well as searching on approaches and concepts.
