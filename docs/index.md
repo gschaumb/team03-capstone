@@ -69,20 +69,24 @@ In Milestone 2, we performed initial testing with a basic RAG setup (see Figure 
 
 <br>
 
+Our primary hypothesis is that utilizing one agent per data source type will enhance the chatbot's overall response quality, particularly for compound questions. Each agent is equipped with customized retrieval parameters, in an attempt to optimize for its respective data source. See Figure 2 for a visual of the anticipated benefits.
+
+<br>
+
 **Figure 1**  
 *Basic RAG Architecture:*  
+
 <br>
+
 ![Figure 1](basic_RAG.png)
-
-<br>
-
-Our primary hypothesis is that utilizing one agent per data source type will enhance the chatbot's overall response quality, particularly for compound questions. Each agent is equipped with customized retrieval parameters, in an attempt to optimize for its respective data source. See Figure 2 for a visual of the anticipated benefits.
 
 <br>
 
 **Figure 2**  
 *Advantages of Specialized Agentic RAG Configuration:*  
+
 <br>
+
 ![Figure 2](high_level_benefits.png)
 
 <br>
@@ -111,8 +115,10 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 <br>
 
 **Figure 3**
-*Agent Design and Workflow:*
+*Agent Design and Workflow:*  
+
 <br>
+
 ![Figure 3 Placeholder](agent_flow.svg)
 
 <br>
@@ -156,7 +162,7 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 **Objective**:
 - Succinct summaries that highlight key information and financial figures from the relvant document chunks. Suitable for financial reports where key figures and statements can be scattered across documents, but where the primary focus should be on the most relevant document. The broader context window helps in gathering insights where the financial information is informed by adjacent chunks.
 
-### Integration Agent - Final Summary Integration {#integration-agent-final-summary-integration}
+### Integration Agent {#integration-agent-final-summary-integration}
 
 **Summarization Strategy**:
 - **Comprehensive Integration**: Combines summaries from all agents, using a prompt that directs the LLM to answer the query with a response synthesized from the relevant provided data.
