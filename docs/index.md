@@ -4,10 +4,19 @@
 
 # Table of Contents 
 - [Introduction](#introduction)
-- [Project Overview](#project-overview)
+  - [Project Overview](#project-overview)
+  - [Inspiration: Unstructured.io's RAG Solution](#inspiration-unstructuredios-rag-solution)
+  - [Capstone Project Hypothesis](#capstone-project-hypothesis)
 - [Methods](#methods)
   - [Project Methodology](#project-methodology)
+    - [Phase 0: Experimentation and Feasibility Prototyping](#phase-0-experimentation-and-feasibility-prototyping)
+    - [Phase 1: Minimum Viable Product (MVP)](#phase-1-minimum-viable-product-mvp)
+    - [Phase 2: Enhancements](#phase-2-enhancements)
   - [Agent Design Rationale](#agent-design-rationale)
+    - [Case Study Agent](#case-study-agent)
+    - [SEC Legal Complaint Documents Agent](#sec-legal-complaint-documents-agent)
+    - [Annual Financial Reports Agent](#annual-financial-reports-agent)
+    - [Integration Agent - Final Summary Integration](#integration-agent-final-summary-integration)
 - [Results](#results)
 - [Discussion](#discussion)
 - [Appendix](#appendix)
@@ -45,7 +54,7 @@ Our goal was to investigate whether agentic RAG improved results over basic RAG 
 
 - **LLM as an Intermediate Summary Processor**: LLMs can be used as a central processing unit to take the summaries from different specialized agents and synthesize them into a single response. This approach would help the chatbot to present a clear and consistent picture of the Enron case, even though the case is very complex.
 
-### Inspiration: Unstructured.io's RAG Solution
+## Inspiration: Unstructured.io's RAG Solution {#inspiration-unstructuredios-rag-solution}
 
 One example of an effective support use case RAG system is Unstructured.io's chatbot, which operates on their documentation page and Slack channel. This tool provides detailed and accurate answers, representing the type of capability we aimed to emulate in our Enron project.
 
@@ -54,7 +63,7 @@ Visit their documentation here:
 
 Their site linked above includes a chatbot in the lower right corner, which we speculate may also support their internal employees and automated email responses. We experimented with document extraction using Unstructured's products in Milestone 2, and our interactions with this chatbot demonstrated its high capacity for providing relevant information, embodying the functionality we sought to implement with the Enron dataset.
 
-### Capstone Project Implementation and Hypothesis
+## Capstone Project Hypothesis {#capstone-project-hypothesis}
 
 In Milestone 2, we performed initial testing with a basic RAG setup (see Figure 1). Our Capstone project expands upon this with the goal of testing whether agentic RAG improves results with the Enron knowledgebase when compared with basic RAG or unaugmented LLM responses, all using the GPT-3.5 Turbo model. Additionally, we created an agent to search via API through the extensive Enron email corpus, located on a cloud database service, and retrieve emails related to the user's query.
 
@@ -62,6 +71,7 @@ In Milestone 2, we performed initial testing with a basic RAG setup (see Figure 
 
 **Figure 1**  
 *Basic RAG Architecture:*  
+<br>
 ![Figure 1](basic_RAG.png)
 
 <br>
@@ -72,25 +82,26 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 
 **Figure 2**  
 *Advantages of Specialized Agentic RAG Configuration:*  
+<br>
 ![Figure 2](high_level_benefits.png)
 
 <br>
 
 # Methods {#methods}
 
-**Methodology** explains how we attempted to solve the problem and justifies our methodological approach, while **Evaluation Strategy** defines what a successful outcome would be.
+**Project Methodology** explains how we attempted to solve the problem and justifies our methodological approach, while **Evaluation Strategy** defines what a successful outcome would be.
 
 ## Project Methodology {#project-methodology}
 
-### Phase 0: Experimentation and Feasibility Prototyping
+### Phase 0: Experimentation and Feasibility Prototyping {#phase-0-experimentation-and-feasibility-prototyping}
 - **High-Level Design - Requirements:** Researched agentic patterns<sup>[3](#ref-3)</sup>.
 - **High-Level Design - Implementation:** Experimented with agentic libraries and did prototype feasibility coding.
 
-### Phase 1: Minimum Viable Product (MVP)
+### Phase 1: Minimum Viable Product (MVP) {#phase-1-minimum-viable-product-mvp}
 - **Detailed Design - Implementation:** Decided to code agents with python classes rather than using an agentic library. Defined our agentic pattern flow and email retrieval (see Figure 3).
 - **Detailed Design - Evaluation:** Defined evaluation criteria after agent design was defined.
 
-### Phase 2: Enhancements
+### Phase 2: Enhancements {#phase-2-enhancements}
 - **Implemented Enhancements:** Integrated the Email Agent.
 - **Updated Evaluation Criteria:** Email Agent evaluation.
 
@@ -101,11 +112,12 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 
 **Figure 3**
 *Agent Design and Workflow:*
+<br>
 ![Figure 3 Placeholder](agent_flow.svg)
 
 <br>
 
-### Case Study Agent
+### Case Study Agent {#case-study-agent}
 
 **Retrieval Pipeline**:
 - **Threshold of 0**: Includes all documents with cosine similarity greater than zero to ensure comprehensive coverage.
@@ -118,7 +130,7 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 **Objective**:
 - Designed to efficiently distill a dense, chronologically consistent case summary of Enron, providing key insights while attempting to ensure no detail is overlooked. The initial broad threshold ensures no potentially relevant document is missed, while the top-k selection focuses on the best matches. The context window adds adjacent documents, which can be helpful for understanding necessary context or additional insights.
 
-### SEC Legal Complaint Documents Agent
+### SEC Legal Complaint Documents Agent {#sec-legal-complaint-documents-agent}
 
 **Retrieval Pipeline**:
 - **Threshold of 0.3**: Filters for moderate to high relevance, reducing noise.
@@ -131,7 +143,7 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 **Objective**:
 - Configured for well-organized legal data where accurate document retrieval is seen as helpful for precision, compliance and regulatory affairs. The higher threshold helps to ensure that only documents significantly related to the query are retrieved, reducing noise from less relevant documents.The context window, although small, is useful with legal data where neighboring paragraphs or sections often contain pertinent arguments or references.
 
-### Annual Financial Reports Agent
+### Annual Financial Reports Agent {#annual-financial-reports-agent}
 
 **Retrieval Pipeline**:
 - **Threshold of 0**: Captures all potentially relevant financial reports.
@@ -144,7 +156,7 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 **Objective**:
 - Succinct summaries that highlight key information and financial figures from the relvant document chunks. Suitable for financial reports where key figures and statements can be scattered across documents, but where the primary focus should be on the most relevant document. The broader context window helps in gathering insights where the financial information is informed by adjacent chunks.
 
-### Integration Agent - Final Summary Integration
+### Integration Agent - Final Summary Integration {#integration-agent-final-summary-integration}
 
 **Summarization Strategy**:
 - **Comprehensive Integration**: Combines summaries from all agents, using a prompt that directs the LLM to answer the query with a response synthesized from the relevant provided data.
@@ -165,13 +177,13 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 <br>
 
 # Appendix {#appendix}
-
+<br>
 ## References {#references}
 
 1. [La Cava, L., & Tagarelli, A. (2024). Safeguarding Decentralized Social Media: LLM Agents for Automating Community Rule Compliance. arXiv.](#ref-1) <a id="ref-1"></a>https://arxiv.org/abs/2409.08963
 2. [Bodas, A., Goldhardt, N., & Schaumburg, G. (n.d.). _Milestone 2_. GitHub.](#ref-2) <a id="ref-2"></a>https://github.com/bodasa-umich/Milestone2
 3. [Doe, J. (2023, September 22). Designing Cognitive Architectures: Agentic Workflow Patterns from Scratch. _Medium_.](#ref-3) <a id="ref-3"></a>https://medium.com/google-cloud/designing-cognitive-architectures-agentic-workflow-patterns-from-scratch-63baa74c54bc
-
+<br>
 ## Statement of Work {#statement-of-work}
 
 **Statement on Use of Generative AI:** Tools such as ChatGPT, Gemini, and Copilot were used in our project for experimentation on tasks such as evaluation query creation, code consultation, as well as searching on approaches and concepts.
@@ -179,6 +191,7 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 **Team Member Scope:** [Anandita and Gary work items to be added here.]
 
 <br>
+
 
 ## Other
 

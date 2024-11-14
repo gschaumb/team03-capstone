@@ -353,7 +353,7 @@ class IntegrationAgent:
 
         system_prompt = (
             "Using the following details, answer the user query: "
-            f"'{query}' in a concise summary, approximately 550 tokens long."
+            f"'{query}' in a concise summary, approximately 550 tokens long. If there is no clear linkage between the user query subject some details in the content data, do not include those details."
         )
         messages = [
             {"role": "system", "content": system_prompt},
