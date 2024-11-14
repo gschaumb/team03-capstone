@@ -16,7 +16,8 @@
     - [Case Study Agent](#case-study-agent)
     - [SEC Legal Complaint Documents Agent](#sec-legal-complaint-documents-agent)
     - [Annual Financial Reports Agent](#annual-financial-reports-agent)
-    - [Integration Agent - Final Summary Integration](#integration-agent-final-summary-integration)
+    - [Integration Agent](#integration-agent-final-summary-integration)
+  - [Evaluation Strategy](#evaluation-strategy)
 - [Results](#results)
 - [Discussion](#discussion)
 - [Appendix](#appendix)
@@ -162,7 +163,7 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 **Objective**:
 - Succinct summaries that highlight key information and financial figures from the relvant document chunks. Suitable for financial reports where key figures and statements can be scattered across documents, but where the primary focus should be on the most relevant document. The broader context window helps in gathering insights where the financial information is informed by adjacent chunks.
 
-### Integration Agent {#integration-agent-final-summary-integration}
+### Integration Agent {#integration-agent}
 
 **Summarization Strategy**:
 - **Comprehensive Integration**: Combines summaries from all agents, using a prompt that directs the LLM to answer the query with a response synthesized from the relevant provided data. Agent explicitly asks the LLM to ignore details that aren't clearly linked to the query subject, in an attempt to counteract instances of over-retrieval and noise.
