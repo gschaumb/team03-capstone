@@ -1,5 +1,6 @@
 # Agentic RAG Support Chatbot
-<br><br><br>
+
+<br><br>
 
 # Table of Contents 
 - [Introduction](#introduction)
@@ -12,6 +13,8 @@
 - [Appendix](#appendix)
   - [References](#references)
   - [Statement of Work](#statement-of-work)
+
+<br><br>
 
 # Introduction {#introduction}
 
@@ -55,15 +58,23 @@ Their site linked above includes a chatbot in the lower right corner, which we s
 
 In Milestone 2, we performed initial testing with a basic RAG setup (see Figure 1). Our Capstone project expands upon this with the goal of testing whether agentic RAG improves results with the Enron knowledgebase when compared with basic RAG or unaugmented LLM responses, all using the GPT-3.5 Turbo model. Additionally, we created an agent to search via API through the extensive Enron email corpus, located on a cloud database service, and retrieve emails related to the user's query.
 
+<br>
+
 **Figure 1**  
 *Basic RAG Architecture:*  
 ![Figure 1](basic_RAG.png)
 
+<br>
+
 Our primary hypothesis is that utilizing one agent per data source type will enhance the chatbot's overall response quality, particularly for compound questions. Each agent is equipped with customized retrieval parameters, in an attempt to optimize for its respective data source. See Figure 2 for a visual of the anticipated benefits.
+
+<br>
 
 **Figure 2**  
 *Advantages of Specialized Agentic RAG Configuration:*  
 ![Figure 2](high_level_benefits.png)
+
+<br>
 
 # Methods {#methods}
 
@@ -86,9 +97,13 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 ## Agent Design Rationale {#agent-design-rationale}
 Each agent's retrieval pipeline and summarization strategy leverages specific parameters and prompts tailored to the nature of the documents it handles, aiding our goal of summaries that are both precise and contextually relevant.
 
+<br>
+
 **Figure 3**
 *Agent Design and Workflow:*
 ![Figure 3 Placeholder](agent_flow.svg)
+
+<br>
 
 ### Case Study Agent
 
@@ -139,9 +154,15 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 
 ## Evaluation Strategy {#evaluation-strategy}
 
+<br>
+
 # Results {#results}
 
+<br>
+
 # Discussion {#discussion}
+
+<br>
 
 # Appendix {#appendix}
 
@@ -157,6 +178,7 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 
 **Team Member Scope:** [Anandita and Gary work items to be added here.]
 
+<br>
 
 ## Other
 
