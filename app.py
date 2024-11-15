@@ -78,8 +78,6 @@ def process_user_input(user_input):
         #get relevant emails
         related_emails= []
         related_emails, keyphrases = email_agent.EmailAgent(email_vector_store).retrieve_emails_from_all_agents(current_state)
-        print ('KEYPHRASES: %s' % keyphrases)
-        print ('----------------------------------------------------------------')
         if len(related_emails) > 0: 
             current_state["email_agent_result"] = {"status": "data_found", "data": related_emails, "keyphrases":keyphrases}
         else:
@@ -98,6 +96,9 @@ def display_full_text(email_df, selected_row: gr.SelectData):
     full_text = email_df['content'].iloc[selected_row.index[0]]
     return full_text
 
+def dummy_function():
+    return "Gradio app is running."
+
 # Gradio interface setup
 with gr.Blocks(theme= gr.themes.Soft(font="Arial")) as demo:
     gr.Markdown("# Enron Agentic RAG Demo")
@@ -107,12 +108,12 @@ with gr.Blocks(theme= gr.themes.Soft(font="Arial")) as demo:
     )
     output = gr.Textbox(label="Agent Response")
 
-    related_emails_output = gr.Dataframe(label="Related Emails Data", interactive=True, column_widths=[30, 30, 30, 200])
+    related_emails_output = gr.Dataframe(label="Related Emails", interactive=True, column_widths=[30, 30, 30, 200])
     full_email_output = gr.Textbox(label="Full Email Text", interactive=False)
 
     related_emails_output.select(fn=display_full_text, inputs=related_emails_output, outputs=full_email_output)
 
-    with gr.Accordion(label="See Agent State Data"):
+    with gr.Accordion(label="See Agent State Data", open=False):
         state_output = gr.JSON(label="Agent Intermediate State Data", value={})
 
     def update_state_ui(user_query):

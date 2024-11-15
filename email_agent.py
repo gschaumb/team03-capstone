@@ -22,7 +22,7 @@ class VectorStore:
             return pickle.load(f)
     
     def load_vectors(self,  embeddings):
-        chroma_client = chromadb.HttpClient(host='ec2-3-25-64-239.ap-southeast-2.compute.amazonaws.com', port=8000)
+        chroma_client = chromadb.HttpClient(host='ec2-54-252-65-170.ap-southeast-2.compute.amazonaws.com', port=8000)
         return Chroma(client=chroma_client, collection_name='chroma_db', embedding_function=embeddings)
 
 class EmailAgent:
@@ -75,8 +75,7 @@ class EmailAgent:
 #initialize vectorstore
 vector_store = VectorStore()
 
-'''
-email_agent = EmailAgent(vector_store)
+'''email_agent = EmailAgent(vector_store)
 responses= email_agent.retrieve_emails("Raptor hedges were fraudulent hedging devices implemented at Enron by the CFO Andrew Fastow, which led to financial losses and raised concerns about the company's financial integrity.")
 print (len(responses[0]))
 '''

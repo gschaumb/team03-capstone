@@ -8,7 +8,7 @@ import time
 
 
 #%%
-chroma_client = chromadb.HttpClient(host='ec2-13-236-71-16.ap-southeast-2.compute.amazonaws.com', port=8000)
+chroma_client = chromadb.HttpClient(host='ec2-54-252-65-170.ap-southeast-2.compute.amazonaws.com', port=8000)
 
 #%%
 collection = chroma_client.get_or_create_collection(name= 'chroma_db')
