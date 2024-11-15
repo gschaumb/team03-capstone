@@ -22,7 +22,7 @@ class VectorStore:
             return pickle.load(f)
     
     def load_vectors(self,  embeddings):
-        chroma_client = chromadb.HttpClient(host='ec2-13-236-71-16.ap-southeast-2.compute.amazonaws.com', port=8000)
+        chroma_client = chromadb.HttpClient(host='ec2-3-25-64-239.ap-southeast-2.compute.amazonaws.com', port=8000)
         return Chroma(client=chroma_client, collection_name='chroma_db', embedding_function=embeddings)
 
 class EmailAgent:
