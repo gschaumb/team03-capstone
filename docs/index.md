@@ -20,7 +20,7 @@
     - [Email Agent](#email-agent)
   - [Evaluation Strategy](#evaluation-strategy)
     - [Agentic Response Evaluation](#agentic-response-evalutation)
-    - [Email Agent Evalutiona](#email-agent-evaluation)
+    - [Email Agent Evaluation](#email-agent-evaluation)
 - [Results](#results)
 - [Discussion](#discussion)
 - [Appendix](#appendix)
@@ -188,7 +188,7 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 
 ## Evaluation Strategy {#evaluation-strategy}
 
-### Agentic Response Evalution {#agentic-response-evalutation}
+### Agentic Response Evaluation {#agentic-response-evalutation}
 
 ### Email Agent Evaluation {#email-agent-evalution}
 
