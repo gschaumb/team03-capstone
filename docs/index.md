@@ -16,8 +16,11 @@
     - [Case Study Agent](#case-study-agent)
     - [SEC Legal Complaint Documents Agent](#sec-legal-complaint-documents-agent)
     - [Annual Financial Reports Agent](#annual-financial-reports-agent)
-    - [Integration Agent](#integration-agent-final-summary-integration)
+    - [Integration Agent](#integration-agent)
+    - [Email Agent](#email-agent)
   - [Evaluation Strategy](#evaluation-strategy)
+    - [Agentic Response Evaluation](#agentic-response-evalutation)
+    - [Email Agent Evalutiona](#email-agent-evaluation)
 - [Results](#results)
 - [Discussion](#discussion)
 - [Appendix](#appendix)
@@ -173,9 +176,23 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 
 <br>
 
+### Email Agent {#email-agent}
+
+**Implementation**:
+- **Query-Related Email Retrieval**: xxxxxxxxxxxx xxxxx xxxxx xxxx xxxx.
+
+**Objective**:
+- Xxxxxxxxx xxxxxx xxxxx xxxxxx xxxx.
+
+<br><br>
+
 ## Evaluation Strategy {#evaluation-strategy}
 
-<br>
+### Agentic Response Evalution {#agentic-response-evalutation}
+
+### Email Agent Evaluation {#email-agent-evalution}
+
+<br><br>
 
 # Results {#results}
 
