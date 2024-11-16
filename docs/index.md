@@ -19,7 +19,7 @@
     - [Integration Agent](#integration-agent)
     - [Email Agent](#email-agent)
   - [Evaluation Strategy](#evaluation-strategy)
-    - [Agentic Response Evaluation](#agentic-response-evalutation)
+    - [Agentic Response Evaluation](#agentic-response-evaluation)
     - [Email Agent Evaluation](#email-agent-evaluation)
 - [Results](#results)
 - [Discussion](#discussion)
@@ -188,9 +188,9 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 
 ## Evaluation Strategy {#evaluation-strategy}
 
-### Agentic Response Evaluation {#agentic-response-evalutation}
+### Agentic Response Evaluation {#agentic-response-evaluation}
 
-### Email Agent Evaluation {#email-agent-evalution}
+### Email Agent Evaluation {#email-agent-evaluation}
 
 <br><br>
 
