@@ -160,3 +160,10 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+
+#large pkl files
+data/case_embeddings.pkl 
+data/email_data_cleaned.pkl
+data/financial_embeddings.pkl 
+data/HF_embeddings.pkl 
+data/sec_embeddings.pkl 

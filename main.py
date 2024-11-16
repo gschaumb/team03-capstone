@@ -21,9 +21,9 @@ GLOBAL_OPENAI_CLIENT = None
 GLOBAL_OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # Paths for Embeddings
-CASE_EMBEDDINGS_PATH = "/data/case_embeddings.pkl"
-SEC_EMBEDDINGS_PATH = "/data/sec_embeddings.pkl"
-FINANCIAL_EMBEDDINGS_PATH = "/data/financial_embeddings.pkl"
+CASE_EMBEDDINGS_PATH = "./data/case_embeddings.pkl"
+SEC_EMBEDDINGS_PATH = "./data/sec_embeddings.pkl"
+FINANCIAL_EMBEDDINGS_PATH = "./data/financial_embeddings.pkl"
 
 
 class PerceptionResult(TypedDict, total=False):
