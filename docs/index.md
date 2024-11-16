@@ -22,6 +22,8 @@
     - [Agentic Response Evaluation](#agentic-response-evaluation)
     - [Email Agent Evaluation](#email-agent-evaluation)
 - [Results](#results)
+  - [Response Scoring](#response-scoring-results)
+  - [Email Retrieval](#email-retrieval-results)
 - [Discussion](#discussion)
 - [Appendix](#appendix)
   - [References](#references)
@@ -196,7 +198,11 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 
 # Results {#results}
 
-<br>
+## Response Scoring Results {#response-scoring-results}
+
+## Email Retrieval Results {#email-retrieval-results}
+
+<br><br>
 
 # Discussion {#discussion}
 
