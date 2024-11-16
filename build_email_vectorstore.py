@@ -5,10 +5,10 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
 import time 
-
+import os 
 
 #%%
-chroma_client = chromadb.HttpClient(host='ec2-54-252-65-170.ap-southeast-2.compute.amazonaws.com', port=8000)
+chroma_client = chromadb.HttpClient(host=os.environ.get("EMAIL_VECTOR_HOST"), port=8000)
 
 #%%
 collection = chroma_client.get_or_create_collection(name= 'chroma_db')
