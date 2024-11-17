@@ -18,6 +18,7 @@
     - [Annual Financial Reports Agent](#annual-financial-reports-agent)
     - [Integration Agent](#integration-agent)
     - [Email Agent](#email-agent)
+    - [Email Agent Architecture](#email-agent-architecture)
   - [Evaluation Strategy](#evaluation-strategy)
     - [Agentic Response Evaluation](#agentic-response-evaluation)
     - [Email Agent Evaluation](#email-agent-evaluation)
@@ -186,6 +187,11 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 **Objective**:
 - Xxxxxxxxx xxxxxx xxxxx xxxxxx xxxx.
 
+<br>
+
+### Email Agent Architecture {#email-agent-architecture}
+[Would be great to have a figure here to show off the impressive email implementation]
+
 <br><br>
 
 ## Evaluation Strategy {#evaluation-strategy}
@@ -205,6 +211,7 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 <br><br>
 
 # Discussion {#discussion}
+[We need to remember to emphasize that all of the LLMs have been trained in the Enron case. So the results would be different with private data sources. Since the Enron pre-training is "ceteris paribus" for the LLMs and our response types, we did not try to correct for it in prompting.]
 
 <br>
 
