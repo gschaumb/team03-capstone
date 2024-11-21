@@ -29,6 +29,7 @@
 - [Appendix](#appendix)
   - [References](#references)
   - [Statement of Work](#statement-of-work)
+  - [Research Notes](#research-notes)
 
 <br><br>
 
@@ -236,11 +237,7 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 <br>
 
 
-## Other
-
-[Include any additional information or sections here.]
-
-### Notes (remove the below for final - keeping just as reference materials for now)
+## Research Notes {#research-notes}
 
 The project may explore emerging tools for agentic RAG that could be used for:
 
@@ -296,11 +293,3 @@ Projects that benefit from agentic LLM structures often involve tasks that can b
 - **Robustness and Error Handling**: Agentic LLM systems can be complex and prone to errors. Implement mechanisms to handle unexpected situations, such as agent failures, ambiguous instructions, or conflicting information.
   
 - **Ethical Implications**: Consider the ethical implications of your project, particularly when agents interact with real-world systems or make decisions that could impact users. Ensure fairness, transparency, and accountability in agent behavior.
-
-#### Placeholder Image Tests
-
-![Figure 1 Placeholder](basic_RAG.png)
-
-![Figure 2 Placeholder](high_level_benefits.png)
-
-![Figure 3 Placeholder](agent_flow.svg)
