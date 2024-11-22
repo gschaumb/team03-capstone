@@ -232,8 +232,8 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 
 **Statement on Use of Generative AI:** Tools such as ChatGPT, Gemini, and Copilot were used in our project for experimentation on tasks such as evaluation query creation, code consultation, as well as searching on approaches and concepts.
 
-**Team Member Scope:** 
-- **Anandita:** Email Agent Architecture, Email Agent Coding, Evaluation Strategy and Results Report Sections Drafts, Project Video Segments and Video Integration
+**Team Member Scope** 
+- **Anandita:** Email Agent Architecture, Email Agent Coding, Evaluation Approach and Scoring, Evaluation Strategy and Results Report Sections Drafts, Project Video Segments and Video Integration
 - **Gary:** HuggingFace Setup, Perception and Integration Agent Coding, Introduction and Methods Drafts, Evaluation Test Query and Responses Generation, Demo Video Segments
 
 <br>
@@ -241,7 +241,9 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 
 ## Research Notes {#research-notes}
 
-Summaries of relevant Phase 0, LLM agent research appear below. The project research explored ideas for agentic RAG such as:
+Summaries of relevant Phase 0, LLM agent research we conducted appear below.
+
+#### Agentic Approaches
 
 - **Workflow Management Systems**: Systems like StateFlow can be used to define the steps that agents need to follow to complete their task. This could be helpful for the Enron chatbot, because the information about the case comes from so many different sources. For example, the workflow could define a state for "retrieving legal documents" and a state for "summarizing financial reports."
 
