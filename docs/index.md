@@ -246,8 +246,9 @@ The data used in this project are publicly available from the following sources:
 ### Data Sources
 
 - [Enron Email Dataset](https://enrondata.readthedocs.io/en/latest/data/calo-enron-email-dataset/)
-- [SEC Filings](https://www.sec.gov/search-filings)
+- [SEC Financial Filings](https://www.sec.gov/search-filings)
 - [Enron: The Good, The Bad, The Lessons (ResearchGate)](https://www.researchgate.net/publication/267715799_Enron_The_Good_The_Bad_The_Lessons)
+- [SEC Legal Complaints](https://www.justice.gov/archive/index-enron.html)
 
 
 <br>
