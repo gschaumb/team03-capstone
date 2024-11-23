@@ -34,4 +34,4 @@ This file is used in the setup of the HuggingFace Space and provides necessary c
   [https://huggingface.co/spaces/gschaumb/M2-Team01-SS24-RAG-demo](https://huggingface.co/spaces/gschaumb/M2-Team01-SS24-RAG-demo)
 
 
-This file is integral to the configuration and deployment of our Capstone project on HuggingFace Spaces.
+This file is integral to the configuration and deployment of our Capstone project on HuggingFace Spaces. When deployed to a HuggingFace Gradio Space the code provided in this repository creates the Capstone Demo application linked above.
