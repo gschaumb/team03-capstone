@@ -29,6 +29,7 @@
 - [Appendix](#appendix)
   - [References](#references)
   - [Statement of Work](#statement-of-work)
+  - [Data Access Statement](#data-access-statement)
   - [Research Notes](#research-notes)
 
 <br><br>
@@ -238,6 +239,18 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 
 <br>
 
+## Data Access Statement {#data-access-statement}
+
+The data used in this project are publicly available from the following sources:
+
+### Data Sources
+
+- [Enron Email Dataset](https://enrondata.readthedocs.io/en/latest/data/calo-enron-email-dataset/)
+- [SEC Filings](https://www.sec.gov/search-filings)
+- [Enron: The Good, The Bad, The Lessons (ResearchGate)](https://www.researchgate.net/publication/267715799_Enron_The_Good_The_Bad_The_Lessons)
+
+
+<br>
 
 ## Research Notes {#research-notes}
 
