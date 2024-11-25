@@ -231,10 +231,10 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
     <tr>
       <td></td>
     <td>
-      <table>
+      <td>
         <th>Score</th>
         <th>P-value</th>
-      </table>
+      </td>
     </td>
       <td>
       <table>
