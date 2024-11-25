@@ -337,7 +337,9 @@ Despite these limitations, manual testing showed that the responses generally ma
 <br><br>
 
 # Discussion {#discussion}
-[We need to remember to emphasize that all of the LLMs have been trained in the Enron case. So the results would be different with private data sources. Since the Enron pre-training is "ceteris paribus" for the LLMs and our response types, we did not try to correct for it in prompting.]
+
+- This project aimed to evaluate the performance of Agentic RAGs on raw corpora. However, we encountered a unique constraint: most large language models are already well-versed in the Enron case's facts and issues. As a result, we could not conclusively determine that Agentic RAGs outperform LLMs on publicly available knowledge bases.
+- In real-world applications, this approach would be more impactful when applied to private datasets that are not exposed to GPTs or other LLMs. In such cases, Agentic RAGs could outperform unaugmented or base RAGs by leveraging specialized agents for distinct data sources, assuming other factors (such as data availability) remain constant.
 
 <br>
 
