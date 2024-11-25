@@ -201,19 +201,22 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 
 <br><br>
 
-## Evaluation Strategy {#evaluation-strategy}
+## Evaluation Strategy and Results {#evaluation-strategy}
 
 ### Agentic Response Evaluation {#agentic-response-evaluation}
+- We have used a test set 100 queries (50 'Single Topic' and 50 'Compound' queries). 
+- To assess the accuracy and efficiency of our Agentic RAG, we used GPT-4o's responses as the Ground Truth. This choice is driven by the Enron dataset and case's prominence as a key training source for most large language models.
+- The ground truth was evaluated against three systems:
+  - **Agentic RAG**: Our custom-built RAG developed for the Capstone project.
+  - **Base RAG**: A foundational RAG created during Milestone 2 as a proof of concept.
+  - **Unaugmented RAG**: Responses generated directly by GPT-3.5 Turbo.
+- The response was evaluated in two ways:
+  - **BERTScore**:
+    - Unlike ROUGE and BLEU that rely on n-gram overlap, BERTScore considers context by leveraging embeddings. We used the microsoft/deberta-xlarge-mnli embeddings to compare the ground truth response with the other three systems. It returns Precision, Recall and F1 Score metrics.
+  - **Entity Coverage Score**
+    - We wanted to overcome the drawbacks of the BERTScore that was presumably caused by the length of the evaluation. It was driven by the philosophy that however short the summary is, if it covers enough entities such as names, places, dates, etc, it can be considered a good summary. To that effect, we calculated a score which was the ratio of topics covered in the ground truth vs topics covered in the other three systems. These 'entities' were captured using Spacy's NER package for People, Locations, Dates and Times, Quantities and Currency. 
 
 ### Email Agent Evaluation {#email-agent-evaluation}
-
-<br><br>
-
-# Results {#results}
-
-## Response Scoring Results {#response-scoring-results}
-
-## Email Retrieval Results {#email-retrieval-results}
 
 <br><br>
 
