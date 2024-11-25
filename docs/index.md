@@ -252,6 +252,7 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 
     
     <tr>
+      <td>Precision</td>
     <td>
       <table>
         <td>0.66</td>
@@ -274,6 +275,7 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
     
 
     <tr>
+      <td>Recall</td>
     <td>
       <table>
         <td>0.66</td>
