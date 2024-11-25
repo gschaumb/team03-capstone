@@ -231,10 +231,10 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
     <tr>
       <td></td>
     <td>
-      <td>
+      <table>
         <th>Score</th>
         <th>P-value</th>
-      </td>
+      </table>
     </td>
       <td>
       <table>
@@ -279,20 +279,20 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
       <th>Recall</th>
     <td>
       <table>
-        <td>0.66</td>
+        <td>0.62</td>
         <td>-</td>
       </table>
     </td>
       <td>
       <table>
-        <td>0.68</td>
-        <td>0.003</td>
+        <td>0.65</td>
+        <td>0.001</td>
       </table>
     </td>
       <td>
       <table>
-        <td>0.73</td>
-        <td>2.02</td>
+        <td>0.70</td>
+        <td>1.03</td>
       </table>
     </td>
       
