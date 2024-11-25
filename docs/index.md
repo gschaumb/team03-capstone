@@ -187,9 +187,12 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 - The email agent supplements the response returned by the Summary Agent by returning emails relevant to the query asked. 
 
 **Implementation**:
-- **Vector Database**: We leveraged the Chroma DB vector database for our use case. The embeddings are generated using the complete corpus of 500k emails. We used Huggingface's all-MiniLM-l6-v2 model to generate these embeddings. We hosted this vector DB on an AWS instance.
-- **Keyphrase Extraction**: Once a query comes in, each agent returns its own summary. This is the 'intermediate response'. We use GPT-3.5-Turbo to extract comma separated keyphrases from the summaries.
-- **Retrieve Relevant Emails**: We convert the string of keyphrases from each agent into embeddings using the same all-MiniLM-l6-v2 model to obtain the top 20 relevant emails using Cosine Similarity at the back-end. Once we have been returned responses for all the agents, we return the unique set of emails back.
+- **Vector Database**: We use Chroma DB to store and query the email embeddings, which are generated from a corpus of 500k emails using Huggingface's all-MiniLM-l6-v2 model. The vector database is hosted on an AWS instance.
+- **Keyphrase Extraction**: When a query is received, each agent generates its own summary (the "intermediate response"). Using GPT-3.5-Turbo, we extract keyphrases from these summaries as a string of comma-separated phrases.
+- **Retrieve Relevant Emails**:
+  - The extracted keyphrases are converted into embeddings using the same all-MiniLM-l6-v2 model.
+  - Using Cosine Similarity, we fetch the top 20 emails relevant to the query for each agent.
+  - Finally, we merge and return a unique set of emails as the final output.
 
 <br>
 
