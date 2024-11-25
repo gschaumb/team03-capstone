@@ -50,7 +50,7 @@ The combination of reasoning and acting makes agentic RAG a promising approach f
 
 Our Capstone project builds on our Milestones 1 and 2<sup>[2](#ref-2)</sup>, where we extracted data sources and developed a basic RAG solution for a **customer support use case**. In this Capstone project:
 
-- **Public legal, financial, and historical documents related to the Enron case** serve as a proxy for the knowledgebase.
+- **Public legal, financial, and historical documents related to the Enron case** serve as a proxy for the knowledge base.
 - **The Enron email corpus** represents a range of employee and/or customer emails.
 
 Ideally, we would have liked to have used a product or service company's corporate technical manuals, implementation guides, support FAQs, and related customer support emails as our data sources. Given the difficulty in obtaining such materials, the Enron data has proven a valuable proxy due to its broad content coverage across various document types and email exchanges.
@@ -183,11 +183,13 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 
 ### Email Agent {#email-agent}
 
-**Implementation**:
-- **Query-Related Email Retrieval**: xxxxxxxxxxxx xxxxx xxxxx xxxx xxxx.
-
 **Objective**:
-- Xxxxxxxxx xxxxxx xxxxx xxxxxx xxxx.
+- The email agent supplements the response returned by the Summary Agent by returning emails relevant to the query asked. 
+
+**Implementation**:
+- **Vector Database**: We leveraged the Chroma DB vector database for our use case. The embeddings are generated using the complete corpus of 500k emails. We used Huggingface's all-MiniLM-l6-v2 model to generate these embeddings. We hosted this vector DB on an AWS instance.
+- **Keyphrase Extraction**: Once a query comes in, each agent returns its own summary. This is the 'intermediate response'. We use GPT-3.5-Turbo to extract comma separated keyphrases from the summaries.
+- **Retrieve Relevant Emails**: We convert the string of keyphrases from each agent into embeddings using the same all-MiniLM-l6-v2 model to obtain the top 20 relevant emails using Cosine Similarity at the back-end. Once we have been returned responses for all the agents, we return the unique set of emails back.
 
 <br>
 
