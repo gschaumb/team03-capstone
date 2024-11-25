@@ -216,6 +216,26 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
     - Unlike traditional metrics like ROUGE and BLEU that rely on n-gram overlap, BERTScore evaluates semantic similarity by leveraging contextual embeddings. We utilized the microsoft/deberta-xlarge-mnli model to compare the ground truth response with the three systems. BERTScore provides three metrics: Precision, Recall, and F1 Score, capturing how well the generated response aligns with the ground truth.
   - **Entity Coverage Score**
     - We wanted to look at the evaluation from another angle. To address the limitations of BERTScore due to its sensitivity to response length, we introduced the Entity Coverage Score. This metric is based on the principle that a good summary should cover key entities, regardless of its length. The score is computed as the ratio of entities in the generated response to those in the ground truth. Entities—such as names, locations, dates, times, quantities, and currencies were identified using spaCy's Named Entity Recognition (NER) package. This method emphasizes coverage over verbosity.
+   
+- **Results**
+  - We primarily considered Precision and F1 Score.
+ 
+  - <table>
+    <tr>
+    <th>Metric</th>
+    <th>Agentic RAG</th>
+    <th>Base RAG</th>
+    <th>Unaugmented Output</th>
+    </tr>
+    <tr>
+    <td>
+      <table>
+        <th>Score</th>
+        <th>p-value</th>
+      </table>
+    </td>
+    </tr>
+  </table>
 
 ### Email Agent Evaluation {#email-agent-evaluation}
 
