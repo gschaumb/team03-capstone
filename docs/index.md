@@ -316,11 +316,22 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
       <td>0.53</td>
     </tr>
   </table>
-
   <br>
 
 
 ### Email Agent Evaluation {#email-agent-evaluation}
+
+We attempted to evaluate the email agent responses manually in two ways
+
+- **Query based evaluation**: Using the same queries as the Agentic Response Evaluation, we checked whether each returned email was relevant to the query. Relevance was determined by either the existence of the key phrases in the intermediate summaries, or contextual similarity to those keyphrases.
+- **Keyphrase based evaluation**: For a single keyphrase, we assessed the top 20 emails retrieved for relevance.
+
+Both methods faced the same challenge: evaluating cosine similarity scores is inherently subjective and qualitative.
+- In the first method, broad queries allowed for nearly any result to be justified as relevant or irrelevant, making consistent evaluation difficult.
+- In the second, more focused method, the same issue persisted. For example, the keyphrase 'Fraudulent Transactions' retrieved emails containing personal opinions and news articles about the Enron scandal, which were contextually relevant but not directly linked to fraudulent activity.
+- Another challenge was duplicate or near-duplicate emails from forwards and long email chains, leading to redundancy in the results.
+
+Despite these limitations, manual testing showed that the responses generally maintained contextual relevance or textual overlap with the queries.
 
 <br><br>
 
