@@ -227,13 +227,49 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
     <th>Base RAG</th>
     <th>Unaugmented Output</th>
     </tr>
+    
     <tr>
     <td>
       <table>
-        <th>Score</th>
-        <th>p-value</th>
+        <td>0.66</td>
+        <td>-</td>
       </table>
     </td>
+      <td>
+      <table>
+        <td>0.68</td>
+        <td>0.003</td>
+      </table>
+    </td>
+      <td>
+      <table>
+        <td>0.73</td>
+        <td>2.02</td>
+      </table>
+    </td>
+    </tr>
+    
+
+    <tr>
+    <td>
+      <table>
+        <td>0.66</td>
+        <td>-</td>
+      </table>
+    </td>
+      <td>
+      <table>
+        <td>0.68</td>
+        <td>0.003</td>
+      </table>
+    </td>
+      <td>
+      <table>
+        <td>0.73</td>
+        <td>2.02</td>
+      </table>
+    </td>
+      
     </tr>
   </table>
 
