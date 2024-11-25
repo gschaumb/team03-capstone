@@ -210,11 +210,12 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
   - **Agentic RAG**: Our custom-built RAG developed for the Capstone project.
   - **Base RAG**: A foundational RAG created during Milestone 2 as a proof of concept.
   - **Unaugmented RAG**: Responses generated directly by GPT-3.5 Turbo.
+    
 - The response was evaluated in two ways:
   - **BERTScore**:
-    - Unlike ROUGE and BLEU that rely on n-gram overlap, BERTScore considers context by leveraging embeddings. We used the microsoft/deberta-xlarge-mnli embeddings to compare the ground truth response with the other three systems. It returns Precision, Recall and F1 Score metrics.
+    - Unlike traditional metrics like ROUGE and BLEU that rely on n-gram overlap, BERTScore evaluates semantic similarity by leveraging contextual embeddings. We utilized the microsoft/deberta-xlarge-mnli model to compare the ground truth response with the three systems. BERTScore provides three metrics: Precision, Recall, and F1 Score, capturing how well the generated response aligns with the ground truth.
   - **Entity Coverage Score**
-    - We wanted to overcome the drawbacks of the BERTScore that was presumably caused by the length of the evaluation. It was driven by the philosophy that however short the summary is, if it covers enough entities such as names, places, dates, etc, it can be considered a good summary. To that effect, we calculated a score which was the ratio of topics covered in the ground truth vs topics covered in the other three systems. These 'entities' were captured using Spacy's NER package for People, Locations, Dates and Times, Quantities and Currency. 
+    - We wanted to look at the evaluation from another angle. To address the limitations of BERTScore due to its sensitivity to response length, we introduced the Entity Coverage Score. This metric is based on the principle that a good summary should cover key entities, regardless of its length. The score is computed as the ratio of entities in the generated response to those in the ground truth. Entities—such as names, locations, dates, times, quantities, and currencies were identified using spaCy's Named Entity Recognition (NER) package. This method emphasizes coverage over verbosity.
 
 ### Email Agent Evaluation {#email-agent-evaluation}
 
