@@ -346,20 +346,20 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
       <th>Precision</th>
       <td>
         <table>
-          <tr><td>Score: 0.66</td></tr>
-          <tr><td>P-value: -</td></tr>
+          <tr><th>Score</th><th>P-value</th></tr>
+          <tr><td>0.66</td><td>-</td></tr>
         </table>
       </td>
       <td>
         <table>
-          <tr><td>Score: 0.68</td></tr>
-          <tr><td>P-value: 0.003</td></tr>
+          <tr><th>Score</th><th>P-value</th></tr>
+          <tr><td>0.68</td><td>0.003</td></tr>
         </table>
       </td>
       <td>
         <table>
-          <tr><td>Score: 0.73</td></tr>
-          <tr><td>P-value: 2.02</td></tr>
+          <tr><th>Score</th><th>P-value</th></tr>
+          <tr><td>0.73</td><td>2.02</td></tr>
         </table>
       </td>
     </tr>
@@ -367,26 +367,27 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
       <th>Recall</th>
       <td>
         <table>
-          <tr><td>Score: 0.62</td></tr>
-          <tr><td>P-value: -</td></tr>
+          <tr><th>Score</th><th>P-value</th></tr>
+          <tr><td>0.62</td><td>-</td></tr>
         </table>
       </td>
       <td>
         <table>
-          <tr><td>Score: 0.65</td></tr>
-          <tr><td>P-value: 0.001</td></tr>
+          <tr><th>Score</th><th>P-value</th></tr>
+          <tr><td>0.65</td><td>0.001</td></tr>
         </table>
       </td>
       <td>
         <table>
-          <tr><td>Score: 0.70</td></tr>
-          <tr><td>P-value: 1.03</td></tr>
+          <tr><th>Score</th><th>P-value</th></tr>
+          <tr><td>0.70</td><td>1.03</td></tr>
         </table>
       </td>
     </tr>
   </table>
 
   There is a minor but statistically significant difference in Precision and F1 Scores between the Agentic RAG and Base RAG. This outcome challenges the expectation that fine-tuning the prompt and combining agent responses would automatically enhance response quality.
+
 
 - **Entity Coverage Score**
   - Additionally, to ensure that we're evaluating the RAG on its merits and not the length (as GPT 4o does provide with additional context, and therefore, has much more text in the response), we also calculated the ratio of the number of entities in each system to the number of entities in the Ground Truth response as the Entity Coverage Score. On this metric, the Agentic RAG performed better than the other two systems.
