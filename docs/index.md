@@ -353,7 +353,7 @@ Despite these limitations, manual testing showed that the responses generally ma
 1. [La Cava, L., & Tagarelli, A. (2024). Safeguarding Decentralized Social Media: LLM Agents for Automating Community Rule Compliance. arXiv.](#ref-1) <a id="ref-1"></a>https://arxiv.org/abs/2409.08963
 2. [Bodas, A., Goldhardt, N., & Schaumburg, G. (n.d.). _Milestone 2_. GitHub.](#ref-2) <a id="ref-2"></a>https://github.com/bodasa-umich/Milestone2
 3. [Doe, J. (2023, September 22). Designing Cognitive Architectures: Agentic Workflow Patterns from Scratch. _Medium_.](#ref-3) <a id="ref-3"></a>https://medium.com/google-cloud/designing-cognitive-architectures-agentic-workflow-patterns-from-scratch-63baa74c54bc
-
+4. [Sahu, S. (2024, October 30). LLM Evaluation Metrics. _Medium_.](#ref-4) <a id="ref-4"></a>https://ssahuupgrad-93226.medium.com/llm-evaluation-metrics-the-ultimate-llm-evaluation-guide-e9bc94dba1e1
 <br>
 
 ## Statement of Work {#statement-of-work}
