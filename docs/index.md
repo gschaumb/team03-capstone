@@ -203,6 +203,7 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 <br><br>
 
 ## Evaluation Strategy and Results {#evaluation-strategy}
+<br>
 
 ### Agentic Response Evaluation {#agentic-response-evaluation}
 - We have used a test set 100 queries (50 'Single Topic' and 50 'Compound' queries). 
@@ -211,13 +212,15 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
   - **Agentic RAG**: Our custom-built RAG developed for the Capstone project.
   - **Base RAG**: A foundational RAG created during Milestone 2 as a proof of concept.
   - **Unaugmented RAG**: Responses generated directly by GPT-3.5 Turbo.
-    
+  <br>
+  
 - The response was evaluated in two ways:
   - **BERTScore**:
     - Unlike traditional metrics like ROUGE and BLEU that rely on n-gram overlap, BERTScore evaluates semantic similarity by leveraging contextual embeddings. We utilized the microsoft/deberta-xlarge-mnli model to compare the ground truth response with the three systems. BERTScore provides three metrics: Precision, Recall, and F1 Score, capturing how well the generated response aligns with the ground truth.
   - **Entity Coverage Score**
     - We wanted to look at the evaluation from another angle. To address the limitations of BERTScore due to its sensitivity to response length, we introduced the Entity Coverage Score. This metric is based on the principle that a good summary should cover key entities, regardless of its length. The score is computed as the ratio of entities in the generated response to those in the ground truth. Entities—such as names, locations, dates, times, quantities, and currencies were identified using spaCy's Named Entity Recognition (NER) package. This method emphasizes coverage over verbosity.
-   
+<br>
+
 - **Results**
   - **BERTScore**
     - The table below presents the mean Precision and F1 Scores from the BERTScore algorithm for each system compared to the ground truth.
@@ -328,6 +331,7 @@ We attempted to evaluate the email agent responses manually in two ways
 - **Query based evaluation**: Using the same queries as the Agentic Response Evaluation, we checked whether each returned email was relevant to the query. Relevance was determined by either the existence of the key phrases in the intermediate summaries, or contextual similarity to those keyphrases.
 - **Keyphrase based evaluation**: For a single keyphrase, we assessed the top 20 emails retrieved for relevance.
 
+<br>
 Both methods faced the same challenge: evaluating cosine similarity scores is inherently subjective and qualitative.
 - In the first method, broad queries allowed for nearly any result to be justified as relevant or irrelevant, making consistent evaluation difficult.
 - In the second, more focused method, the same issue persisted. For example, the keyphrase 'Fraudulent Transactions' retrieved emails containing personal opinions and news articles about the Enron scandal, which were contextually relevant but not directly linked to fraudulent activity.
@@ -343,8 +347,20 @@ Despite these limitations, manual testing showed that the responses generally ma
 
 - This project aimed to evaluate the performance of Agentic RAGs on raw corpora. However, we encountered a unique constraint: most large language models are already well-versed in the Enron case's facts and issues. As a result, we could not conclusively determine that Agentic RAGs outperform LLMs on publicly available knowledge bases.
 - In real-world applications, this approach would be more impactful when applied to private datasets that are not exposed to GPTs or other LLMs. In such cases, Agentic RAGs could outperform unaugmented or base RAGs by leveraging specialized agents for distinct data sources, assuming other factors (such as data availability) remain constant.
-
 <br>
+**Next Steps**:
+- With additional time, we would have focused more extensively on prompt engineering. This could include experimenting with different structures, tones, and techniques to optimize how prompts influence the outcomes of the system.
+- Another key area for improvement lies in experimenting further with chunk sizes and text preprocessing. Adjusting chunk sizes directly impacts the granularity of text representation and the balance between precision and recall. 
+- We would also like to study how these changes affect other critical parameters such as the similarity threshold, the choice of 'k' in nearest neighbor searches, and overall system accuracy.
+- We might have also experimented with an algorithm other than cosine similarity for finding the closest text.
+- One specific improvement we aimed for was using techniques like Locality Sensitive Hashing (LSH) to identify forwards or replies that contain repeated email content and perhaps make a decision to retain the longest email whilst eliminating all others to remove redundancy.
+- We also found that the Chroma DB occupied a large amount of space and would've liked to experiment with alternatives like FAISS/Elasticsearch DB/traditional DBs like Postgresql.
+- We might've wanted to introduce explicit guardrails to ensure users only asked questions related to Enron.
+<br>
+
+# Ethical Considerations {ethical-considerations}
+- As the Enron case is widely publicized, we refrained from picking up studies, papers and other material that would reflect opinions of any individuals or group of individuals, so as to not perpetuate any bias.
+- On the user interface, we have intentionally displayed the intermediate responses generated by the agents to promote transparency and provide full visibility into the system's decision-making process.
 
 # Appendix {#appendix}
 
