@@ -335,7 +335,9 @@ Both methods faced the same challenge: evaluating cosine similarity scores is in
 
 Despite these limitations, manual testing showed that the responses generally maintained contextual relevance or textual overlap with the queries.
 
-<br><br>
+<br>
+<iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSazYHLTkUGFPhN0KqDidJPrdtEYcs3apmemOkPjzgAiDhl2EkmxVk55jNxtcmBArZyzzSyyAPiA6nU/pubhtml?widget=true&amp;headers=false"></iframe>
+<br>
 
 # Discussion {#discussion}
 
