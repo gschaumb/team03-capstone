@@ -32,7 +32,7 @@ This file is integral to the configuration and deployment of our Capstone projec
   Our Milestone 2 demo (used in Capstone evaluation) can be found at:  
   [https://huggingface.co/spaces/gschaumb/M2-Team01-SS24-RAG-demo](https://huggingface.co/spaces/gschaumb/M2-Team01-SS24-RAG-demo)
 
-   **Evaluation Report**
+- **Evaluation Report:**
   Our detailed evaluation of queries can be found at:
   <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vSazYHLTkUGFPhN0KqDidJPrdtEYcs3apmemOkPjzgAiDhl2EkmxVk55jNxtcmBArZyzzSyyAPiA6nU/pubhtml?widget=true&amp;headers=false" target="_blank">Link to Evaluation Sheet</a>
   
