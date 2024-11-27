@@ -94,7 +94,7 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 
 <br>
 
-![Figure 2](high_level_benefits.png)
+![ 2](high_level_benefits.png)
 
 <br>
 
@@ -109,7 +109,7 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 - **High-Level Design - Implementation:** Experimented with agentic libraries and did prototype feasibility coding.
 
 ### Phase 1: Minimum Viable Product (MVP) {#phase-1-minimum-viable-product-mvp}
-- **Detailed Design - Implementation:** Decided to code agents with python classes rather than using an agentic library. Defined our agentic pattern flow and email retrieval (see Figure 3).
+- **Detailed Design - Implementation:** Decided to code agents with python classes rather than using an agentic library. Defined our agentic pattern flow and email retrieval (see  3).
 - **Detailed Design - Evaluation:** Defined evaluation criteria after agent design was defined.
 
 ### Phase 2: Enhancements {#phase-2-enhancements}
@@ -123,12 +123,12 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 
 <br>
 
-**Figure 3**
+** 3**
 *Agent Design and Workflow:*  
 
 <br>
 
-![Figure 3 Placeholder](agent_flow.svg)
+![ 3 Placeholder](agent_flow.svg)
 
 <br>
 
@@ -156,7 +156,7 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 - **Legal Focus**: Summarizes critical legal elements like relevant people and dates in two sentences.
 
 **Objective**:
-- Configured for well-organized legal data where accurate document retrieval is seen as helpful for precision, compliance and regulatory affairs. The higher threshold helps to ensure that only documents significantly related to the query are retrieved, reducing noise from less relevant documents.The context window, although small, is useful with legal data where neighboring paragraphs or sections often contain pertinent arguments or references.
+- Cond for well-organized legal data where accurate document retrieval is seen as helpful for precision, compliance and regulatory affairs. The higher threshold helps to ensure that only documents significantly related to the query are retrieved, reducing noise from less relevant documents.The context window, although small, is useful with legal data where neighboring paragraphs or sections often contain pertinent arguments or references.
 
 ### Annual Financial Reports Agent {#annual-financial-reports-agent}
 
@@ -169,7 +169,7 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 - **Financial Analysis**: Integrates financial insights into a concise two-sentence summary focusing on key financial facts.
 
 **Objective**:
-- Succinct summaries that highlight key information and financial figures from the relvant document chunks. Suitable for financial reports where key figures and statements can be scattered across documents, but where the primary focus should be on the most relevant document. The broader context window helps in gathering insights where the financial information is informed by adjacent chunks.
+- Succinct summaries that highlight key information and financial s from the relvant document chunks. Suitable for financial reports where key s and statements can be scattered across documents, but where the primary focus should be on the most relevant document. The broader context window helps in gathering insights where the financial information is informed by adjacent chunks.
 
 ### Integration Agent {#integration-agent}
 
@@ -197,7 +197,8 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 <br>
 
 ### Email Agent Architecture {#email-agent-architecture}
-[Would be great to have a figure here to show off the impressive email implementation]
+
+![Figure 4](VectorStore.png)
 
 <br><br>
 
