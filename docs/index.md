@@ -328,6 +328,27 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
     </table>
   <br>
 
+  - **BERTScore**
+  - The table below presents the mean Precision and F1 Scores from the BERTScore algorithm for each system compared to the ground truth.
+  - To evaluate the Agentic RAG against other systems, we performed a t-test to calculate the p-value. A p-value < 0.05 was considered statistically significant.
+
+| Metric     | Agentic RAG | Base RAG          | Unaugmented Output |
+|------------|-------------|-------------------|---------------------|
+| Precision  | Score: 0.66<br>P-value: - | Score: 0.68<br>P-value: 0.003 | Score: 0.73<br>P-value: 2.02 |
+| Recall     | Score: 0.62<br>P-value: - | Score: 0.65<br>P-value: 0.001 | Score: 0.70<br>P-value: 1.03 |
+
+  There is a minor but statistically significant difference in Precision and F1 Scores between the Agentic RAG and Base RAG. This outcome challenges the expectation that fine-tuning the prompt and combining agent responses would automatically enhance response quality.
+
+- **Entity Coverage Score**
+  - Additionally, to ensure that we're evaluating the RAG on its merits and not the length (as GPT 4o does provide with additional context, and therefore, has much more text in the response), we also calculated the ratio of the number of entities in each system to the number of entities in the Ground Truth response as the Entity Coverage Score. On this metric, the Agentic RAG performed better than the other two systems.
+
+| System              | Entity Coverage Score |
+|---------------------|------------------------|
+| Agentic RAG         | 0.73                  |
+| Base RAG            | 0.56                  |
+| Unaugmented Response| 0.53                  |
+
+
 
 ### Email Agent Evaluation {#email-agent-evaluation}
 
@@ -336,7 +357,6 @@ We attempted to evaluate the email agent responses manually in two ways
 - **Query based evaluation**: Using the same queries as the Agentic Response Evaluation, we checked whether each returned email was relevant to the query. Relevance was determined by either the existence of the key phrases in the intermediate summaries, or contextual similarity to those keyphrases.
 - **Keyphrase based evaluation**: For a single keyphrase, we assessed the top 20 emails retrieved for relevance.
 
-<br>
 
 Both methods faced the same challenge: evaluating cosine similarity scores is inherently subjective and qualitative.
 
@@ -368,7 +388,6 @@ Despite these limitations, manual testing showed that the responses generally ma
 - We also found that the Chroma DB occupied a large amount of space and would've liked to experiment with alternatives like FAISS/Elasticsearch DB/traditional DBs like Postgresql.
 - We might've wanted to introduce explicit guardrails to ensure users only asked questions related to Enron.
 
-<br>
 
 # Ethical Considerations {#ethical-considerations}
 
