@@ -331,6 +331,82 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
   <br>
 
 
+- **BERTScore**
+  - The table below presents the mean Precision and F1 Scores from the BERTScore algorithm for each system compared to the ground truth.
+  - To evaluate the Agentic RAG against other systems, we performed a t-test to calculate the p-value. A p-value < 0.05 was considered statistically significant.
+
+  <table>
+    <tr>
+      <th>Metric</th>
+      <th>Agentic RAG</th>
+      <th>Base RAG</th>
+      <th>Unaugmented Output</th>
+    </tr>
+    <tr>
+      <th>Precision</th>
+      <td>
+        <table>
+          <tr><td>Score: 0.66</td></tr>
+          <tr><td>P-value: -</td></tr>
+        </table>
+      </td>
+      <td>
+        <table>
+          <tr><td>Score: 0.68</td></tr>
+          <tr><td>P-value: 0.003</td></tr>
+        </table>
+      </td>
+      <td>
+        <table>
+          <tr><td>Score: 0.73</td></tr>
+          <tr><td>P-value: 2.02</td></tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <th>Recall</th>
+      <td>
+        <table>
+          <tr><td>Score: 0.62</td></tr>
+          <tr><td>P-value: -</td></tr>
+        </table>
+      </td>
+      <td>
+        <table>
+          <tr><td>Score: 0.65</td></tr>
+          <tr><td>P-value: 0.001</td></tr>
+        </table>
+      </td>
+      <td>
+        <table>
+          <tr><td>Score: 0.70</td></tr>
+          <tr><td>P-value: 1.03</td></tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  There is a minor but statistically significant difference in Precision and F1 Scores between the Agentic RAG and Base RAG. This outcome challenges the expectation that fine-tuning the prompt and combining agent responses would automatically enhance response quality.
+
+- **Entity Coverage Score**
+  - Additionally, to ensure that we're evaluating the RAG on its merits and not the length (as GPT 4o does provide with additional context, and therefore, has much more text in the response), we also calculated the ratio of the number of entities in each system to the number of entities in the Ground Truth response as the Entity Coverage Score. On this metric, the Agentic RAG performed better than the other two systems.
+
+  <table>
+    <tr>
+      <th>Agentic RAG</th>
+      <th>Base RAG</th>
+      <th>Unaugmented Response</th>
+    </tr>
+    <tr>
+      <td>0.73</td>
+      <td>0.56</td>
+      <td>0.53</td>
+    </tr>
+  </table>
+
+
+
+
 ### Email Agent Evaluation {#email-agent-evaluation}
 
 We attempted to evaluate the email agent responses manually in two ways
