@@ -26,6 +26,8 @@
   - [Response Scoring Results](#response-scoring-results)
   - [Email Retrieval Results](#email-retrieval-results)
 - [Discussion](#discussion)
+- [Ethical Considerations](#ethical-considerations)
+- [Conclusion](#conclusion)
 - [Appendix](#appendix)
   - [References](#references)
   - [Statement of Work](#statement-of-work)
@@ -344,6 +346,8 @@ Despite these limitations, manual testing showed that the responses generally ma
 <br>
 
 # Discussion {#discussion}
+
+<br>
 
 - This project aimed to evaluate the performance of Agentic RAGs on raw corpora. However, we encountered a unique constraint: most large language models are already well-versed in the Enron case's facts and issues. As a result, we could not conclusively determine that Agentic RAGs outperform LLMs on publicly available knowledge bases.
 - In real-world applications, this approach would be more impactful when applied to private datasets that are not exposed to GPTs or other LLMs. In such cases, Agentic RAGs could outperform unaugmented or base RAGs by leveraging specialized agents for distinct data sources, assuming other factors (such as data availability) remain constant.
