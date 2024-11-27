@@ -336,15 +336,11 @@ We attempted to evaluate the email agent responses manually in two ways
 <br>
 
 Both methods faced the same challenge: evaluating cosine similarity scores is inherently subjective and qualitative.
-<br>
 
 - In the first method, broad queries allowed for nearly any result to be justified as relevant or irrelevant, making consistent evaluation difficult.
-  
 - In the second, more focused method, the same issue persisted. For example, the keyphrase 'Fraudulent Transactions' retrieved emails containing personal opinions and news articles about the Enron scandal, which were contextually relevant but not directly linked to fraudulent activity.
-  
 - Another challenge was duplicate or near-duplicate emails from forwards and long email chains, leading to redundancy in the results.
 
-<br>
 
 Despite these limitations, manual testing showed that the responses generally maintained contextual relevance or textual overlap with the queries.
 
