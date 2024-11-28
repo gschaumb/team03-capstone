@@ -218,7 +218,7 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 - The response was evaluated in two ways:
   - **BERTScore**
     
-    - Unlike traditional metrics like ROUGE and BLEU that rely on n-gram overlap, BERTScore evaluates semantic similarity by leveraging contextual embeddings. We utilized the microsoft/deberta-xlarge-mnli model to compare the ground truth response with the three systems. BERTScore provides three metrics: Precision, Recall, and F1 Score, capturing how well the generated response aligns with the ground truth.
+    - Unlike traditional metrics like ROUGE and BLEU that rely on n-gram overlap, BERTScore evaluates semantic similarity by leveraging contextual embeddings. We utilized the microsoft/deberta-xlarge-mnli model to compare the ground truth response with the three systems. BERTScore provides three metrics: Precision, Recall, and F1 Score, capturing how well the generated response aligns with the ground truth<sup>[4](#ref-4)</sup>.
   - **Entity Coverage Score**
     
     - We wanted to look at the evaluation from another angle. To address the limitations of BERTScore due to its sensitivity to response length, we introduced the Entity Coverage Score. This metric is based on the principle that a good summary should cover key entities, regardless of its length. The score is computed as the ratio of entities in the generated response to those in the ground truth. Entities—such as names, locations, dates, times, quantities, and currencies were identified using spaCy's Named Entity Recognition (NER) package. This method emphasizes coverage over verbosity.
@@ -303,7 +303,7 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 
 ### Email Agent Evaluation {#email-agent-evaluation}
 
-We attempted to evaluate the email agent responses manually in two ways
+We attempted to evaluate the email agent responses manually in two ways.
 
 - **Query based evaluation**: Using the same queries as the Agentic Response Evaluation, we checked whether each returned email was relevant to the query. Relevance was determined by either the existence of the key phrases in the intermediate summaries, or contextual similarity to those keyphrases.
 - **Keyphrase based evaluation**: For a single keyphrase, we assessed the top 20 emails retrieved for relevance.
