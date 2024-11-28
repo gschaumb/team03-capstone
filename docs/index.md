@@ -109,7 +109,7 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 - **High-Level Design - Implementation:** Experimented with agentic libraries and did prototype feasibility coding.
 
 ### Phase 1: Minimum Viable Product (MVP) {#phase-1-minimum-viable-product-mvp}
-- **Detailed Design - Implementation:** Decided to code agents with python classes rather than using an agentic library. Defined our agentic pattern flow and email retrieval (see  3).
+- **Detailed Design - Implementation:** Decided to code agents with python classes rather than using an agentic library. Defined our agentic pattern flow and email retrieval (see Figure 3).
 - **Detailed Design - Evaluation:** Defined evaluation criteria after agent design was defined.
 
 ### Phase 2: Enhancements {#phase-2-enhancements}
@@ -156,7 +156,7 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 - **Legal Focus**: Summarizes critical legal elements like relevant people and dates in two sentences.
 
 **Objective**:
-- Cond for well-organized legal data where accurate document retrieval is seen as helpful for precision, compliance and regulatory affairs. The higher threshold helps to ensure that only documents significantly related to the query are retrieved, reducing noise from less relevant documents.The context window, although small, is useful with legal data where neighboring paragraphs or sections often contain pertinent arguments or references.
+- Suitable for well-organized legal data where accurate document retrieval is seen as helpful for precision, compliance and regulatory affairs. The higher threshold helps to ensure that only documents significantly related to the query are retrieved, reducing noise from less relevant documents.The context window, although small, is useful with legal data where neighboring paragraphs or sections often contain pertinent arguments or references.
 
 ### Annual Financial Reports Agent {#annual-financial-reports-agent}
 
@@ -184,7 +184,7 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 ### Email Agent {#email-agent}
 
 **Objective**:
-- The email agent supplements the response returned by the Summary Agent by returning emails relevant to the query asked. 
+- The email agent supplements the response returned by the Summary Agent by returning emails relevant to the query asked (see Figure 4). 
 
 **Implementation**:
 - **Vector Database**: We use Chroma DB to store and query the email embeddings, which are generated from a corpus of 500k emails using Huggingface's all-MiniLM-l6-v2 model. The vector database is hosted on an AWS instance.
