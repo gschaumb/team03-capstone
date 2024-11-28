@@ -281,7 +281,7 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
         </tr>
       </table>
 
-  There is a minor but statistically significant difference in Precision and F1 Scores between the Agentic RAG and Base RAG. This outcome challenges the expectation that fine-tuning the prompt and combining agent responses would automatically enhance response quality.
+  There is a minor but statistically significant difference in Precision and F1 Scores between the Agentic RAG and Base RAG. This outcome challenges the expectation that LLM prompt engineering and combining specialized agent responses would enhance response quality.
     
   - **Entity Coverage Score**
     - Additionally, to ensure that we're evaluating the RAG on its merits and not the length (as GPT 4o does provide with additional context, and therefore, has much more text in the response), we also calculated the ratio of the number of entities in each system to the number of entities in the Ground Truth response as the Entity Coverage Score. On this metric, the Agentic RAG performed better than the other two systems.
@@ -352,7 +352,7 @@ Despite these limitations, manual testing showed that the responses generally ma
 ## Conclusion {#conclusion}
 
 
-Using the Enron corpus as a proxy knowledge base posed unique challenges since modern LLMs are already trained on it, but it also reinforced the promise of this approach for real-world applications involving private, unseen data sources. This project leaves us optimistic about the future of Agentic RAG systems. With further fine-tuning and adaptation to proprietary datasets, these systems have the potential to improve responses by AI Agents, and subsequently decision making. 
+Using the Enron corpus as a proxy knowledge base posed unique challenges since modern LLMs are already trained on it, but it also reinforced the promise of this approach for real-world applications involving private, unseen data sources. This project leaves us optimistic about the future of Agentic RAG systems. With further design variations, prompt engineering, external tool access, and adaptation to proprietary datasets, systems similar to our Capstone have the potential to improve responses by AI Agents, and subsequently decision making. 
 
 <br><br><br>
 
