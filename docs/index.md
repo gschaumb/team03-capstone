@@ -118,7 +118,7 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 <br>
 
 ## Agent Design Rationale {#agent-design-rationale}
-Each agent's retrieval pipeline and summarization strategy leverages specific parameters and prompts tailored to the nature of the documents it handles, aiding our goal of summaries that are both precise and contextually relevant.
+Our code uses the term "Perception Agents" for our data source agents, reflecting their ability to both retrieve chunks and extract specific useful information relevant to the query. Each agent's retrieval pipeline and summarization strategy leverages specific parameters and prompts tailored to the nature of the documents it handles, aiding our goal of summaries that are both precise and contextually relevant.
 <br>
 
 **Figure 3**
@@ -187,7 +187,7 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 ### Email Agent {#email-agent}
 
 **Objective**:
-- The email agent supplements the response returned by the Summary Agent by returning emails relevant to the query asked (see Figure 4). 
+- The email agent supplements the response returned to the User Interface by the Integration Agent by returning emails relevant to the query asked (see Figure 4). It leverages the summaries from each Perception Agent to do this.
 
 **Implementation**:
 - **Vector Database**: We use Chroma DB to store and query the email embeddings, which are generated from a corpus of 500k emails using Huggingface's all-MiniLM-l6-v2 model. The vector database is hosted on an AWS instance.
