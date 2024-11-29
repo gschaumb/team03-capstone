@@ -369,8 +369,8 @@ Using the Enron corpus as a proxy knowledge base posed unique challenges since m
 3. [Doe, J. (2023, September 22). Designing Cognitive Architectures: Agentic Workflow Patterns from Scratch. *Medium*.](#ref-3) <a id="ref-3"></a>https://medium.com/google-cloud/designing-cognitive-architectures-agentic-workflow-patterns-from-scratch-63baa74c54bc
 4. [Sahu, S. (2024, October 30). LLM Evaluation Metrics. *Medium*.](#ref-4) <a id="ref-4"></a>https://ssahuupgrad-93226.medium.com/llm-evaluation-metrics-the-ultimate-llm-evaluation-guide-e9bc94dba1e1
 5. [Cecco, L. (2024, February 16). Air Canada ordered to pay customer who was misled by airline’s chatbot. *The Guardian*.](#ref-5) <a id="ref-5"></a>https://www.theguardian.com/world/2024/feb/16/air-canada-chatbot-lawsuit
-<br>
 
+<br>
 
 ## Statement of Work {#statement-of-work}
 
