@@ -170,7 +170,7 @@ Our code uses the term "Perception Agents" for our data source agents, reflectin
 - **Financial Analysis**: Integrates financial insights into a concise two-sentence summary focusing on key financial facts.
 
 **Objective**:
-- Succinct summaries that highlight key information and financials from the relvant document chunks. Suitable for financial reports where key results and statements can be scattered across documents, but where the primary focus should be on the most relevant document. The broader context window helps in gathering insights where the financial information is informed by adjacent chunks.
+- Succinct summaries that highlight key information and financials from the relevant document chunks. Suitable for financial reports where key results and statements can be scattered across documents, but where the primary focus should be on the most relevant document. The broader context window helps in gathering insights where the desired financial information is informed by adjacent chunks.
 
 <br>
 
