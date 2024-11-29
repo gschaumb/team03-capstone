@@ -94,8 +94,7 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 
 <br>
 
-![ 2](high_level_benefits.png)
-
+![Figure 2](high_level_benefits.png)
 <br>
 
 # Methods {#methods}
@@ -120,15 +119,13 @@ Our primary hypothesis is that utilizing one agent per data source type will enh
 
 ## Agent Design Rationale {#agent-design-rationale}
 Each agent's retrieval pipeline and summarization strategy leverages specific parameters and prompts tailored to the nature of the documents it handles, aiding our goal of summaries that are both precise and contextually relevant.
-
 <br>
 
 **Figure 3**
 *Agent Design and Workflow:*  
-
 <br>
 
-![ 3 Placeholder](agent_flow.svg)
+![Figure 3](agent_flow.svg)
 
 <br>
 
@@ -145,6 +142,8 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 **Objective**:
 - Designed to efficiently distill a dense, chronologically consistent case summary of Enron, providing key insights while attempting to ensure no detail is overlooked. The initial broad threshold ensures no potentially relevant document is missed, while the top-k selection focuses on the best matches. The context window adds adjacent documents, which can be helpful for understanding necessary context or additional insights.
 
+<br>
+
 ### SEC Legal Complaint Documents Agent {#sec-legal-complaint-documents-agent}
 
 **Retrieval Pipeline**:
@@ -158,6 +157,8 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 **Objective**:
 - Suitable for well-organized legal data where accurate document retrieval is seen as helpful for precision, compliance and regulatory affairs. The higher threshold helps to ensure that only documents significantly related to the query are retrieved, reducing noise from less relevant documents.The context window, although small, is useful with legal data where neighboring paragraphs or sections often contain pertinent arguments or references.
 
+<br>
+
 ### Annual Financial Reports Agent {#annual-financial-reports-agent}
 
 **Retrieval Pipeline**:
@@ -170,6 +171,8 @@ Each agent's retrieval pipeline and summarization strategy leverages specific pa
 
 **Objective**:
 - Succinct summaries that highlight key information and financial s from the relvant document chunks. Suitable for financial reports where key s and statements can be scattered across documents, but where the primary focus should be on the most relevant document. The broader context window helps in gathering insights where the financial information is informed by adjacent chunks.
+
+<br>
 
 ### Integration Agent {#integration-agent}
 
