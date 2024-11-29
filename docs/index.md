@@ -371,6 +371,7 @@ Using the Enron corpus as a proxy knowledge base posed unique challenges since m
 5. [Cecco, L. (2024, February 16). Air Canada ordered to pay customer who was misled by airline’s chatbot. *The Guardian*.](#ref-5) <a id="ref-5"></a>https://www.theguardian.com/world/2024/feb/16/air-canada-chatbot-lawsuit
 <br>
 
+
 ## Statement of Work {#statement-of-work}
 
 **Statement on Use of Generative AI:** Tools such as ChatGPT, Gemini, and Copilot were used in our project for experimentation on tasks such as evaluation query creation, code consultation, as well as searching on approaches and concepts.
