@@ -170,7 +170,7 @@ Our code uses the term "Perception Agents" for our data source agents, reflectin
 - **Financial Analysis**: Integrates financial insights into a concise two-sentence summary focusing on key financial facts.
 
 **Objective**:
-- Succinct summaries that highlight key information and financial s from the relvant document chunks. Suitable for financial reports where key s and statements can be scattered across documents, but where the primary focus should be on the most relevant document. The broader context window helps in gathering insights where the financial information is informed by adjacent chunks.
+- Succinct summaries that highlight key information and financials from the relvant document chunks. Suitable for financial reports where key results and statements can be scattered across documents, but where the primary focus should be on the most relevant document. The broader context window helps in gathering insights where the financial information is informed by adjacent chunks.
 
 <br>
 
@@ -187,7 +187,7 @@ Our code uses the term "Perception Agents" for our data source agents, reflectin
 ### Email Agent {#email-agent}
 
 **Objective**:
-- The email agent supplements the response returned to the User Interface by the Integration Agent by returning emails relevant to the query asked (see Figure 4). It leverages the summaries from each Perception Agent to do this.
+- The Email Agent supplements the response returned to the User Interface by the Integration Agent by returning emails relevant to the query (see Figure 4). It leverages the summaries from each Perception Agent to do this.
 
 **Implementation**:
 - **Vector Database**: We use Chroma DB to store and query the email embeddings, which are generated from a corpus of 500k emails using Huggingface's all-MiniLM-l6-v2 model. The vector database is hosted on an AWS instance.
