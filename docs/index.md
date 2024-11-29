@@ -129,7 +129,7 @@ Our code uses the term "Perception Agents" for our data source agents, reflectin
 
 <br>
 
-### Case Study Agent {#case-study-agent}
+### Case Study Agent (PerceptionAgent1) {#case-study-agent}
 
 **Retrieval Pipeline**:
 - **Threshold of 0**: Includes all documents with cosine similarity greater than zero to ensure comprehensive coverage.
@@ -144,7 +144,7 @@ Our code uses the term "Perception Agents" for our data source agents, reflectin
 
 <br>
 
-### SEC Legal Complaint Documents Agent {#sec-legal-complaint-documents-agent}
+### SEC Legal Complaint Documents Agent (PerceptionAgent2) {#sec-legal-complaint-documents-agent}
 
 **Retrieval Pipeline**:
 - **Threshold of 0.3**: Filters for moderate to high relevance, reducing noise.
@@ -159,7 +159,7 @@ Our code uses the term "Perception Agents" for our data source agents, reflectin
 
 <br>
 
-### Annual Financial Reports Agent {#annual-financial-reports-agent}
+### Annual Financial Reports Agent (PerceptionAgent3) {#annual-financial-reports-agent}
 
 **Retrieval Pipeline**:
 - **Threshold of 0**: Captures all potentially relevant financial reports.
