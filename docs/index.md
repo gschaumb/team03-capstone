@@ -324,6 +324,10 @@ Despite these limitations, manual testing showed that the responses generally ma
 <br>
 <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vSazYHLTkUGFPhN0KqDidJPrdtEYcs3apmemOkPjzgAiDhl2EkmxVk55jNxtcmBArZyzzSyyAPiA6nU/pubhtml?widget=true&amp;headers=false" target="_blank">Link to Evaluation Sheet</a>
 
+<a href="https://huggingface.co/spaces/gschaumb/team03-capstone" target="_blank">Link to Capstone Agentic RAG Demo Application</a>
+
+<a href="https://huggingface.co/spaces/gschaumb/M2-Team01-SS24-RAG-demo" target="_blank">Link to Milestone 2 Basic RAG Demo Application</a>
+
 <br><br>
 
 # Discussion {#discussion}
