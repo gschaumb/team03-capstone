@@ -300,7 +300,7 @@ Our code uses the term "Perception Agents" for our data source agents, reflectin
           <td>0.53</td>
         </tr>
       </table>
-<br>
+
 
 
 ### Email Agent Evaluation {#email-agent-evaluation}
