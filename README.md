@@ -14,9 +14,9 @@ This file is integral to the configuration and deployment of our Capstone projec
 
 ### Project Description
 
- Our Capstone project for the University of Michigan MADS Program expands upon our team's work in Milestone 2, with the goal of testing whether agentic RAG improves results with an Enron source knowledgebase as compared with basic RAG and unaugmented LLM responses. Additionally, it includes an agent to search via API through the extensive Enron email corpus (which we have implemented in an AWS service) and retrieve emails related to the user's query.
+ Our Capstone project for the University of Michigan MADS Program expands upon our team's work in Milestone 2, with the goal of testing whether agentic RAG improves results with an Enron source knowledgebase when compared with basic RAG and unaugmented LLM responses. Additionally, it includes an agent to search via API through the extensive Enron email corpus (which we have implemented in an AWS service) and retrieve emails related to the user's query.
 
- When deployed to a HuggingFace Gradio Space the code provided in this repository creates the Capstone Demo application linked bleow.
+ When deployed to a HuggingFace Gradio Space the code provided in this repository creates the Capstone Demo application linked below.
 
 ### Capstone Project Links
 
