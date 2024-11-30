@@ -70,7 +70,7 @@ One example of an effective support use case RAG system is Unstructured.io's cha
 Visit their documentation page here:  
 <a href="https://docs.unstructured.io/welcome" target="_blank">Unstructured.io Documentation</a>
 
-Their site linked above includes a chatbot in the lower right corner, which we speculate may also support their internal employees and automated email responses. We experimented with document extraction using Unstructured's products in Milestone 2, and our interactions with this chatbot demonstrated its high capacity for providing relevant information, embodying the functionality we sought to implement with the Enron dataset.
+Their site linked above includes a chatbot in the lower right corner, which we speculate may also support their internal employees and automated email responses. We experimented with document extraction using Unstructured's products in Milestone 2, and our interactions with this chatbot demonstrated its high capacity for providing relevant information.
 
 ## Capstone Project Hypothesis {#capstone-project-hypothesis}
 
