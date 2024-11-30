@@ -238,7 +238,7 @@ Our code uses the term "Perception Agents" for our data source agents, reflectin
           <th>Metric</th>
           <th>Agentic RAG</th>
           <th>Base RAG</th>
-          <th>Unaugmented Output</th>
+          <th>Unaugmented Response</th>
         </tr>
         <tr>
           <th>Precision</th>
