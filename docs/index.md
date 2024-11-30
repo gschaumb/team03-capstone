@@ -67,8 +67,8 @@ Our goal was to investigate whether agentic RAG improved results over basic RAG 
 
 One example of an effective support use case RAG system is Unstructured.io's chatbot, which operates on their documentation page and Slack channel. This tool provides detailed and accurate answers, representing the type of capability we aimed to emulate in our Enron project.
 
-Visit their documentation here:  
-[Unstructured.io Documentation](https://docs.unstructured.io/welcome)
+Visit their documentation page here:  
+<a href="https://docs.unstructured.io/welcome" target="_blank">Unstructured.io Documentation</a>
 
 Their site linked above includes a chatbot in the lower right corner, which we speculate may also support their internal employees and automated email responses. We experimented with document extraction using Unstructured's products in Milestone 2, and our interactions with this chatbot demonstrated its high capacity for providing relevant information, embodying the functionality we sought to implement with the Enron dataset.
 
