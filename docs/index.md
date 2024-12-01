@@ -245,7 +245,7 @@ Our code uses the term "Perception Agents" for our data source agents, reflectin
           <td>
             <table>
               <tr><th>Score</th><th>P-value</th></tr>
-              <tr><td>0.66</td><td>-</td></tr>
+              <tr><td>0.66</td><td>NA</td></tr>
             </table>
           </td>
           <td>
@@ -266,7 +266,7 @@ Our code uses the term "Perception Agents" for our data source agents, reflectin
           <td>
             <table>
               <tr><th>Score</th><th>P-value</th></tr>
-              <tr><td>0.62</td><td>-</td></tr>
+              <tr><td>0.62</td><td>NA</td></tr>
             </table>
           </td>
           <td>
