@@ -347,7 +347,7 @@ Despite these limitations, manual testing showed that the responses generally ma
 - We would also like to study how these changes affect other critical parameters such as the similarity threshold, the choice of 'k' in nearest neighbor searches, and overall system accuracy.
 - We might have also experimented with an algorithm other than cosine similarity for finding the closest text.
 - One specific improvement we aimed for was using techniques like Locality Sensitive Hashing (LSH) to identify forwards or replies that contain repeated email content and perhaps make a decision to retain the longest email whilst eliminating all others to remove redundancy.
-- We also found that the Chroma DB occupied a large amount of space and would've liked to experiment with alternatives like FAISS/Elasticsearch DB/traditional DBs like Postgresql.
+- We also found that the Chroma DB occupied a large amount of space and would've liked to experiment with alternatives like FAISS/Elasticsearch DB/traditional DBs like PostgreSQL.
 - We might've wanted to introduce explicit guardrails to ensure users only asked questions related to Enron.
 
 
