@@ -285,7 +285,71 @@ Our code uses the term "Perception Agents" for our data source agents, reflectin
       </table>
 
   There is a minor but statistically significant difference in Precision and F1 Scores between the Agentic RAG and Base RAG. This outcome challenges the expectation that LLM prompt engineering and combining specialized agent responses would enhance response quality.
-    
+
+
+- **Results**
+
+  - **BERTScore**
+    - The table below presents the mean Precision and F1 Scores from the BERTScore algorithm for each system compared to the ground truth.
+    - To evaluate the Agentic RAG against other systems, we performed a t-test to calculate the p-value. A p-value < 0.05 was considered statistically significant.
+
+    - <table>
+        <tr>
+          <th>Metric</th>
+          <th>Agentic RAG</th>
+          <th>Base RAG</th>
+          <th>Unaugmented Response</th>
+        </tr>
+        <tr>
+          <th>Precision</th>
+          <td>
+            <table>
+              <tr><th>Score</th><th>P-value</th></tr>
+              <tr><td>0.660</td><td>-</td></tr>
+            </table>
+          </td>
+          <td>
+            <table>
+              <tr><th>Score</th><th>P-value</th></tr>
+              <tr><td>0.680</td><td>0.004</td></tr>
+            </table>
+          </td>
+          <td>
+            <table>
+              <tr><th>Score</th><th>P-value</th></tr>
+              <tr><td>0.730</td><td>3.10e-18</td></tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <th>Recall</th>
+          <td>
+            <table>
+              <tr><th>Score</th><th>P-value</th></tr>
+              <tr><td>0.620</td><td>-</td></tr>
+            </table>
+          </td>
+          <td>
+            <table>
+              <tr><th>Score</th><th>P-value</th></tr>
+              <tr><td>0.650</td><td>4.36e-05</td></tr>
+            </table>
+          </td>
+          <td>
+            <table>
+              <tr><th>Score</th><th>P-value</th></tr>
+              <tr><td>0.700</td><td>3.55e-28</td></tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+
+  There is a statistically significant difference in Precision and Recall between the Agentic RAG and both the Base RAG and Unaugmented responses. Specifically, the Unaugmented system had the highest performance, while Base RAG also outperformed Agentic RAG. This outcome challenges the expectation that LLM prompt engineering and combining specialized agent responses would enhance response quality.
+
+  When we analyzed the Single Topic and Compound questions separately, the Agentic RAG did slightly better on the Compound questions, but the overall ranking across the responses was the same.
+
+
+
   - **Entity Coverage Score**
     - Additionally, to ensure that we're evaluating the RAG on its merits and not the length (as GPT 4o does provide with additional context, and therefore, has much more text in the response), we also calculated the ratio of the number of entities in each system to the number of entities in the Ground Truth response as the Entity Coverage Score. On this metric, the Agentic RAG performed better than the other two systems.
     - <table>
