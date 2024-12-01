@@ -284,9 +284,9 @@ Our code uses the term "Perception Agents" for our data source agents, reflectin
         </tr>
       </table>
 
-  There is a statistically significant difference in Precision and Recall between the Agentic RAG and both the Base RAG and Unaugmented responses. Specifically, the Unaugmented system had the highest performance, while Base RAG also outperformed Agentic RAG. This outcome challenges the expectation that LLM prompt engineering and combining specialized agent responses would enhance response quality.
+    - There is a statistically significant difference in Precision and Recall between the Agentic RAG and both the Base RAG and Unaugmented responses. Specifically, the Unaugmented system had the highest performance, while Base RAG also outperformed Agentic RAG. This outcome challenges the expectation that LLM prompt engineering and combining specialized agent responses would enhance response quality.
 
-  When we analyzed the Single Topic and Compound questions separately, the Agentic RAG did slightly better on the Compound questions, but the overall ranking across the response types was the same.
+    - When we analyzed the Single Topic and Compound questions separately, the Agentic RAG did slightly better on the Compound questions, but the overall ranking across the response types was the same.
 
 
   - **Entity Coverage Score**
