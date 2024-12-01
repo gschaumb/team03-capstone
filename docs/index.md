@@ -290,20 +290,20 @@ Our code uses the term "Perception Agents" for our data source agents, reflectin
 
 <br>
 
-    - **Entity Coverage Score**
-      - Additionally, to ensure that we're evaluating the RAG on its merits and not the length (as GPT 4o does provide with additional context, and therefore, has much more text in the response), we also calculated the ratio of the number of entities in each system to the number of entities in the Ground Truth response as the Entity Coverage Score. On this metric, the Agentic RAG performed better than the other two systems.
-      - <table>
-          <tr>
-          <th>Agentic RAG</th>
-          <th>Base RAG</th>
-            <th>Unaugmented Response</th>
-            </tr>
-          <tr>
-            <td>0.73</td>
-            <td>0.56</td>
-            <td>0.53</td>
+  - **Entity Coverage Score**
+    - Additionally, to ensure that we're evaluating the RAG on its merits and not the length (as GPT 4o does provide with additional context, and therefore, has much more text in the response), we also calculated the ratio of the number of entities in each system to the number of entities in the Ground Truth response as the Entity Coverage Score. On this metric, the Agentic RAG performed better than the other two systems.
+    - <table>
+        <tr>
+        <th>Agentic RAG</th>
+        <th>Base RAG</th>
+          <th>Unaugmented Response</th>
           </tr>
-        </table>
+        <tr>
+          <td>0.73</td>
+          <td>0.56</td>
+          <td>0.53</td>
+        </tr>
+      </table>
 
 <br>
 
