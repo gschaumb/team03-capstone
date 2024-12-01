@@ -287,7 +287,7 @@ Our code uses the term "Perception Agents" for our data source agents, reflectin
     - There is a statistically significant difference in Precision and Recall between the Agentic RAG and both the Base RAG and Unaugmented responses. Specifically, the Unaugmented system had the highest performance, while Base RAG also outperformed Agentic RAG. This outcome challenges the expectation that LLM prompt engineering and combining specialized agent responses would enhance response quality.
 
     - When we analyzed the Single Topic and Compound questions separately, the Agentic RAG did slightly better on the Compound questions, but the overall ranking across the response types was the same.
-
+<br>
 
   - **Entity Coverage Score**
     - Additionally, to ensure that we're evaluating the RAG on its merits and not the length (as GPT 4o does provide with additional context, and therefore, has much more text in the response), we also calculated the ratio of the number of entities in each system to the number of entities in the Ground Truth response as the Entity Coverage Score. On this metric, the Agentic RAG performed better than the other two systems.
