@@ -336,9 +336,9 @@ Despite these limitations, manual testing showed that the responses generally ma
 
 ## Reflections {#reflections}
 
-- This project aimed to evaluate the performance of Agentic RAGs on raw corpora. However, we encountered a unique constraint: most large language models are already well-versed in the Enron case's facts and issues. As a result, we could not conclusively determine that Agentic RAGs outperform LLMs on publicly available knowledge bases.
+- This project aimed to evaluate the performance of Agentic RAGs on raw corpora. However, we encountered a unique constraint: most large language models are already well-versed in the Enron case's facts and issues. As a result, we could not conclusively determine that Agentic RAGs outperform LLMs on publicly available knowledge bases. Our inclusion of the Entity Coverage Score metric did indicate that the Agentic RAG effectively balances content with conciseness in its responses.
 - The fact that we (for project efficiency's sake) used GPT-4o responses as our Ground Truth may have contributed to the Unaugmented Reponse being rated highest on BERTScore, as the common model training between GPT-4o and GPT-3.5-Turbo can be considered a form of data leakage potentially favoring the non-RAG responses.
-- In real-world applications, this approach would be more impactful when applied to private datasets that are not exposed to OpenAI's GPTs or other LLMs. In such cases, Agentic RAGs could outperform unaugmented or base RAGs by leveraging specialized agents for distinct data sources, assuming other factors (such as data availability) remain constant.
+- In real-world applications this approach would be more impactful when applied to private datasets that are not exposed to OpenAI's GPTs or other LLMs. In such cases Agentic RAGs could outperform unaugmented or base RAGs by leveraging specialized agents for distinct data sources, assuming other factors (such as data availability) remain constant.
 
 
 **Next Steps**:
