@@ -22,6 +22,7 @@
   - [Evaluation Strategy and Results](#evaluation-strategy)
     - [Agentic Response Evaluation](#agentic-response-evaluation)
     - [Email Agent Evaluation](#email-agent-evaluation)
+    - [Evaluation and Demo Links](#evalutiona-links)
 - [Discussion](#discussion)
   - [Reflections](#reflections)
   - [Ethical Considerations](#ethical-considerations)
@@ -345,6 +346,10 @@ Both methods faced the same challenge: evaluating cosine similarity scores is in
 Despite these limitations, manual testing showed that the responses generally maintained contextual relevance or textual overlap with the queries.
 
 <br>
+
+### Evaluation and Demo Links {#evaluation-links}
+
+
 <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vSazYHLTkUGFPhN0KqDidJPrdtEYcs3apmemOkPjzgAiDhl2EkmxVk55jNxtcmBArZyzzSyyAPiA6nU/pubhtml?widget=true&amp;headers=false" target="_blank">Link to Evaluation Sheet</a>
 
 <a href="https://huggingface.co/spaces/gschaumb/team03-capstone" target="_blank">Link to Capstone Agentic RAG Demo Application</a>
