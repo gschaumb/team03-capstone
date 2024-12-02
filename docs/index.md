@@ -230,8 +230,8 @@ Our code uses the term "Perception Agents" for our data source agents, reflectin
 - **Results**
 
   - **BERTScore**
-    - The table below presents the mean Precision and F1 Scores from the BERTScore algorithm for each system compared to the Ground Truth.
-    - To evaluate the performance of Agentic RAG relative to other systems, we conducted paired t-tests to assess whether the differences in Precision and Recall scores were statistically significant. A p-value less than 0.05 was used as the threshold for significance, indicating strong evidence against the null hypothesis of no difference between methods.
+    - The table below presents the mean Precision and Recall scores from the BERTScore algorithm for each system compared to the Ground Truth.
+    - To evaluate the performance of Agentic RAG relative to other systems, we conducted paired t-tests on the Precision and Recall scores to assess whether the differences between the systems were statistically significant. A p-value less than 0.05 was used as the threshold for significance, indicating strong evidence against the null hypothesis of no difference between methods.
 
     - <table>
         <tr>
