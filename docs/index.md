@@ -50,7 +50,7 @@ The combination of reasoning and acting makes agentic RAG a promising approach f
 
 Our Capstone project builds on our Milestones 1 and 2<sup>[2](#ref-2)</sup>, where we extracted data sources and developed a basic RAG solution for a **customer support use case**. In this Capstone project:
 
-- **Public legal, financial, and historical documents related to the Enron case** serve as a proxy for the knowledge base. Securities and Exchange Commission (SEC) Legal Complaints and an Enron case study provide a rich history simulating fact-based manuals or implementation guides. And the annual financial reports provide an even less structured set of possibly relevant details, simulating incorporation of noisy historical information or data logs.
+- **Public legal, financial, and historical documents related to the Enron case** serve as a proxy for the knowledge base. Securities and Exchange Commission (SEC) Legal Complaints and an Enron case study provide a rich, unstructured data history simulating fact-based manuals or implementation guides. And the annual financial reports provide an even less structured set of possibly relevant details, simulating incorporation of noisy historical information or data logs.
 - **The Enron email corpus** represents a range of employee and/or customer emails.
 
 Ideally, we would have liked to have used a product or service company's corporate technical manuals, implementation guides, support FAQs, and related customer support emails as our data sources. Given the difficulty in obtaining such materials, the Enron data has proven a valuable proxy due to its broad content coverage across various document types and email exchanges.
