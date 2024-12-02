@@ -210,9 +210,9 @@ Our code uses the term "Perception Agents" for our data source agents, reflectin
 
 
 ### Agentic Response Evaluation {#agentic-response-evaluation}
-- We used a test set of 100 queries (50 "Single Topic" and 50 "Compound" queries). The queries were generated using generative AI tools to extract questions related to our source material and then curated by human review. We divided them into "Single Topic" vs. "Compound" queries with a secondary goal of determining if the Agentic RAG performed better on Compound questions.
-- To assess our Agentic RAG we used GPT-4o's responses as the Ground Truth. This choice was enabled by the Enron dataset and case's prominence as a key training source for most large language models. Through a high level review of answers, we felt GPT-4o responses provided a suitable Ground Truth.
-- The Ground Truth was evaluated against three systems:
+- We used a test set of 100 queries (50 "Single Topic" and 50 "Compound" queries). The queries were created using generative AI tools to extract questions related to our source material and then curated by human review. We divided them into "Single Topic" vs. "Compound" queries with a secondary goal of determining if the Agentic RAG performed better on Compound questions.
+- To assess our Agentic RAG we used GPT-4o's responses as the Ground Truth. This choice was enabled by the Enron dataset and case's prominence as a key training source for most large language models. Through a high level review of answers, we felt GPT-4o responses provided a suitable Ground Truth that exceeded our GPT-3.5 Turbo based system responses in terms of accuracy and completeness.
+- The Ground Truth was evaluated against our three GPT-3.5 Turbo based systems:
   - **Agentic RAG**: Our custom-built RAG developed for the Capstone project.
   - **Base RAG**: A foundational RAG created during Milestone 2 as a proof of concept.
   - **Unaugmented RAG**: Responses generated directly by GPT-3.5 Turbo.
@@ -307,7 +307,7 @@ Our code uses the term "Perception Agents" for our data source agents, reflectin
 
     - There is a statistically significant difference in F1, Precision, and Recall between the Agentic RAG and both the Base RAG and Unaugmented responses. Specifically, the Unaugmented system had the highest performance, followed by Base RAG, with Agentic RAG consistently showing the lowest scores across all metrics. The F1 scores show that Unaugmented Response is significantly better than both Agentic and Base RAG, which aligns with the individual precision and recall findings. This outcome challenges the expectation that LLM prompt engineering and combining specialized agent responses would enhance response quality.
 
-    - When we analyzed the Single Topic and Compound questions separately, the Agentic RAG did slightly better on the Compound questions, but the overall ranking across the response types was the same.
+    - When we analyzed the Single Topic and Compound questions separately, the performance of Agentic RAG was closer to that of Unaugmented Response on Compound questions, suggesting a slightly smaller gap. However, the overall ranking across the response types remained the same, with Unaugmented Response performing the best, followed by Base RAG, and then Agentic RAG.
 
 
   - **Entity Coverage Score**
