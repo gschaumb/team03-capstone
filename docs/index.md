@@ -51,7 +51,7 @@ The combination of reasoning and acting makes agentic RAG a promising approach f
 
 Our Capstone project builds on our Milestones 1 and 2<sup>[2](#ref-2)</sup>, where we extracted data sources and developed a basic RAG solution for a **customer support use case**. In this Capstone project:
 
-- **Public legal, financial, and historical documents related to the Enron case** serve as a proxy for the knowledge base. Securities and Exchange Commission (SEC) Legal Complaints and an Enron case study provide a rich, unstructured data history simulating fact-based manuals or implementation guides. And the annual financial reports provide an even less structured set of possibly relevant details, simulating incorporation of noisy historical information or data logs.
+- **Public legal, financial, and historical documents related to the Enron case** serve as a proxy for the knowledgebase. Securities and Exchange Commission (SEC) Legal Complaints and an Enron case study provide a rich, unstructured data history simulating fact-based manuals or implementation guides. And the annual financial reports provide an even less structured set of possibly relevant details, simulating incorporation of noisy historical information or data logs.
 - **The Enron email corpus** represents a range of employee and/or customer emails.
 
 Ideally, we would have liked to have used a product or service company's corporate technical manuals, implementation guides, support FAQs, and related customer support emails as our data sources. Given the difficulty in obtaining such materials, the Enron data has proven a valuable proxy due to its broad content coverage across various document types and email exchanges.
@@ -362,7 +362,7 @@ Despite these limitations, manual testing showed that the responses generally ma
 
 ## Reflections {#reflections}
 
-- This project aimed to evaluate the performance of Agentic RAGs on raw corpora. However, we encountered a unique constraint: most large language models are already well-versed in the Enron case's facts and issues. As a result, we could not conclusively determine that Agentic RAGs outperform LLMs on publicly available knowledge bases. Our inclusion of the Entity Coverage Score metric did indicate that the Agentic RAG effectively balances content with conciseness in its responses.
+- This project aimed to evaluate the performance of Agentic RAGs on raw corpora. However, we encountered a unique constraint: most large language models are already well-versed in the Enron case's facts and issues. As a result, we could not conclusively determine that Agentic RAGs outperform LLMs on publicly available knowledgebases. Our inclusion of the Entity Coverage Score metric did indicate that the Agentic RAG effectively balances content with conciseness in its responses.
 - The fact that we (for project efficiency's sake) used GPT-4o responses as our Ground Truth may have contributed to the Unaugmented Reponse being rated highest on BERTScore, as the common model training between GPT-4o and GPT-3.5-Turbo can be considered a form of data leakage potentially favoring the non-RAG responses.
 - In real-world applications this approach would be more impactful when applied to private datasets that are not exposed to OpenAI's GPTs or other LLMs. In such cases Agentic RAGs could outperform unaugmented or base RAGs by leveraging specialized agents for distinct data sources, assuming other factors (such as data availability) remain constant.
 
@@ -389,7 +389,7 @@ Despite these limitations, manual testing showed that the responses generally ma
 ## Conclusion {#conclusion}
 
 
-Using the Enron corpus as a proxy knowledge base posed unique challenges since modern LLMs are already trained on it, but it also reinforced the promise of this approach for real-world applications involving private, unseen data sources. This project leaves us optimistic about the future of Agentic RAG systems. With further design variations, prompt engineering, external tool access, and adaptation to proprietary datasets, systems similar to our Capstone have the potential to improve responses by AI Agents, and subsequently decision making. 
+Using the Enron corpus as a proxy knowledgebase posed unique challenges since modern LLMs are already trained on it, but it also reinforced the promise of this approach for real-world applications involving private, unseen data sources. This project leaves us optimistic about the future of Agentic RAG systems. With further design variations, prompt engineering, external tool access, and adaptation to proprietary datasets, systems similar to our Capstone have the potential to improve responses by AI Agents, and subsequently decision making. 
 
 <br><br><br>
 
@@ -476,7 +476,7 @@ Projects that benefit from agentic LLM structures often involve tasks that can b
   
 - **Tool Integration**: Incorporate external tools to augment agent capabilities. This could involve accessing databases, executing code, or leveraging APIs for specific functionalities.
   
-- **Memory Management**: Design mechanisms for agents to access and manage shared or individual memories, allowing them to retain relevant information from previous interactions or access external knowledge bases.
+- **Memory Management**: Design mechanisms for agents to access and manage shared or individual memories, allowing them to retain relevant information from previous interactions or access external knowledgebases.
 
 #### Evaluation and Refinement:
 
