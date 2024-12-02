@@ -22,7 +22,7 @@
   - [Evaluation Strategy and Results](#evaluation-strategy)
     - [Agentic Response Evaluation](#agentic-response-evaluation)
     - [Email Agent Evaluation](#email-agent-evaluation)
-    - [Evaluation and Demo Links](#evalutiona-links)
+    - [Evaluation and Demo Links](#evaluation-links)
 - [Discussion](#discussion)
   - [Reflections](#reflections)
   - [Ethical Considerations](#ethical-considerations)
