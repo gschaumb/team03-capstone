@@ -230,7 +230,7 @@ Our code uses the term "Perception Agents" for our data source agents, reflectin
 - **Results**
 
   - **BERTScore**
-    - The table below presents the mean Precision and Recall scores from the BERTScore algorithm for each system compared to the Ground Truth.
+    - The table below presents the mean **F1**, **Precision**, and **Recall** scores from the BERTScore algorithm for each system compared to the Ground Truth.
     - To evaluate the performance of Agentic RAG relative to other systems, we conducted paired t-tests on the Precision and Recall scores to assess whether the differences between the systems were statistically significant. A p-value less than 0.05 was used as the threshold for significance, indicating strong evidence against the null hypothesis of no difference between methods.
 
     - <table>
@@ -239,6 +239,27 @@ Our code uses the term "Perception Agents" for our data source agents, reflectin
           <th>Agentic RAG</th>
           <th>Base RAG</th>
           <th>Unaugmented Response</th>
+        </tr>
+        <tr>
+          <th>F1 Score</th>
+          <td>
+            <table>
+              <tr><th>Score</th></tr>
+              <tr><td>0.624</td></tr>
+            </table>
+          </td>
+          <td>
+            <table>
+              <tr><th>Score</th></tr>
+              <tr><td>0.650</td></tr>
+            </table>
+          </td>
+          <td>
+            <table>
+              <tr><th>Score</th></tr>
+              <tr><td>0.700</td></tr>
+            </table>
+          </td>
         </tr>
         <tr>
           <th>Precision</th>
@@ -284,7 +305,7 @@ Our code uses the term "Perception Agents" for our data source agents, reflectin
         </tr>
       </table>
 
-    - There is a statistically significant difference in Precision and Recall between the Agentic RAG and both the Base RAG and Unaugmented responses. Specifically, the Unaugmented system had the highest performance, while Base RAG also outperformed Agentic RAG. This outcome challenges the expectation that LLM prompt engineering and combining specialized agent responses would enhance response quality.
+    - There is a statistically significant difference in Precision and Recall between the Agentic RAG and both the Base RAG and Unaugmented responses. Specifically, the Unaugmented system had the highest performance, while Base RAG also outperformed Agentic RAG. The F1 score results align with these findings, showing that the Unaugmented system achieves the highest overall F1 score, followed by Base RAG, with Agentic RAG performing the lowest. This outcome challenges the expectation that LLM prompt engineering and combining specialized agent responses would enhance response quality.
 
     - When we analyzed the Single Topic and Compound questions separately, the Agentic RAG did slightly better on the Compound questions, but the overall ranking across the response types was the same.
 
