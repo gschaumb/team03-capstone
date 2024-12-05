@@ -252,13 +252,13 @@ Our code uses the term "Perception Agents" for our data source agents, reflectin
           <td>
             <table>
               <tr><th>Score</th><th>P-value</th></tr>
-              <tr><td>0.650</td><td>2.324e-04</td></tr>
+              <tr><td>0.650</td><td>0.0001</td></tr>
             </table>
           </td>
           <td>
             <table>
               <tr><th>Score</th><th>P-value</th></tr>
-              <tr><td>0.700</td><td>3.287e-24</td></tr>
+              <tr><td>0.700</td><td>1.03e-24</td></tr>
             </table>
           </td>
         </tr>
@@ -273,13 +273,13 @@ Our code uses the term "Perception Agents" for our data source agents, reflectin
           <td>
             <table>
               <tr><th>Score</th><th>P-value</th></tr>
-              <tr><td>0.68</td><td>0.004</td></tr>
+              <tr><td>0.68</td><td>0.003</td></tr>
             </table>
           </td>
           <td>
             <table>
               <tr><th>Score</th><th>P-value</th></tr>
-              <tr><td>0.73</td><td>3.10e-18</td></tr>
+              <tr><td>0.73</td><td>2.02e-18</td></tr>
             </table>
           </td>
         </tr>
@@ -294,13 +294,13 @@ Our code uses the term "Perception Agents" for our data source agents, reflectin
           <td>
             <table>
               <tr><th>Score</th><th>P-value</th></tr>
-              <tr><td>0.65</td><td>4.36e-05</td></tr>
+              <tr><td>0.65</td><td>3.61e-05</td></tr>
             </table>
           </td>
           <td>
             <table>
               <tr><th>Score</th><th>P-value</th></tr>
-              <tr><td>0.70</td><td>3.55e-28</td></tr>
+              <tr><td>0.70</td><td>3.60e-28</td></tr>
             </table>
           </td>
         </tr>
