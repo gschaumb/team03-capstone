@@ -288,19 +288,19 @@ Our code uses the term "Perception Agents" for our data source agents, reflectin
           <td>
             <table>
               <tr><th>Score</th><th>P-value</th></tr>
-              <tr><td>0.62</td><td>NA</td></tr>
+              <tr><td>0.59</td><td>NA</td></tr>
             </table>
           </td>
           <td>
             <table>
               <tr><th>Score</th><th>P-value</th></tr>
-              <tr><td>0.65</td><td>3.61e-05</td></tr>
+              <tr><td>0.62</td><td>3.61e-05</td></tr>
             </table>
           </td>
           <td>
             <table>
               <tr><th>Score</th><th>P-value</th></tr>
-              <tr><td>0.70</td><td>3.60e-28</td></tr>
+              <tr><td>0.67</td><td>3.60e-28</td></tr>
             </table>
           </td>
         </tr>
