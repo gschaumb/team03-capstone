@@ -82,7 +82,7 @@ def initialize_openai():
 
 def openai_generate_response(messages, max_tokens=150):
     try:
-        response = openai.ChatCompletion.create(
+        response = GLOBAL_OPENAI_CLIENT.chat.completions.create(
             model="gpt-3.5-turbo", messages=messages, max_tokens=max_tokens
         )
         return response.choices[0].message["content"].strip()

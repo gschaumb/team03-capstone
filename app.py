@@ -1,4 +1,5 @@
 import gradio as gr
+import pandas as pd
 from main import (
     perception_node_1,
     perception_node_2,
@@ -23,19 +24,18 @@ agent_state = {
     "perception_2": {"status": None, "data": None},
     "perception_3": {"status": None, "data": None},
     "integration_result": {"status": None, "message": None},
-    "email_agent_result": {"status":None, "data":None}
+    "email_agent_result": {"status": None, "data": None},
 }
 
-#Intialize email agent 
+# Intialize email agent
 email_vector_store = email_agent.vector_store
 
 
-# Function to process user input and generate summaries
 def process_user_input(user_input):
     logger.debug("Received user input: %s", user_input)
 
     if user_input:
-        # Append new message to state - for possible later use for session persistence
+        agent_state["messages"].clear()
         agent_state["messages"].append({"sender": "User", "content": user_input})
 
         # Reset perceptions and integration result for new query
@@ -43,7 +43,7 @@ def process_user_input(user_input):
         agent_state["perception_2"] = {"status": None, "data": None}
         agent_state["perception_3"] = {"status": None, "data": None}
         agent_state["integration_result"] = {"status": None, "message": None}
-        agent_state['email_agent_result'] = {"status":None, "data":None}
+        agent_state["email_agent_result"] = {"status": None, "data": None}
     else:
         logger.error("User input is empty.")
         return "Please provide a valid input.", {}
@@ -75,14 +75,29 @@ def process_user_input(user_input):
         )
         logger.debug("Final response to be returned: %s", summary)
 
-        #get relevant emails
-        related_emails= []
-        related_emails, keyphrases = email_agent.EmailAgent(email_vector_store).retrieve_emails_from_all_agents(current_state)
-        if len(related_emails) > 0: 
-            current_state["email_agent_result"] = {"status": "data_found", "data": related_emails, "keyphrases":keyphrases}
-        else:
-            current_state["email_agent_result"] = {"status": "no_data", "data": "No relevant emails found."}
-            logger.error('No emails found.')
+        # Attempt email retrieval
+        try:
+            related_emails, keyphrases = email_agent.EmailAgent(
+                email_vector_store
+            ).retrieve_emails_from_all_agents(current_state)
+            if len(related_emails) > 0:
+                current_state["email_agent_result"] = {
+                    "status": "data_found",
+                    "data": related_emails,
+                    "keyphrases": keyphrases,
+                }
+            else:
+                current_state["email_agent_result"] = {
+                    "status": "no_data",
+                    "data": pd.DataFrame(columns=["From", "To", "Date", "Content"]),
+                }
+                logger.info("No relevant emails found.")
+        except Exception as e:
+            logger.error("Error in email processing: %s", e)
+            current_state["email_agent_result"] = {
+                "status": "error",
+                "data": pd.DataFrame(columns=["From", "To", "Date", "Content"]),
+            }
 
         return summary, current_state
 
@@ -90,17 +105,20 @@ def process_user_input(user_input):
         logger.error("Error occurred during processing of user input: %s", e)
         return "An error occurred while processing your request.", {}
 
+
 def display_full_text(email_df, selected_row: gr.SelectData):
     if selected_row is None:
         return ""
-    full_text = email_df['content'].iloc[selected_row.index[0]]
+    full_text = email_df["content"].iloc[selected_row.index[0]]
     return full_text
+
 
 def dummy_function():
     return "Gradio app is running."
 
+
 # Gradio interface setup
-with gr.Blocks(theme= gr.themes.Soft(font="Arial")) as demo:
+with gr.Blocks(theme=gr.themes.Soft(font="Arial")) as demo:
     gr.Markdown("# Enron Agentic RAG Demo")
 
     user_input = gr.Textbox(
@@ -108,22 +126,43 @@ with gr.Blocks(theme= gr.themes.Soft(font="Arial")) as demo:
     )
     output = gr.Textbox(label="Agent Response")
 
-    related_emails_output = gr.Dataframe(label="Related Emails", interactive=True, column_widths=[30, 30, 30, 200])
+    related_emails_output = gr.Dataframe(
+        label="Related Emails", interactive=True, column_widths=[30, 30, 30, 200]
+    )
     full_email_output = gr.Textbox(label="Full Email Text", interactive=False)
 
-    related_emails_output.select(fn=display_full_text, inputs=related_emails_output, outputs=full_email_output)
+    related_emails_output.select(
+        fn=display_full_text, inputs=related_emails_output, outputs=full_email_output
+    )
 
     with gr.Accordion(label="See Agent State Data", open=False):
         state_output = gr.JSON(label="Agent Intermediate State Data", value={})
 
     def update_state_ui(user_query):
         response, intermediate_states = process_user_input(user_query)
-        related_emails_data = intermediate_states.get("email_agent_result", {}).get("data", None)
+
+        # Extract related email data safely
+        email_agent_result = intermediate_states.get("email_agent_result", {})
+        related_emails_data = email_agent_result.get(
+            "data", pd.DataFrame(columns=["From", "To", "Date", "Content"])
+        )
+        email_status = email_agent_result.get("status", "error")
+
+        if email_status == "error":
+            logger.warning(
+                "Email processing encountered an issue. Displaying fallback message."
+            )
+            related_emails_data = pd.DataFrame(
+                columns=["From", "To", "Date", "Content"]
+            )  # Empty DataFrame
+
         return response, intermediate_states, related_emails_data
 
     submit_btn = gr.Button("Submit")
     submit_btn.click(
-        fn=update_state_ui, inputs=user_input, outputs=[output, state_output, related_emails_output]
+        fn=update_state_ui,
+        inputs=user_input,
+        outputs=[output, state_output, related_emails_output],
     )
 
 # Launch Gradio app
