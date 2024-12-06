@@ -4,6 +4,7 @@ import pickle
 from openai import OpenAI
 import os 
 import pandas as pd 
+from langchain_huggingface import HuggingFaceEmbeddings
 
 #CONSTANTS
 global HF_EMBEDDINGS_DB
@@ -17,9 +18,19 @@ class VectorStore:
         self.embeddings = self.load_embeddings()
         self.vector_store = self.load_vectors(self.embeddings)
 
-    def load_embeddings(embeddings_str=HF_EMBEDDINGS_DB):
-        with open(HF_EMBEDDINGS_DB, "rb") as f:
-            return pickle.load(f)
+    def load_embeddings(embeddings_str=None):
+        modelPath = "sentence-transformers/all-MiniLM-l6-v2"
+        model_kwargs = {'device':'cpu'}
+        encode_kwargs = {'normalize_embeddings': False, 'is_fast':False}
+        embeddings = HuggingFaceEmbeddings(
+            model_name=modelPath,
+            model_kwargs=model_kwargs,
+            encode_kwargs=encode_kwargs
+        )
+        '''with open(HF_EMBEDDINGS_DB, "rb") as f:
+            return pickle.load(f)'''
+                
+        return embeddings
     
     def load_vectors(self,  embeddings):
         chroma_client = chromadb.HttpClient(host=os.environ.get("EMAIL_VECTOR_HOST"), port=8000)
