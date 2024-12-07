@@ -1,3 +1,11 @@
+"""
+email_agent.py: Manages email retrieval using vector search and language model-based keyphrase extraction.
+
+This file contains:
+- VectorStore: Initializes and manages embeddings and vector storage for email search.
+- EmailAgent: Interacts with the vector store and uses GPT for extracting query-relevant keyphrases.
+"""
+
 from langchain_chroma import Chroma
 import chromadb
 import pickle

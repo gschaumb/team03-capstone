@@ -1,3 +1,19 @@
+"""
+main.py: Core functionality for an agent-based Retrieval-Augmented Generation (RAG) system. 
+
+This file contains:
+- Model initialization (SentenceTransformer and OpenAI GPT).
+- Perception Agents for embedding-based document retrieval and summarization.
+- Integration Agent for combining summaries into a concise response.
+- Workflow nodes for executing the perception and integration tasks.
+
+Modules and Classes:
+- PerceptionAgentBase: Base class for embedding-based document retrieval.
+- PerceptionAgent1/2/3: Specialized agents for handling case, SEC, and financial documents.
+- IntegrationAgent: Synthesizes summaries from perception agents.
+- Workflow Nodes: Functions to process agent state and query.
+"""
+
 import os
 import pandas as pd
 import logging

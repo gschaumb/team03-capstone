@@ -1,3 +1,12 @@
+"""
+app.py: Gradio-based interface for the Enron Agentic RAG Demo.
+
+This file contains:
+- Gradio UI setup for interacting with the RAG pipeline.
+- Functions for processing user queries and visualizing results.
+- Integration with email retrieval agent for supplementary information.
+"""
+
 import gradio as gr
 import pandas as pd
 from main import (
