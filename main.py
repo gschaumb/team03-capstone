@@ -1,4 +1,3 @@
-# main.py
 import os
 import pandas as pd
 import logging
@@ -113,12 +112,12 @@ class PerceptionAgentBase:
                 pickle.dump(embeddings, f)
         return embeddings
 
-    # Retrieval Option 1: Apply a similarity threshold
+    # Retrieval Option 1 Apply a similarity threshold
     def apply_similarity_threshold(self, similarities, threshold=0.5):
         logger.debug("Applying similarity threshold: %s", threshold)
         return [i for i, score in enumerate(similarities) if score >= threshold]
 
-    # Retrieval Option 2: Select the top K documents
+    # Retrieval Option 2 Select the top K documents
     def select_top_k(self, similarities, indices, top_k=1):
         logger.debug("Selecting top %d documents by similarity", top_k)
         # Only use similarities of documents that passed previous filter (indices)
@@ -126,7 +125,7 @@ class PerceptionAgentBase:
         top_indices = selected_similarities.argsort()[-top_k:][::-1]
         return [indices[i] for i in top_indices]
 
-    # Retrieval Option 3: Retrieve with context (neighbors before and after)
+    # Retrieval Option 3 Retrieve with context (neighbors before and after)
     def retrieve_with_context(self, indices, context_window=1):
         logger.debug("Retrieving with context window: %d", context_window)
         extended_indices = set(indices)
@@ -144,7 +143,7 @@ class PerceptionAgentBase:
         # Start with all document indices
         selected_indices = list(range(len(self.data_df)))
 
-        # Apply each step in the pipeline
+        # Apply each step in pipeline
         for step in self.retrieval_pipeline:
             selected_indices = step(similarities, selected_indices)
 
@@ -218,7 +217,7 @@ class PerceptionAgent1(PerceptionAgentBase):
             return None, retrieved_docs, top_k_documents
 
 
-# PerceptionAgent2 for sec_docs - the legal complaints (previously PerceptionAgent1)
+# PerceptionAgent2 for sec_docs - the legal complaints
 class PerceptionAgent2(PerceptionAgentBase):
     def __init__(self, data_df, name, embeddings_path):
         retrieval_pipeline = [
@@ -278,7 +277,7 @@ class PerceptionAgent2(PerceptionAgentBase):
             return None, retrieved_docs, top_k_documents
 
 
-# PerceptionAgent3 for financial_reports docs - the annual reports (previously PerceptionAgent2)
+# PerceptionAgent3 for financial_reports docs - the annual reports
 class PerceptionAgent3(PerceptionAgentBase):
     def __init__(self, data_df, name, embeddings_path):
         retrieval_pipeline = [
@@ -372,7 +371,7 @@ class IntegrationAgent:
         cleaned = summary.split("Context:")[-1]
         return cleaned.strip()
 
-    def synthesize_data_llm(self, input_text, max_length=550):  # Updated max_length
+    def synthesize_data_llm(self, input_text, max_length=550):
         messages = [
             {"role": "system", "content": "You are an expert summarizer."},
             {"role": "user", "content": input_text},
