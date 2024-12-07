@@ -44,3 +44,28 @@ As mentioned above, this file is used in the setup of the HuggingFace Space and 
 - **Configuration Reference:**  
   Check out the configuration reference at:  
   [https://huggingface.co/docs/hub/spaces-config-reference](https://huggingface.co/docs/hub/spaces-config-reference)
+
+
+### Features
+
+- **Perception Agents**: Specialized agents that retrieve and summarize information from distinct datasets:
+  - **Case Documents**: Enron case study paper.
+  - **SEC Filings**: Legal complaints involving Enron key defendants.
+  - **Financial Reports**: Annual Enron 10-K financial reports.
+
+- **Integration Agent**: Combines outputs from perception agents into a concise summary relevant to the user query.
+
+- **Email Retrieval Agent**: Utilizes keyphrase extraction and vector search to retrieve relevant emails from the Enron corpus.
+
+- **Interactive Gradio Interface**: Allows users to input queries, view synthesized summaries, and explore related emails interactively.
+
+
+### Required Environment Variables in the HuggingFace Gradio Space
+
+- **`OPENAI_API_KEY`**:  
+  - This key is required to authenticate with the OpenAI API for generating summaries and extracting keyphrases using GPT-3.5 Turbo.  
+  - **How to get it**: Sign up for an OpenAI account at [OpenAI](https://platform.openai.com/signup/) and obtain an API key from the API section of your dashboard.
+
+- **`EMAIL_VECTOR_HOST`**:  
+  - Specifies the host address for the email Chroma vector store, which is used to perform vector similarity searches for email retrieval.
+  - **How to set it up**: Deploy a Chroma database instance (see build_email_vectorstore.py) and set this environment variable to access that host.
