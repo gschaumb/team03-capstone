@@ -1,4 +1,5 @@
 # Agentic RAG Support Chatbot
+<a href="https://github.com/gschaumb/team03-capstone" target="_blank">Link to GitHub Repository</a>
 
 <br><br>
 
