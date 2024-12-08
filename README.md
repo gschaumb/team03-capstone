@@ -73,11 +73,11 @@ As mentioned above, this file is used in the setup of the HuggingFace Space and 
 
 ### Note on Email Data
 
-We have not included the `email_data_cleaned.pkl` file in this GitHub repository due to its large file size.
+We have not included the `email_data_cleaned.pkl` file in this GitHub repository due to its very large file size.
 
 The email data used to create this file is publicly available as part of the [Enron Email Dataset](https://enrondata.readthedocs.io/en/latest/data/calo-enron-email-dataset/).
 
-Anyone wishing to recreate this application would need to:
+Anyone wishing to recreate the email portion of this application would need to:
 1. Download and preprocess the Enron Email Dataset to produce a cleaned version of the data.
 2. Set up a hosted environment for the Chroma vector database to store the email embeddings. This could involve deploying a Chroma instance locally or on a cloud-based environment and configuring the `EMAIL_VECTOR_HOST` environment variable to point to its endpoint.
 3. Use the `build_email_vectorstore.py` script provided in this repository to populate the Chroma database with email data.

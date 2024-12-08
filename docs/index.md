@@ -1,4 +1,4 @@
-# Agentic RAG Support Chatbot
+# Agentic RAG Chatbot with Enron Knowledgebase
 <a href="https://github.com/gschaumb/team03-capstone" target="_blank">Link to GitHub Repository</a>
 
 <br><br>
