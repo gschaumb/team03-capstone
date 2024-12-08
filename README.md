@@ -60,7 +60,7 @@ As mentioned above, this file is used in the setup of the HuggingFace Space and 
 - **Interactive Gradio Interface**: Allows users to input queries, view synthesized summaries, and explore related emails interactively.
 
 
-### Required Environment Variables in the HuggingFace Gradio Space
+### Note on Required Environment Variables in the HuggingFace Gradio Space
 
 - **`OPENAI_API_KEY`**:  
   - This key is required to authenticate with the OpenAI API for generating summaries and extracting keyphrases using GPT-3.5 Turbo.  
@@ -69,3 +69,14 @@ As mentioned above, this file is used in the setup of the HuggingFace Space and 
 - **`EMAIL_VECTOR_HOST`**:  
   - Specifies the host address for the email Chroma vector store, which is used to perform vector similarity searches for email retrieval.
   - **How to set it up**: Deploy a Chroma database instance (see build_email_vectorstore.py) and set this environment variable to access that host.
+
+
+### Note on Email Data Integration
+
+We have not included the `email_data_cleaned.pkl` file in this GitHub repository due to its very large file size.
+
+The email data used to create this file is publicly available as part of the [Enron Email Dataset](https://enrondata.readthedocs.io/en/latest/data/calo-enron-email-dataset/).
+
+Anyone wishing to recreate this application's email integration would need to:
+1. Download and preprocess the Enron Email Dataset to produce a cleaned version of the data.
+2. Use the `build_email_vectorstore.py` script provided in this repository to create the Chroma vector database required for email retrieval.
